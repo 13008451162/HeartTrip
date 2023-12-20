@@ -22,6 +22,6 @@ public class LoginUiFragment extends Fragment {
      */
     private boolean loginStatus(String user,String password){
 
-        return true;
+//        return true;
     }
 }
