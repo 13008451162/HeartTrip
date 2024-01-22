@@ -1,0 +1,38 @@
+ext {
+    // false: 集成开发模式
+    // true ：组件独立开发模式
+    isModule = true
+    android = [
+            compileSdkVersion: 33,
+            minSdkVersion    : 24,
+            targetSdkVersion : 33,
+            versionCode      : 1,
+            versionName      : "1.0",
+            applicationId    : 'com.xupt3g.hearttrip'
+    ]
+
+    applicationId = [
+            "app"                   : 'com.xupt3g.hearttrip',
+            "loginRegistraionView"  : "com.xupt3g.loginregistrationview",
+            "homepageView"          : "com.xupt3g.homepageview",
+            "houseInfoView"         : "com.xupt3g.houseinfoview",
+            "searchResultView"      : "com.xupt3g.searchresultview",
+            "collectionsView"       : "com.xupt3g.collectionsview",
+            "messagesView"          : "com.xupt3g.messagesview",
+            "personalManagementView": "com.xupt3g.personalmanagementview",
+            "ordersView"            : "com.xupt3g.ordersview",
+            "browsingHistoryView"   : "com.xupt3g.browsinghistoryview"
+    ]
+
+
+    dependencies = [
+            glide             : 'com.github.bumptech.glide:glide:4.16.0',
+            cicleimagview     : 'de.hdodenhof:circleimageview:3.1.0',
+            swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0',
+            eventbus          : 'org.greenrobot:eventbus:3.3.1',
+            gson              : 'com.google.code.gson:gson:2.10.1'
+    ]
+    libARouter = 'com.alibaba:arouter-api:1.5.2'
+    libARouterCompiler = 'com.alibaba:arouter-compiler:1.5.2'
+    libEventBusCompiler = 'org.greenrobot:eventbus-annotation-processor:3.3.1'
+}

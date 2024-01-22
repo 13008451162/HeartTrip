@@ -1,0 +1,58 @@
+def cfg = rootProject.ext
+if (cfg.isModule) {
+    //true表示当前处于组件独立开发模式中
+    apply plugin: 'com.android.application'
+} else {
+    //false表示当前处于项目集成开发模式中
+    apply plugin: 'com.android.library'
+}
+
+android {
+    namespace 'com.xupt3g.personalmanagementview'
+    compileSdk cfg.android.compileSdkVersion
+
+    defaultConfig {
+        if (cfg.isModule) {
+            //true表示当前处于组件独立开发模式中
+            applicationId cfg.applicationId.personalManagementView
+        }
+        minSdk cfg.android.minSdkVersion
+        targetSdk cfg.android.targetSdkVersion
+        versionCode cfg.android.versionCode
+        versionName cfg.android.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            if (cfg.isModule) {
+                //true表示当前处于组件独立开发模式中
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/release/AndroidManifest.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':moduleBase:libBase')//依赖基础组件
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
