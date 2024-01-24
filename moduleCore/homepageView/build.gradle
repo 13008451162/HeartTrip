@@ -44,9 +44,14 @@ android {
         main {
             if (cfg.isModule) {
                 //true表示当前处于组件独立开发模式中
-                manifest.srcFile 'src/main/AndroidManifest.xml'
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
             } else {
-                manifest.srcFile 'src/main/release/AndroidManifest.xml'
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+
+                //正式环境下屏蔽Debug包下的所有文件
+                java{
+                    exclude "**/debug/**"
+                }
             }
         }
     }

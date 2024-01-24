@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
 }
+
+
 def cfg = rootProject.ext
 android {
     namespace 'com.xupt3g.hearttrip'
@@ -37,20 +39,21 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
-
 
     if (!cfg.isModule){
         implementation project(":moduleCore:homepageView")
         implementation project(":moduleCore:loginregistrationView")
-        implementation project(":moduleCore:houseinfoView")
+        implementation project(":moduleCore:houseInfoView")
         implementation project(":moduleCore:collectionsView")
-        implementation project(":moduleCore:searchresultView")
+        implementation project(":moduleCore:searchResultView")
         implementation project(":moduleCore:messagesView")
-        implementation project(":moduleCore:personalmanagementView")
+        implementation project(":moduleCore:personalManagementView")
         implementation project(":moduleCore:ordersView")
-        implementation project(":moduleCore:browsinghistoryView")
+        implementation project(":moduleCore:browsingHistoryView")
     }
 
     implementation 'androidx.appcompat:appcompat:1.6.1'

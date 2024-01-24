@@ -3,16 +3,24 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url "https://jitpack.io" }
     }
 }
+
+
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
+
+
 rootProject.name = "HeartTrip"
+
 include ':app'
 include ':moduleBase:libBase'
 include ':moduleCore:homepageView'
@@ -24,3 +32,4 @@ include ':moduleCore:personalManagementView'
 include ':moduleCore:ordersView'
 include ':moduleCore:browsingHistoryView'
 include ':moduleCore:loginregistrationView'
+include ':moduleBase:xuiBase'

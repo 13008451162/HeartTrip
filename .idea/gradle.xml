@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/moduleBase" />
             <option value="$PROJECT_DIR$/moduleBase/libBase" />
+            <option value="$PROJECT_DIR$/moduleBase/xuiBase" />
             <option value="$PROJECT_DIR$/moduleCore" />
             <option value="$PROJECT_DIR$/moduleCore/browsingHistoryView" />
             <option value="$PROJECT_DIR$/moduleCore/collectionsView" />

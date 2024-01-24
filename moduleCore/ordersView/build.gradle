@@ -21,6 +21,12 @@ android {
         versionName cfg.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -37,9 +43,14 @@ android {
         main {
             if (cfg.isModule) {
                 //true表示当前处于组件独立开发模式中
-                manifest.srcFile 'src/main/AndroidManifest.xml'
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
             } else {
-                manifest.srcFile 'src/main/release/AndroidManifest.xml'
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+
+                //正式环境下屏蔽Debug包下的所有文件
+                java{
+                    exclude "**/debug/**"
+                }
             }
         }
     }
@@ -47,6 +58,7 @@ android {
 
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
+    annotationProcessor cfg.libARouterCompiler
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

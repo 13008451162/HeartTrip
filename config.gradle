@@ -1,7 +1,7 @@
 ext {
     // false: 集成开发模式
     // true ：组件独立开发模式
-    isModule = true
+    isModule = false
     android = [
             compileSdkVersion: 33,
             minSdkVersion    : 24,
@@ -30,8 +30,25 @@ ext {
             cicleimagview     : 'de.hdodenhof:circleimageview:3.1.0',
             swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0',
             eventbus          : 'org.greenrobot:eventbus:3.3.1',
-            gson              : 'com.google.code.gson:gson:2.10.1'
+            gson              : 'com.google.code.gson:gson:2.10.1',
     ]
+
+    //XUI库所需依赖
+    xuidependencies = [
+            // 工具类
+            xutil_core : 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0',
+            xutil_sub : 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
+    ]
+
+    //沉浸式导航栏
+    libImmersionbar = 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+
+    //UI框架
+    libXui = 'com.github.xuexiangjys:XUI:1.2.1'
+
+    //字节工具集
+    libCodeLocator = "com.bytedance.tools.codelocator:codelocator-core:2.0.3"
+
     libARouter = 'com.alibaba:arouter-api:1.5.2'
     libARouterCompiler = 'com.alibaba:arouter-compiler:1.5.2'
     libEventBusCompiler = 'org.greenrobot:eventbus-annotation-processor:3.3.1'

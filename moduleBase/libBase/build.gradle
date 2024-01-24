@@ -13,7 +13,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
+        //让java代码也可以使用isModule
+        buildConfigField("boolean","isModule",String.valueOf(isModule))
     }
+
+    //让java代码自动生成系统的BuildConfig
+    buildFeatures {
+        buildConfig true
+    }
+
 
     buildTypes {
         release {
@@ -29,6 +37,17 @@ android {
 
 dependencies {
     api cfg.libARouter//ARouter依赖
+    api cfg.libImmersionbar//引入沉浸式布局依赖
+    api cfg.libXui   //引入UI库
+    api cfg.libCodeLocator   //引入字节工具集
+
+    // 依赖lancet-all, 则包含所有lancet能力
+    debugImplementation "com.bytedance.tools.codelocator:codelocator-lancet-all:2.0.3"
+
+    // 使用 for 循环添加 xuidependencies 中的依赖项
+    for (def dependency in xuidependencies) {
+        api dependency.value
+    }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
