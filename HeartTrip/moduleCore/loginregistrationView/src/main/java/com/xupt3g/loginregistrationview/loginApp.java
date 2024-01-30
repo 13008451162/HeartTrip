@@ -2,6 +2,7 @@ package com.xupt3g.loginregistrationview;
 
 import android.app.Application;
 
+
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.XUI;
 
@@ -19,6 +20,7 @@ public class loginApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         isDebug();
 

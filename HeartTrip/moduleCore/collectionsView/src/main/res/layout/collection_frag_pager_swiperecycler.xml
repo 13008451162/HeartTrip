@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fcfcfc">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/collections_recycler_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.yanzhenjie.recyclerview.SwipeRecyclerView
+            android:id="@+id/swiperecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="true"
+            android:scrollbarStyle="insideOverlay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:scrollbars="vertical" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="400dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/collection_icon_refresh"
+            app:elevation="8dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/no_collections_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_show"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/collection_no_collections"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/no_collections_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/collection_font_1"
+            android:text="未找到您的收藏，去看看我们的推荐吧！"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_show" />
+
+        <com.xuexiang.xui.widget.button.RippleView
+            android:id="@+id/ripple_to_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/no_collections_hint"
+            app:rv_type="simpleRipple">
+
+            <TextView
+                android:id="@+id/default_button_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/collection_cardview_background"
+                android:gravity="center"
+                android:padding="7dp"
+                android:paddingStart="60dp"
+                android:paddingEnd="60dp"
+                android:text="点击看我推荐"
+                android:textColor="@color/xui_config_color_white"
+                android:textSize="16sp" />
+
+        </com.xuexiang.xui.widget.button.RippleView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

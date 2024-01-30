@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PersonalManagementView</string>
+    <string name="hint_please_introduce_yourself">introduce</string>
 </resources>

@@ -60,6 +60,7 @@ android {
 
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
+    implementation project(':moduleBase:mylibrary1')//依赖基础组件
     annotationProcessor cfg.libARouterCompiler
 
 

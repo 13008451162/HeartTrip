@@ -19,10 +19,10 @@ public class UiTool {
      * @param activity
      * TODO 调用沉浸式状态栏
      */
-    public static void setImmersionBar(@NonNull Activity activity){
+    public static void setImmersionBar(@NonNull Activity activity, boolean isDarkFont){
         ImmersionBar.with(activity)
                 .transparentStatusBar()
-                .statusBarDarkFont(true)
+                .statusBarDarkFont(false)
                 .init();
 
     }

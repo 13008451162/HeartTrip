@@ -7,12 +7,14 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/moduleBase" />
             <option value="$PROJECT_DIR$/moduleBase/libBase" />
+            <option value="$PROJECT_DIR$/moduleBase/mylibrary1" />
             <option value="$PROJECT_DIR$/moduleBase/xuiBase" />
             <option value="$PROJECT_DIR$/moduleCore" />
             <option value="$PROJECT_DIR$/moduleCore/browsingHistoryView" />

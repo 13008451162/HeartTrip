@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
+    implementation project(':moduleBase:mylibrary1')
 
     if (!cfg.isModule){
         implementation project(":moduleCore:homepageView")

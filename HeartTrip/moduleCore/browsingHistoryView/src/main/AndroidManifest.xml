@@ -3,8 +3,14 @@
 
     <application>
         <activity
-            android:name=".BrowsingHistoryActivity"
+            android:name=".view.BrowsingHistoryActivity"
             android:exported="false" />
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="412"/>
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="915"/>
     </application>
 
 </manifest>
