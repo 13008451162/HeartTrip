@@ -3,10 +3,6 @@
 
     <application>
         <activity
-<<<<<<< HEAD
-            android:name=".BrowsingHistoryActivity"
-            android:exported="false" />
-=======
             android:name=".view.BrowsingHistoryActivity"
             android:exported="false" />
         <meta-data
@@ -15,7 +11,6 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="915"/>
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
     </application>
 
 </manifest>

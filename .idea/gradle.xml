@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-<<<<<<< HEAD
-=======
-        <option name="gradleJvm" value="17" />
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
+        <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/moduleBase" />
             <option value="$PROJECT_DIR$/moduleBase/libBase" />
-<<<<<<< HEAD
-=======
             <option value="$PROJECT_DIR$/moduleBase/mylibrary1" />
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
             <option value="$PROJECT_DIR$/moduleBase/xuiBase" />
             <option value="$PROJECT_DIR$/moduleCore" />
             <option value="$PROJECT_DIR$/moduleCore/browsingHistoryView" />

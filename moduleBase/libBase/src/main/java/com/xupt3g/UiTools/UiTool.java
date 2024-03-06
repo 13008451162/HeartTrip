@@ -17,8 +17,10 @@ import com.gyf.immersionbar.ImmersionBar;
 public class UiTool {
     /**
      * @param activity
-     * TODO 调用沉浸式状态栏
+     * @param isDarkFont  true-黑，false-白
+     *  TODO 调用沉浸式状态栏
      */
+
 
     public static void setImmersionBar(@NonNull Activity activity, boolean isDarkFont){
         ImmersionBar.with(activity)

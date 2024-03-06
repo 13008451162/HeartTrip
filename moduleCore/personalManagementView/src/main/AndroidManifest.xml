@@ -3,11 +3,6 @@
 
     <application>
         <activity
-<<<<<<< HEAD
-            android:name=".PersonalManagementActivity"
-            android:exported="true">
-        </activity>
-=======
             android:name=".view.PersonalManagementActivity"
             android:exported="true">
         </activity>
@@ -17,7 +12,6 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="915"/>
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
     </application>
 
 </manifest>

@@ -9,11 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeartTrip">
         <activity
-<<<<<<< HEAD
-            android:name=".BrowsingHistoryActivity"
-=======
             android:name=".view.BrowsingHistoryActivity"
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,15 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="412"/>
         <meta-data
             android:name="design_height_in_dp"
             android:value="915"/>
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
     </application>
 
 </manifest>

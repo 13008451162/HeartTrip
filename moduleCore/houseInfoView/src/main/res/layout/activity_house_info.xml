@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".HouseInfoActivity">
 
-<<<<<<< HEAD
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="房屋信息!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-=======
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -29,7 +19,5 @@
             />
     </FrameLayout>
 
-
->>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
 
 </androidx.constraintlayout.widget.ConstraintLayout>

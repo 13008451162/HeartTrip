@@ -25,7 +25,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_registration);
 
-        UiTool.setImmersionBar(this);
+        UiTool.setImmersionBar(this,false);
         showTimePicker();
     }
 
