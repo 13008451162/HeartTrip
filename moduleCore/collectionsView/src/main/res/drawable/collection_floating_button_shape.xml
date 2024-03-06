@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" >
+
+    <!-- 填充的颜色 -->
+    <gradient android:startColor="#4facfe"
+        android:endColor="#00f2fe"
+        android:angle="45"
+        />
+
+
+
+    <!-- padding：Button里面的文字与Button边界的间隔 -->
+    <padding
+        android:bottom="20dp"
+        android:left="20dp"
+        android:right="20dp"
+        android:top="20dp" />
+
+    <!--设置描边-->
+    <stroke
+        android:width= "10dp"
+        android:color= "#00000000" />
+</shape>

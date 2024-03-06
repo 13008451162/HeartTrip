@@ -1,0 +1,8 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="author:,data:2024/2/19,about:,date:2024/2/19,data:2024/2/15,data:2024/2/16,data:2024/2/22,data:2024/2/25,data:2024/2/28,data:" />
+    </inspection_tool>
+  </profile>
+</component>

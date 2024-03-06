@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.application'
+}
+
+
+def cfg = rootProject.ext
+android {
+    namespace 'com.xupt3g.hearttrip'
+    compileSdk cfg.android.compileSdkVersion
+
+    defaultConfig {
+        applicationId cfg.android.applicationId
+        minSdk cfg.android.minSdkVersion
+        targetSdk cfg.android.targetSdkVersion
+        versionCode cfg.android.versionCode
+        versionName cfg.android.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //让java代码也可以使用isModule
+        buildConfigField("boolean","isModule",String.valueOf(isModule))
+    }
+
+    //让java代码自动生成系统的BuildConfig
+    buildFeatures {
+        buildConfig true
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+
+dependencies {
+    implementation project(':moduleBase:libBase')//依赖基础组件
+    implementation project(':moduleBase:mylibrary1')
+
+    if (!cfg.isModule){
+        implementation project(":moduleCore:homepageView")
+        implementation project(":moduleCore:loginregistrationView")
+        implementation project(":moduleCore:houseInfoView")
+        implementation project(":moduleCore:collectionsView")
+        implementation project(":moduleCore:searchResultView")
+        implementation project(":moduleCore:messagesView")
+        implementation project(":moduleCore:personalManagementView")
+        implementation project(":moduleCore:ordersView")
+        implementation project(":moduleCore:browsingHistoryView")
+    }
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

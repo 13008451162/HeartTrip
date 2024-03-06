@@ -1,0 +1,36 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+
+rootProject.name = "HeartTrip"
+
+include ':app'
+include ':moduleBase:libBase'
+include ':moduleCore:homepageView'
+include ':moduleCore:searchResultView'
+include ':moduleCore:houseInfoView'
+include ':moduleCore:collectionsView'
+include ':moduleCore:messagesView'
+include ':moduleCore:personalManagementView'
+include ':moduleCore:ordersView'
+include ':moduleCore:browsingHistoryView'
+include ':moduleCore:loginregistrationView'
+include ':moduleBase:xuiBase'
+include ':moduleBase:mylibrary1'
