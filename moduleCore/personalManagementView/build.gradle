@@ -21,6 +21,10 @@ android {
         versionCode cfg.android.versionCode
         versionName cfg.android.versionName
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -59,8 +63,15 @@ android {
 
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
+<<<<<<< HEAD
     annotationProcessor cfg.libARouterCompiler
 
+=======
+    implementation project(':moduleBase:mylibrary1')//依赖基础组件
+    annotationProcessor cfg.libARouterCompiler
+
+
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'

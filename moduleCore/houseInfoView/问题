@@ -1,0 +1,4 @@
+1. TabLayout和滑动的ScrollView建立联系时，两者都要调用监听，他们的监听可能会发生导致滑动效果比较奇怪。
+    比如：滑动ScrollView时，滑动到任意位置，会监听主动使TabLayout滑动到指定的tab；但TabLayout又会监听，如果选择到了该tab，ScrollView会滑动到该区域的View的顶端。结果ScrollView滑动的结果出现偏移。
+    比如：TabLayout点击选择了tab时会调用ScrollView的滑动方法滑动到某View的顶端；但ScrollView又会实时监听，使TabLayout滑动到当前View对应的tab上。也会出现冲突。
+    我的解决：我加了一个布尔值变量用来判断当前是否正在使ScrollView滑动，或者使TabLayout的Indicator滑动。true时表示正在滑动，此时就不让他再去调用另一个控件监听中的处理方法。

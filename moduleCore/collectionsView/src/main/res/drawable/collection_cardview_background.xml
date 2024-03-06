@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    background-image:linear-gradient(45deg,#93a5cf 0%, #e4efe9 100%)-->
+    <gradient android:startColor="#93a5cf"
+        android:endColor="#e4efe9"
+        android:angle="45"
+        />
+    <stroke android:width="2dp"
+        android:color="#424242"
+        />
+    <corners android:radius="25dp"/>
+</shape>

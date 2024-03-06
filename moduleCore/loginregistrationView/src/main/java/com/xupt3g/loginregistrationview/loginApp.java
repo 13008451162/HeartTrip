@@ -2,6 +2,10 @@ package com.xupt3g.loginregistrationview;
 
 import android.app.Application;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.XUI;
 

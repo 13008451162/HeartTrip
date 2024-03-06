@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PersonalManagementView</string>
+<<<<<<< HEAD
+=======
+    <string name="hint_please_introduce_yourself">introduce</string>
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
 </resources>

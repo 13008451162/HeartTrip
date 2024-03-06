@@ -15,10 +15,17 @@ import com.xuexiang.xutil.data.DateUtils;
 import com.xupt3g.UiTools.UiTool;
 
 import java.util.Calendar;
+import com.xuexiang.xui.widget.picker.widget.TimePickerView;
+import com.xuexiang.xutil.tip.ToastUtils;
+import com.xupt3g.UiTools.UiTool;
+import com.xupt3g.mylibrary1.BrowsedHistoryManagerService;
+import com.xupt3g.mylibrary1.CollectionManagerService;
 
 
 public class MainActivity extends AppCompatActivity {
     private TimePickerView mTimePicker;
+    private CollectionManagerService collectionManagerService;
+    private BrowsedHistoryManagerService browsedHistoryManagerService;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,30 +33,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UiTool.setImmersionBar(this);
 
-        findViewById(R.id.hello).setOnClickListener(view -> {
-            Log.d("TAG", "onCreate: 点击了");
-            ARouter.getInstance().build("/LoginRegistration/LoginRegistrationActivity").navigation();
-        });
-        //测试XUI框架
-        showTimePicker();
-    }
+        UiTool.setImmersionBar(this, true);
 
-    /**
-     * 测试XUI框架，可删除
-     */
-    private void showTimePicker() {
-        if (mTimePicker == null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.getNowDate());
-            mTimePicker = new TimePickerBuilder(this, (date, v) -> XToastUtils.toast(DateUtils.date2String(date, DateUtils.HHmmss.get())))
-                    .setTimeSelectChangeListener(date -> Log.i("pvTime", "onTimeSelectChanged"))
-                    .setType(TimePickerType.TIME)
-                    .setTitleText("时间选择")
-                    .setDate(calendar)
-                    .build();
+        if (!BuildConfig.isModule) {
+            //集成模式
+            collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collections/CollectionManagerImpl").navigation();
+            browsedHistoryManagerService = (BrowsedHistoryManagerService) ARouter.getInstance().build("/browsingHistoryView/BrowsingHistoryRequest").navigation();
+
+            ToastUtils.toast("collectionsCount == " + collectionManagerService.getCollectionsCount() + "\nhistoryCount == " + browsedHistoryManagerService.getBrowsedHistoryCount()
+                    + "\n" + browsedHistoryManagerService.addBrowsedHistory(1));
+
+            findViewById(R.id.hello).setOnClickListener(view -> {
+                Log.d("TAG", "onCreate: 点击了");
+                ARouter.getInstance().build("/personalManagement/PersonalManagementActivity").navigation();
+
+            });
         }
-        mTimePicker.show();
     }
 }

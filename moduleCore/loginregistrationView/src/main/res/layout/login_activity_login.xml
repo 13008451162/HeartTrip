@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoginActivity"
+    android:background="@drawable/login_background">
+
+    <ImageButton
+        android:id="@+id/back_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/login_icon_backbtn"
+        android:layout_marginTop="35dp"
+        android:layout_marginStart="15dp"
+        />
+
+    <View
+        android:id="@+id/mengcengGrey"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#70ffffff"
+
+        />
+
+    <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:id="@+id/phoneEdit"
+        app:layout_constraintTop_toTopOf="@id/mengcengGrey"
+        app:layout_constraintBottom_toTopOf="@id/passwordEdit"
+        app:layout_constraintStart_toStartOf="@id/mengcengGrey"
+        app:layout_constraintEnd_toEndOf="@id/mengcengGrey"
+        android:hint="请输入手机号"
+        android:textColor="@color/white"
+        android:gravity="left|bottom"
+        android:inputType="number"
+        app:met_iconRight="@drawable/login_icon_mobile"
+        app:met_iconPadding="8dp"
+        />
+    
+    <com.xuexiang.xui.widget.edittext.PasswordEditText
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:id="@+id/passwordEdit"
+        app:layout_constraintTop_toBottomOf="@id/phoneEdit"
+        app:layout_constraintBottom_toBottomOf="@id/mengcengGrey"
+        app:layout_constraintStart_toStartOf="@id/mengcengGrey"
+        app:layout_constraintEnd_toEndOf="@id/mengcengGrey"
+        android:hint="请输入密码(8-16位)"
+        app:pet_iconHide="@drawable/login_icon_invisibility"
+        app:pet_iconShow="@drawable/login_icon_visibility"
+        app:pet_isAsteriskStyle="true"
+        android:gravity="left|bottom"
+        tools:ignore="RtlHardcoded" />
+
+
+
+    <com.xuexiang.xui.widget.button.ButtonView
+        android:id="@+id/loginBtn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/mengcengGrey"
+        app:layout_constraintStart_toStartOf="@id/passwordEdit"
+        app:layout_constraintEnd_toEndOf="@id/passwordEdit"
+        style="@style/ButtonView.Gray"
+        android:layout_margin="20dp"
+        android:text="登  录"/>
+
+    <com.xuexiang.xui.widget.button.ButtonView
+        android:id="@+id/registerBtn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn"
+        app:layout_constraintStart_toStartOf="@id/passwordEdit"
+        app:layout_constraintEnd_toEndOf="@id/passwordEdit"
+        style="@style/ButtonView.Green"
+        android:layout_margin="20dp"
+        android:text="注  册"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

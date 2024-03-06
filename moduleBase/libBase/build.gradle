@@ -40,6 +40,19 @@ dependencies {
     api cfg.libImmersionbar//引入沉浸式布局依赖
     api cfg.libXui   //引入UI库
     api cfg.libCodeLocator   //引入字节工具集
+<<<<<<< HEAD
+=======
+    api cfg.dependencies.retrofit2
+    api cfg.dependencies.retrofit2gson
+    api cfg.dependencies.glide
+    api cfg.dependencies.appintro //引导页工具
+    api cfg.dependencies.cicleimagview //圆形ImageView 用户头像
+    api cfg.dependencies.gson //引入GSON
+    api cfg.dependencies.swiperecyclerview//滑动recycler
+    api cfg.dependencies.AndroidAutoSize//屏幕适配
+    api cfg.dependencies.eventbus //EventBus
+
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
 
     // 依赖lancet-all, 则包含所有lancet能力
     debugImplementation "com.bytedance.tools.codelocator:codelocator-lancet-all:2.0.3"

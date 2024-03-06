@@ -1,9 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+<<<<<<< HEAD
     <style name="Base.Theme.HeartTrip" parent="Theme.Material3.DayNight.NoActionBar">
+=======
+    <style name="Base.Theme.HeartTrip" parent="XUITheme.Phone">
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.HeartTrip" parent="Base.Theme.HeartTrip" />
+<<<<<<< HEAD
+=======
+
+    <style name="tabIndicatorUnselectedText" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="tabIndicatorselectedText" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
 </resources>

@@ -33,3 +33,7 @@ include ':moduleCore:ordersView'
 include ':moduleCore:browsingHistoryView'
 include ':moduleCore:loginregistrationView'
 include ':moduleBase:xuiBase'
+<<<<<<< HEAD
+=======
+include ':moduleBase:mylibrary1'
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e

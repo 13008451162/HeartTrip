@@ -14,14 +14,27 @@
         android:theme="@style/Theme.HeartTrip"
         tools:targetApi="31">
         <activity
+<<<<<<< HEAD
             android:name=".MainActivity"
             android:exported="true">
+=======
+            android:name=".GuideActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.Splash">
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+>>>>>>> 85312de7e7f0ad8772144c6a7452b387e7032e8e
     </application>
 
 </manifest>
