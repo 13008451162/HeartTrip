@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.libbase.BuildConfig;
+import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.popupwindow.good.GoodView;
 import com.xuexiang.xui.widget.popupwindow.good.IGoodView;
 import com.xuexiang.xutil.tip.ToastUtils;
@@ -27,7 +30,7 @@ import java.util.Random;
  * 文件名: com.xupt3g.collectionsview.view.RecommendationsListAdapter
  *
  * @author: shallew
- * @data:2024/2/17 1:24
+ * @data: 2024/2/17 1:24
  * @about: TODO
  */
 public class RecommendationsListAdapter extends RecyclerView.Adapter<RecommendationsListAdapter.ViewHolder> implements CollectionsGuessManagerImpl {
@@ -142,7 +145,14 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
                     guessData.setCollected(false);
                 }
             }
-
+        });
+        holder.itemView.setOnClickListener(view -> {
+            if (!BuildConfig.isModule) {
+                ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
+                        .withInt("HouseId", guessData.getId()).navigation();
+            } else {
+                XToastUtils.error("当前不能跳转！");
+            }
         });
     }
 

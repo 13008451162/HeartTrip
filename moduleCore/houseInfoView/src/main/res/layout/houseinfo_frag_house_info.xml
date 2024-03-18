@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3"
+    android:background="#eef3f7"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/houseInfo_scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="true"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,55 +25,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <include
                 android:id="@+id/t_1"
+                layout="@layout/houseinfo_first_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#e3e3e3"
-                android:text="text1"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
-            <TextView
+
+            <include
                 android:id="@+id/t_2"
+                layout="@layout/houseinfo_second_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="@color/white"
-                android:text="text2"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
-            <TextView
+            <include
                 android:id="@+id/t_3"
+                layout="@layout/houseinfo_third_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#e3e3e3"
-                android:text="text3"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
-            <TextView
+            <include
                 android:id="@+id/t_4"
+                layout="@layout/houseinfo_fourth_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="@color/white"
-                android:text="text4"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
-            <TextView
+            <include
                 android:id="@+id/t_5"
+                layout="@layout/houseinfo_fifth_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#e3e3e3"
-                android:text="text5"
-                android:textSize="20sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:background="@color/xui_config_color_white" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="90dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -81,9 +70,9 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
 
             <ImageView
                 android:id="@+id/houseInfo_back_icon"
@@ -139,5 +128,112 @@
             app:tabTextAppearance="@style/tabIndicatorUnselectedText" />
     </LinearLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/houseinfo_bottom_float_background"
+        android:padding="10dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/bottom_text_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/houseinfo_icon_consult"
+            android:drawablePadding="5dp"
+            android:padding='7dp'
+            android:drawableTint="#636363"
+            android:text="咨询"
+            android:textSize="12sp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_book"
+            app:layout_constraintStart_toEndOf="@id/bottom_text_1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/bottom_price_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥516"
+                android:textColor="#ee609c"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/bottom_price_discount"
+                app:layout_constraintEnd_toStartOf="@id/bottom_unit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bottom_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元/晚"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/bottom_price_after"
+                app:layout_constraintStart_toEndOf="@id/bottom_price_after"
+                app:layout_constraintEnd_toStartOf="@id/bottom_price_before"/>
+
+            <TextView
+                android:id="@+id/bottom_price_before"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥860"
+                android:textSize="12sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/bottom_price_after"
+                app:layout_constraintStart_toEndOf="@id/bottom_unit"
+                app:layout_constraintEnd_toEndOf="@id/bottom_price_discount"
+                />
+
+            <TextView
+                android:id="@+id/bottom_price_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/houseinfo_bottom_discount_background"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="已为您优惠减免344元"
+                android:textColor="#ee609c"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottom_price_after" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/bottom_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bottom_price"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/bottom_time_or_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ee609c"
+                android:paddingStart="15dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="7dp"
+                android:text="立即预定"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

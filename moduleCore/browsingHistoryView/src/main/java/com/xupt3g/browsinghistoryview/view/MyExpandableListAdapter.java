@@ -17,6 +17,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.adapter.recyclerview.sticky.FullSpanUtils;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
@@ -147,8 +149,17 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
 
             holder.expandableLayoutTitle.setOnClickListener(view -> {
                 //由此跳转至民宿详情页面
-                ToastUtils.toast("进入民宿详情页");
-
+                if (item.getHistoryData().getRowState() == 0) {
+                    //已下架
+                    ToastUtils.toast("该民宿已下架");
+                } else {
+                    if (!BuildConfig.isModule) {
+                        ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
+                                .withInt("HouseId", item.getHistoryData().getId()).navigation();
+                    } else {
+                        XToastUtils.error("当前不可跳转！");
+                    }
+                }
             });
 
             holder.expandCollectButton.setOnClickListener(view -> {
@@ -166,17 +177,16 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
                     boolean b1 = mDeleteHistoryItemListener.deleteHistoryItem(position);
                     if (b1) {
                         ToastUtils.toast("删除成功");
-
                     }
-
                 } else {
                     XToastUtils.error("删除失败");
                 }
             });
-
             if (item.getHistoryData().getRowState() == 0) {
                 //已下架
                 holder.darkOverlayView.setVisibility(View.VISIBLE);
+            } else {
+                holder.darkOverlayView.setVisibility(View.GONE);
             }
         }
     }

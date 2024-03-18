@@ -79,7 +79,6 @@ public class CollectionsFragment extends Fragment {
         new TabLayoutMediator(tabLayout, vp2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                Log.d("tabPOSITION", "onConfigureTab: " + position);
                 tab.setText(tabs[position]);
             }
         }).attach();

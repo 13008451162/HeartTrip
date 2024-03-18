@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
  * @data:2024/2/22 0:51
  * @about: TODO
  */
-public class BrowsingHistoryFragment extends Fragment implements BrowsingHistoryUiImpl{
+public class BrowsingHistoryFragment extends Fragment implements BrowsingHistoryUiImpl {
 
     private View mView;
     private RecyclerView historyRecycler;
@@ -188,13 +188,13 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
     /**
      * @param listItems 字符串列表
      * @param view      生成列表弹窗的根View
-     * TODO 生成列表弹窗
+     *                  TODO 生成列表弹窗
      */
     public void listPopup(List<String> listItems, View view) {
         //将字符数组转成adapter
         XUISimpleAdapter simpleAdapter = XUISimpleAdapter.create(getContext(), listItems);
         mListPopup = new XUIListPopup(requireContext(), simpleAdapter);
-        mListPopup.create(DensityUtils.dp2px(view.getContext(),200), DensityUtils.dp2px(view.getContext(),200), new AdapterView.OnItemClickListener() {
+        mListPopup.create(DensityUtils.dp2px(view.getContext(), 200), DensityUtils.dp2px(view.getContext(), 200), new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == headerTitles.size() - 1) {
@@ -212,7 +212,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     //清空历史记录 Presenter
-                                    if (presenter.clearHistoryList() && dataList != null && adapter!= null) {
+                                    if (presenter.clearHistoryList() && dataList != null && adapter != null) {
                                         dataList.clear();
                                         historyRecycler.setVisibility(View.INVISIBLE);
                                         stickyHeadContainer.onInVisible();
@@ -257,7 +257,6 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
         dataList = new ArrayList<>();
 
 
-
         //遍历数据集合
         for (int i = 0; i < historyDataList.size(); i++) {
             //根据HistoryData的browsingTime进行分组
@@ -281,24 +280,31 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
             }
         }
         //分组完成放到dataList中进行显示
-        dataList.add(new StickyItem("最近的浏览"));
+        if (weekBrowsedList.size() > 0) {
+            dataList.add(new StickyItem("最近的浏览"));
+            dataList.addAll(weekBrowsedList);
+        }
         WEEK_GROUP_HEADER_INDEX = 0;
-        dataList.addAll(weekBrowsedList);
-        dataList.add(new StickyItem("一月内的浏览"));
+        if (monthBrowsedList.size() > 0) {
+            dataList.add(new StickyItem("一月内的浏览"));
+            dataList.addAll(monthBrowsedList);
+        }
         MONTH_GROUP_HEADER_INDEX = weekBrowsedList.size() + 1;
-        dataList.addAll(monthBrowsedList);
-        dataList.add(new StickyItem("一季内的浏览"));
+        if (seasonBrowsedList.size() > 0) {
+            dataList.add(new StickyItem("一季内的浏览"));
+            dataList.addAll(seasonBrowsedList);
+        }
         SEASON_GROUP_HEADER_INDEX = MONTH_GROUP_HEADER_INDEX + monthBrowsedList.size() + 1;
-        dataList.addAll(seasonBrowsedList);
-        dataList.add(new StickyItem("更早的浏览"));
+        if (earlierBrowsedList.size() > 0) {
+            dataList.add(new StickyItem("更早的浏览"));
+            dataList.addAll(earlierBrowsedList);
+        }
         EARLIER_GROUP_HEADER_INDEX = SEASON_GROUP_HEADER_INDEX + seasonBrowsedList.size() + 1;
-        dataList.addAll(earlierBrowsedList);
     }
 
     /**
-     *
      * @param historyDataList 从Model层进行网络请求获取的浏览历史集合
-     * TODO 在Ui上展示获取到的历史数据
+     *                        TODO 在Ui上展示获取到的历史数据
      */
     @Override
     public void showHistoryListOnUi(List<HistoryData> historyDataList) {
@@ -306,7 +312,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
             //如果获取到的数据集合为空 可能未登录或请求失败
             //未登录的情况前面已经判断 应该是请求失败
 
-            return ;
+            return;
         }
         if (historyDataList.size() == 0) {
             //如果集合中没有数据 生成缺省页
@@ -321,7 +327,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
                     }
                 }
             });
-            return ;
+            return;
         }
 
         try {
@@ -382,9 +388,8 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
     }
 
     /**
-     *
      * @param animRes 动画资源
-     * TODO 给RecyclerView的子项设置入场动画
+     *                TODO 给RecyclerView的子项设置入场动画
      */
     private void animationInit(int animRes) {
         Animation animation = AnimationUtils.loadAnimation(getContext(), animRes);
@@ -395,7 +400,6 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
     }
 
     /**
-     *
      * @param position 要删除的子项在集合中的下标
      * @return 返回是否成功删除
      * TODO 删除历史子项 更新集合和RecyclerView

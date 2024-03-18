@@ -27,6 +27,10 @@ import androidx.lifecycle.Observer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
+import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.XToastUtils;
@@ -36,6 +40,8 @@ import com.xuexiang.xui.widget.grouplist.XUIGroupListView;
 import com.xupt3g.mylibrary1.NotificationManagement;
 import com.xupt3g.personalmanagementview.R;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
+
+import java.util.List;
 
 
 /**
@@ -137,10 +143,8 @@ public class SettingFragment extends Fragment {
                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                             item1.setImageDrawable(resource);
                         }
-
                         @Override
                         public void onLoadCleared(@Nullable Drawable placeholder) {
-
                         }
                     });
 
@@ -205,6 +209,40 @@ public class SettingFragment extends Fragment {
      * 允许通知
      */
     public void notificationAllowed() {
+        final boolean[] success = {false};
+        if (!XXPermissions.isGranted(requireContext(), Permission.POST_NOTIFICATIONS)) {
+            //检测是否有发送通知权限
+            //没有
+            XXPermissions.with(requireContext())
+                    .permission(Permission.POST_NOTIFICATIONS)
+                    .request(new OnPermissionCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
+                            if (allGranted) {
+                                ToastUtils.toast("已成功授权！");
+                                success[0] = true;
+                            } else {
+                                ToastUtils.toast("授权失败");
+                            }
+                        }
+
+                        @Override
+                        public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {
+                            if (doNotAskAgain) {
+                                ToastUtils.toast("被永久拒绝授权，请手动授予通知权限！");
+                                if (XXPermissions.isGranted(requireContext(), permissions)) {
+                                    success[0] = true;
+                                }
+                            } else {
+                                ToastUtils.toast("通知权限获取失败");
+                            }
+                        }
+                    });
+            if (!success[0]) {
+                return;
+            }
+        }
+
         Log.d("Switch", "onCheckedChanged: 允许通知");
         NotificationManagement.isAllowNotification = true;
         NotificationManager manager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -235,7 +273,6 @@ public class SettingFragment extends Fragment {
         NotificationManager manager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
     }
-
 
 
 }

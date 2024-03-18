@@ -49,6 +49,8 @@ dependencies {
     api cfg.dependencies.swiperecyclerview//滑动recycler
     api cfg.dependencies.AndroidAutoSize//屏幕适配
     api cfg.dependencies.eventbus //EventBus
+    api cfg.libXXPermissions    //权限请求框架
+
 
 
     // 依赖lancet-all, 则包含所有lancet能力

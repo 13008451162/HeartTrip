@@ -10,7 +10,7 @@ import com.xuexiang.xui.XUI;
  * 文件名: loginApp
  *
  * @author: lukecc0
- * @data:2024/1/24 下午4:29
+ * @data: 2024/1/24 下午4:29
  * @about: TODO
  */
 

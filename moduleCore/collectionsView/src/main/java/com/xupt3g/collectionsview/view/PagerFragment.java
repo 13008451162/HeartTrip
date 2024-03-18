@@ -21,8 +21,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.example.libbase.BuildConfig;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.xuexiang.xui.utils.XToastUtils;
 import com.xupt3g.collectionsview.R;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
@@ -199,15 +202,12 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
             return ;
         }
 
-        Log.d("requestCOUNT", "collectionViewInit: " + collections.size());
         OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onItemClick(SwipeMenuBridge menuBridge, int position) {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
-                Log.d("cancelwwwhat", "cancelCollectInGuesses: " + collections.toString());
-
                 //先记录民宿ID
                 int houseId = collections.get(position).getId();
                 //先向服务器提交删除申请Presenter
@@ -262,7 +262,6 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
      */
     @SuppressLint("NotifyDataSetChanged")
     private void cancelCollectInGuesses(int houseId) {
-        Log.d("cancelwwwhat", "cancelCollectInGuesses: " + houseId);
         if (guesses != null) {
             for (int i = 0; i < guesses.size(); i++) {
                 if (houseId == guesses.get(i).getId() && guesses.get(i).isCollected()) {
@@ -318,7 +317,6 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
             @Override
             public void onClick(View view) {
                 presenter.showGuessList();
-
             }
         });
 
@@ -430,21 +428,29 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
             }
         };
 
-        // 设置监听器。
-        swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //TODO 进入民俗详情页面
-                if (dataList.get(position) instanceof CollectionData
-                        && ((CollectionData) dataList.get(position)).getRowState() == 0) {
-                    //dataList在这里一定不为空
-                    //如果是收藏数据判断以下是否已下架
-                    ToastUtils.toast("该房屋已下架！");
-                } else {
-                    ToastUtils.toast("进入民宿详情页面");
-                }
-            }
-        });
+//        // 设置监听器。
+//        swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                //TODO 进入民俗详情页面
+//                if (dataList.get(position) instanceof CollectionData
+//                        && ((CollectionData) dataList.get(position)).getRowState() == 0) {
+//                    //dataList在这里一定不为空
+//                    //如果是收藏数据判断以下是否已下架
+//                    ToastUtils.toast("该房屋已下架！");
+//                } else {
+//                    if (!BuildConfig.isModule) {
+//                        //跳转至民宿详情页面
+//
+//                        ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
+//                                .withInt("HouseId", )
+//                                .navigation();
+//                    } else {
+//                        XToastUtils.error("当前不能跳转！");
+//                    }
+//                }
+//            }
+//        });
         //添加菜单
         if (!No_NEED_MENU.equals(swipeMenuText)) {
             //需要菜单 否则不需要添加
