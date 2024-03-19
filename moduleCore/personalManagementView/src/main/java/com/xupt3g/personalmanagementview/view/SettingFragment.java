@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,6 +44,7 @@ import com.xupt3g.personalmanagementview.R;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -150,12 +153,12 @@ public class SettingFragment extends Fragment {
 
             XUIGroupListView.newSection(mView.getContext())
                     .addItemView(item1, new View.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
                         @Override
                         public void onClick(View view) {
                             //跳转至账号信息管理页面
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.fragment_container, new AccountInfoFragment())
-                                    .hide(SettingFragment.this)
+                            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.add(R.id.setting_fragment_container, new AccountInfoFragment())
                                     .addToBackStack(null).commit();
                         }
                     })

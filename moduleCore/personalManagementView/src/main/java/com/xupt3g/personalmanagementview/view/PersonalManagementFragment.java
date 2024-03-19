@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
@@ -45,6 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @data: 2024/2/3 12:13
  * @about: TODO 个人管理页面Fragment
  */
+@Route(path = "/personalManagementView/PersonalManagementFragment")
 public class PersonalManagementFragment extends Fragment implements AccountInfoShowImpl {
 
     private View mView;
@@ -152,7 +154,7 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
                     //Presenter
                     presenter.accountInfoGet();
 
-                } else if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())){
+                } else if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
                     //如果登录状态为false 未登录
                     notLoggedInUi();//未登录界面展示
                 }
@@ -161,11 +163,16 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
 
         //设置图标点击监听
         settingButton.setOnClickListener(view -> {
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new SettingFragment())
-                    .hide(PersonalManagementFragment.this)
-                    .addToBackStack(null).commit();
-
+            if (BuildConfig.isModule) {
+                //组件模式下
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.personal_fragment_container, new SettingFragment())
+                        .addToBackStack(null).commit();
+            } else {
+                //集成模式下
+                Intent intent = new Intent(getContext(), SettingActivity.class);
+                startActivity(intent);
+            }
         });
 
         //observe观察者当数据第一次使用时（没有修改）也会被调用
@@ -289,7 +296,6 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
     }
 
     /**
-     *
      * TODO 将账户信息显示在UI上
      */
     @Override

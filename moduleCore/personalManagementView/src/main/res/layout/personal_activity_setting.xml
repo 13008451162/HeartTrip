@@ -3,19 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.PersonalManagementActivity">
+    tools:context=".view.SettingActivity">
 
     <FrameLayout
+        android:id="@+id/setting_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/personal_fragment_container"
-        >
+        android:layout_height="match_parent">
 
         <fragment
+            android:name="com.xupt3g.personalmanagementview.view.SettingFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/personal_fragment"
-            android:name="com.xupt3g.personalmanagementview.view.PersonalManagementFragment"
-            />
+            android:layout_height="match_parent" />
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

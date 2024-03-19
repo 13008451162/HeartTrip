@@ -17,10 +17,7 @@ public class HouseInfoBaseData {
      * 标题
      */
     private String title;
-    /**
-     * 定位地址
-     */
-    private String location;
+
     /**
      * 评星评级
      */
@@ -38,6 +35,14 @@ public class HouseInfoBaseData {
      */
     private String[] bannerUrls;
     /**
+     * 纬度
+     */
+    private long latitude;
+    /**
+     * 经度
+     */
+    private long longitude;
+    /**
      * 基础设施标签
      */
     private String[] baseFacilities;
@@ -49,26 +54,6 @@ public class HouseInfoBaseData {
      * 房间配置 1室1厅1卫1厨
      */
     private String room;
-//    /**
-//     * 卫浴设施标签
-//     */
-//    private String[] bathFacilities;
-//    /**
-//     * 服务设施标签
-//     */
-//    private String[] serviceFacilities;
-//    /**
-//     * 居家设施标签
-//     */
-//    private String[] livingFacilities;
-//    /**
-//     * 安全设施标签
-//     */
-//    private String[] safetyFacilities;
-//    /**
-//     * 周边设施标签
-//     */
-//    private String[] surroundingFacilities;
     /**
      * 房间清理过程录像的url
      */
@@ -89,6 +74,31 @@ public class HouseInfoBaseData {
      * 折前价
      */
     private int priceBefore;
+    //以下暂不需要
+    /**
+     * 定位地址
+     */
+    private String location;
+//    /**
+//     * 卫浴设施标签
+//     */
+//    private String[] bathFacilities;
+//    /**
+//     * 服务设施标签
+//     */
+//    private String[] serviceFacilities;
+//    /**
+//     * 居家设施标签
+//     */
+//    private String[] livingFacilities;
+//    /**
+//     * 安全设施标签
+//     */
+//    private String[] safetyFacilities;
+//    /**
+//     * 周边设施标签
+//     */
+//    private String[] surroundingFacilities;
 
     public HouseInfoBaseData(int id, String title, String location, float ratingStars, int commentsCount, String titleTags, String[] bannerUrls, String[] baseFacilities, String area, String room, String cleanVideoUrl, String landlordAvatar, String landlordNickname, int priceAfter, int priceBefore) {
         this.id = id;

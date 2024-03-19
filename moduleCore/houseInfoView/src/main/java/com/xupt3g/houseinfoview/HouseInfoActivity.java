@@ -25,10 +25,10 @@ public class HouseInfoActivity extends AppCompatActivity {
             ARouter.getInstance().inject(this);
         }
         UiTool.setImmersionBar(this, true);
-        FrameLayout frameLayout = findViewById(R.id.fragment_container);
+        FrameLayout frameLayout = findViewById(R.id.houseinfo_fragment_container);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.add(R.id.fragment_container, HouseInfoFragment.newInstance(houseId)).commit();
+        transaction.add(R.id.houseinfo_fragment_container, HouseInfoFragment.newInstance(houseId)).commit();
 
     }
 

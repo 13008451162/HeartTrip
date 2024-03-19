@@ -1,8 +1,6 @@
 package com.xupt3g.houseinfoview;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -912,6 +910,8 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
      * TODO 设置ScrollView滑动位置改变时的监听
      */
     private void setScrollViewPositionChangedListener() {
+        //滑动未开始 尚未滑动
+        topViewColorChange(true);
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.google.android.material.tabs.TabLayout;
@@ -32,6 +33,7 @@ import java.util.List;
  * @data:2024/2/15 1:02
  * @about: TODO 收藏页面Fragment
  */
+@Route(path = "/collectionsView/CollectionsFragment")
 public class CollectionsFragment extends Fragment {
     private View mView;
     private List<String> mList = new ArrayList<>();

@@ -11,7 +11,7 @@ package com.xupt3g.houseinfoview.model;
 public class HouseInfoBaseDataResponse {
     private int code;
     private String msg;
-    private HouseInfoBaseData houseInfoBaseData;
+    private HouseInfoBaseData data;
 
     public int getCode() {
         return code;
@@ -22,6 +22,6 @@ public class HouseInfoBaseDataResponse {
     }
 
     public HouseInfoBaseData getHouseInfoBaseData() {
-        return houseInfoBaseData;
+        return data;
     }
 }
