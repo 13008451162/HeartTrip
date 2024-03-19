@@ -23,7 +23,7 @@ ext {
             "personalManagementView": "com.xupt3g.personalmanagementview",
             "ordersView"            : "com.xupt3g.ordersview",
             "browsingHistoryView"   : "com.xupt3g.browsinghistoryview",
-            "leakcanary"     : 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+            "commentsView"          : "com.xupt3g.commentsview"
     ]
 
 

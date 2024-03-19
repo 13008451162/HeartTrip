@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ARouter.getInstance().build("/commentsview/CommentsActivity").navigation();
 
         UiTool.setImmersionBar(this, true);
         bottomNavigationView = findViewById(R.id.app_bottom_navigation);
