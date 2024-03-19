@@ -37,14 +37,36 @@ ext {
             appintro          : 'com.github.AppIntro:AppIntro:6.3.1', //引导页
             swiperecyclerview : 'com.yanzhenjie.recyclerview:support:1.3.2', //可滑动recycler
             AndroidAutoSize   : 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1', //屏幕适配
+            lottie_android    : 'com.airbnb.android:lottie:6.4.0' // 用于渲染json格式的插画
+    ]
+
+    //百度SDK
+    baidudependencies = [
+            baiduMap     : 'com.baidu.lbsyun:BaiduMapSDK_Map:7.5.4',
+            baiduSearch  : 'com.baidu.lbsyun:BaiduMapSDK_Search:7.5.4',
+            baiduTool    : 'com.baidu.lbsyun:BaiduMapSDK_Util:7.5.4',
+            baiduLocation: 'com.baidu.lbsyun:BaiduMapSDK_Location:9.3.7'
+    ]
+
+    rxJavadependencies = [
+            rxandroid: 'io.reactivex.rxjava3:rxandroid:3.0.2',
+            rxjava   : 'io.reactivex.rxjava3:rxjava:3.1.5',
+            rxbinding: 'com.jakewharton.rxbinding4:rxbinding:4.0.0',
+            rxjava3_retrofit2 : 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     ]
 
     //XUI库所需依赖
     xuidependencies = [
             // 工具类
             xutil_core: 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0',
-            xutil_sub : 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
+            xutil_sub : 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0',
+
+            citypicker: 'com.github.xuexiangjys:citypicker:1.0.1'
     ]
+
+
+    //开发工具
+    liblombok = 'org.projectlombok:lombok:1.18.30'
 
     //沉浸式导航栏
     libImmersionbar = 'com.geyifeng.immersionbar:immersionbar:3.2.2'
@@ -58,4 +80,8 @@ ext {
     libARouter = 'com.alibaba:arouter-api:1.5.2'
     libARouterCompiler = 'com.alibaba:arouter-compiler:1.5.2'
     libEventBusCompiler = 'org.greenrobot:eventbus-annotation-processor:3.3.1'
+    libXXPermissions = 'com.github.getActivity:XXPermissions:18.6'  //权限请求框架
+
+    leakcanary = 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-1';  //内存监控工具
+
 }

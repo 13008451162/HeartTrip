@@ -3,6 +3,9 @@ package com.xupt3g.hearttrip;
 import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.baidu.location.LocationClient;
+import com.baidu.mapapi.CoordType;
+import com.baidu.mapapi.SDKInitializer;
 import com.xuexiang.xui.XUI;
 
 /**

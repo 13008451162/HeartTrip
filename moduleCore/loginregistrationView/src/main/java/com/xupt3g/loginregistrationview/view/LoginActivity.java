@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  * @about: TODO View层登录活动界面
  */
 
-@Route(path = "/loginRegistration/LoginActivity")
+@Route(path = "/loginregistrationView/LoginActivity")
 public class LoginActivity extends AppCompatActivity implements LoginRegisterViewImpl {
 
 

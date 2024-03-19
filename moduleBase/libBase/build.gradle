@@ -49,6 +49,10 @@ dependencies {
     api cfg.dependencies.swiperecyclerview//滑动recycler
     api cfg.dependencies.AndroidAutoSize//屏幕适配
     api cfg.dependencies.eventbus //EventBus
+    api cfg.dependencies.lottie_android //渲染json格式插画
+    api cfg.libXXPermissions //权限请求框架
+    api cfg.leakcanary  //内存监控工具
+    api cfg.liblombok //开发工具
 
 
     // 依赖lancet-all, 则包含所有lancet能力
@@ -59,7 +63,16 @@ dependencies {
         api dependency.value
     }
 
+    // 使用 for 循环添加 baidudependencies 中的依赖项
+    for (def dependency in baidudependencies) {
+        api dependency.value
+    }
+
+    for (def dependency in rxJavadependencies){
+        api dependency.value
+    }
+
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

@@ -12,13 +12,20 @@ android {
         applicationId cfg.android.applicationId
         minSdk cfg.android.minSdkVersion
         targetSdk cfg.android.targetSdkVersion
-        versionCode cfg.android.versionCode
+        versionCode versionCode
         versionName cfg.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         //让java代码也可以使用isModule
         buildConfigField("boolean","isModule",String.valueOf(isModule))
+
+
+        //百度定位SDK所需
+        ndk {
+            // 设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+        }
     }
 
     //让java代码自动生成系统的BuildConfig

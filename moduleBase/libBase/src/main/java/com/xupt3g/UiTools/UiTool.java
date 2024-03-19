@@ -25,7 +25,7 @@ public class UiTool {
     public static void setImmersionBar(@NonNull Activity activity, boolean isDarkFont){
         ImmersionBar.with(activity)
                 .transparentStatusBar()
-                .statusBarDarkFont(false)
+                .statusBarDarkFont(isDarkFont)
                 .init();
 
     }
