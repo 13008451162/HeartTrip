@@ -1,12 +1,16 @@
 package com.xupt3g.hearttrip;
 
+import static com.xuexiang.xutil.tip.ToastUtils.toast;
+
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.CoordType;
-import com.baidu.mapapi.SDKInitializer;
+
 import com.xuexiang.xui.XUI;
+
+import java.util.List;
 
 /**
  * @author lukecc0
@@ -19,6 +23,9 @@ public class HeartTripApp extends Application {
 
         onCreateARouter();
         onCreateXUI();
+
+
+
 
     }
 

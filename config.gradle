@@ -22,7 +22,8 @@ ext {
             "messagesView"          : "com.xupt3g.messagesview",
             "personalManagementView": "com.xupt3g.personalmanagementview",
             "ordersView"            : "com.xupt3g.ordersview",
-            "browsingHistoryView"   : "com.xupt3g.browsinghistoryview"
+            "browsingHistoryView"   : "com.xupt3g.browsinghistoryview",
+            "commentsView"          : "com.xupt3g.commentsview"
     ]
 
 
@@ -66,6 +67,7 @@ ext {
     //开发工具
     liblombok = 'org.projectlombok:lombok:1.18.30'
 
+
     //沉浸式导航栏
     libImmersionbar = 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 
@@ -78,8 +80,10 @@ ext {
     libARouter = 'com.alibaba:arouter-api:1.5.2'
     libARouterCompiler = 'com.alibaba:arouter-compiler:1.5.2'
     libEventBusCompiler = 'org.greenrobot:eventbus-annotation-processor:3.3.1'
+
     libXXPermissions = 'com.github.getActivity:XXPermissions:18.6'  //权限请求框架
 
     leakcanary = 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-1';  //内存监控工具
+    
 
 }

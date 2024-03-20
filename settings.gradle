@@ -15,6 +15,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.aliyun.com/repository/public" }
     }
 }
 
@@ -34,3 +35,4 @@ include ':moduleCore:browsingHistoryView'
 include ':moduleCore:loginregistrationView'
 include ':moduleBase:xuiBase'
 include ':moduleBase:mylibrary1'
+include ':moduleCore:commentsview'

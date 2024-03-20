@@ -44,7 +44,7 @@ public class CollectionData {
     /**
      * 上架状态 0：下架 1：上架
      */
-    private int rowState = 0;
+    private int rowState = 1;
 
     public int getRowState() {
         return rowState;

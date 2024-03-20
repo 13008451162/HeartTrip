@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/moduleCore" />
             <option value="$PROJECT_DIR$/moduleCore/browsingHistoryView" />
             <option value="$PROJECT_DIR$/moduleCore/collectionsView" />
+            <option value="$PROJECT_DIR$/moduleCore/commentsview" />
             <option value="$PROJECT_DIR$/moduleCore/homepageView" />
             <option value="$PROJECT_DIR$/moduleCore/houseInfoView" />
             <option value="$PROJECT_DIR$/moduleCore/loginregistrationView" />
@@ -29,5 +30,6 @@
         <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
+    <option name="offlineMode" value="true" />
   </component>
 </project>

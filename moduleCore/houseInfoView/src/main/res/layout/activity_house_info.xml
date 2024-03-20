@@ -7,17 +7,9 @@
     tools:context=".HouseInfoActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/houseinfo_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/frag_houseinfo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.xupt3g.houseinfoview.HouseInfoFragment"
-            />
     </FrameLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.xupt3g.collectionsview.view;
 
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.libbase.BuildConfig;
+import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.progress.ratingbar.ScaleRatingBar;
+import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.collectionsview.R;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
 
@@ -54,7 +59,22 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
         if (collectionsData.getRowState() == 0) {
             //已下架
             holder.darkOverlayView.setVisibility(View.VISIBLE);
+        } else {
+            holder.darkOverlayView.setVisibility(View.GONE);
         }
+        holder.itemView.setOnClickListener(view -> {
+            if (collectionsData.getRowState() == 0) {
+                ToastUtils.toast("该民宿已下架");
+            } else {
+                if (!BuildConfig.isModule) {
+                    Log.d("HouseId", "onBindViewHolder: " + collectionsData.getId());
+                    ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
+                            .withInt("HouseId", collectionsData.getId()).navigation();
+                } else {
+                    XToastUtils.error("当前不能跳转！");
+                }
+            }
+        });
 
     }
 

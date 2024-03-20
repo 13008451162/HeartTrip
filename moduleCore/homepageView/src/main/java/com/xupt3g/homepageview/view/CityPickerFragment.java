@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.jakewharton.rxbinding4.widget.RxTextView;
-import com.xupt3g.homepageview.HomeFragment;
+import com.xupt3g.homepageview.HomepageFragment;
 import com.xupt3g.homepageview.R;
 import com.xupt3g.homepageview.model.CityOfCollect;
 import com.xupt3g.homepageview.model.SearchedLocationData;
@@ -159,7 +158,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
     public void onDestroyView() {
         super.onDestroyView();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        HomeFragment homeFragment = (HomeFragment) fragmentManager.findFragmentById((int) R.layout.home_fragment);
+        HomepageFragment homeFragment = (HomepageFragment) fragmentManager.findFragmentById((int) R.layout.home_fragment);
         if (homeFragment != null) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.show(homeFragment);

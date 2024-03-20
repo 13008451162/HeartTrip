@@ -62,6 +62,7 @@ dependencies {
         implementation project(":moduleCore:personalManagementView")
         implementation project(":moduleCore:ordersView")
         implementation project(":moduleCore:browsingHistoryView")
+        implementation project(":moduleCore:commentsview")
     }
 
     implementation 'androidx.appcompat:appcompat:1.6.1'

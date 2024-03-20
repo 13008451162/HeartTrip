@@ -14,6 +14,9 @@
       <entry key="moduleCore.loginregistrationView">
         <State />
       </entry>
+      <entry key="moduleCore.searchResultView">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

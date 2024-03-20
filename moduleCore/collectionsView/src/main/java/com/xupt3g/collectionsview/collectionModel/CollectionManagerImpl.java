@@ -39,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @date:2024/2/19 17:10
  * @about: TODO 收藏管理方法
  */
-@Route(path = "/collections/CollectionManagerImpl")
+@Route(path = "/collectionsView/CollectionManagerImpl")
 public class CollectionManagerImpl implements CollectionManagerService, CollectionsListImpl {
 
     /**

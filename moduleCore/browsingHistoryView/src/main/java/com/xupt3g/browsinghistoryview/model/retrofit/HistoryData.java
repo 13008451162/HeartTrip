@@ -47,7 +47,7 @@ public class HistoryData {
     /**
      * 上架状态 0：下架 1：上架
      */
-    private int rowState;
+    private int rowState = 1;
     /**
      * 上次浏览的时间 y/M/d
      */

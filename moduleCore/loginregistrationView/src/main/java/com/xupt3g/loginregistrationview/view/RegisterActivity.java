@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.Window;
 import android.widget.ImageButton;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.xupt3g.mylibrary1.LoginStatusData;
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
  * 文件名: com.xupt3g.loginregistrationview.view.RegisterActivity
  *
  * @author: shallew
- * @data:2024/1/29 0:07
+ * @data: 2024/1/29 0:07
  * @about: TODO View层注册活动界面
  */
 public class RegisterActivity extends AppCompatActivity implements LoginRegisterViewImpl {

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -30,6 +31,10 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.libbase.BuildConfig;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.widget.button.RippleView;
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
@@ -45,6 +50,8 @@ import com.xupt3g.personalmanagementview.presenter.AccountInfoPresenter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -58,6 +65,7 @@ import okhttp3.RequestBody;
  * @data: 2024/2/6 0:06
  * @about: TODO 账号信息管理页面
  */
+@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 public class AccountInfoFragment extends Fragment implements AccountInfoModifyImpl {
     private View mView;
     private ImageView backButton;
@@ -227,7 +235,7 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
         item3 = mGroupListView.createItemView(
                 null,
                 "性别",
-                 sex,
+                sex,
                 XUICommonListItemView.HORIZONTAL,
                 XUICommonListItemView.ACCESSORY_TYPE_NONE);
 
@@ -375,7 +383,6 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
 
     public void openCamera() {
         if (!checkPermissionsIsAllowed(cameraPermissions)) {
-            ToastUtils.toast("您的权限尚未打开！请打开后重试！");
             return;
         }//检查并申请权限
 
@@ -395,7 +402,13 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
         //第二步：将文件转换成uri对象
         if (Build.VERSION.SDK_INT >= 24) {
             //如果版本大于7.0，就调用FileProvider的getUriForFile()方法将图片路径（File）转换成Uri对象
-            contentUri = FileProvider.getUriForFile(requireContext(), "com.xupt3g.hearttrip.provider", outputImage);
+            if (!BuildConfig.isModule) {
+                //集成
+                contentUri = FileProvider.getUriForFile(requireContext(), "com.xupt3g.hearttrip.app.provider", outputImage);
+            } else {
+                //组件化
+                contentUri = FileProvider.getUriForFile(requireContext(), "com.xupt3g.personalmanagementview.provider", outputImage);
+            }
         } else {
             //如果版本低于7.0，就调用Uri的fromFile()方法将图片路径（File）转换为Uri的实例
             contentUri = Uri.fromFile(outputImage);
@@ -411,18 +424,8 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
 
     public void openAlbum() {
         if (!checkPermissionsIsAllowed(albumPermissions)) {
-            ToastUtils.toast("您的权限尚未打开！请打开后重试！");
             return;
         }//检查并申请权限
-
-        for (int i = 0; i < albumPermissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(requireContext(), albumPermissions[i])
-                    == PackageManager.PERMISSION_GRANTED) {
-                //某一权限未打开
-                ToastUtils.toast("您还有权限尚未打开！");
-                return;
-            }
-        }//再次验证
 
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
@@ -471,7 +474,6 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
      */
     private void cropPhoto(Uri uri) {
         ToastUtils.toast("裁剪 ");
-
         Uri contentUri = Uri.fromFile(new File(getPhotoPath()));
         Intent intent = new Intent("com.android.camera.action.CROP");
         //Android 7.0需要临时添加读取Url的权限， 添加此属性是为了解决：调用裁剪框时候提示：图片无法加载或者加载图片失败或者无法加载此图片
@@ -511,36 +513,52 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
         }
     }
 
-    private String[] cameraPermissions = {
-            Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-    private String[] albumPermissions = {
-
-    };
+    private String[] cameraPermissions = {Permission.CAMERA};
+    private String[] albumPermissions = {Permission.MANAGE_EXTERNAL_STORAGE};
     private final int PERMISSION_REQUEST_CODE = 1212;
 
     /**
      * TODO 检查权限是否被打开
-     * 这里使用了两次遍历权限查询是否被授权，不太明白，但是我想第一次检查授权时可能会被用户拒绝，权限仍然无法打开
-     * 通过一次遍历检查权限，不好确定最终权限的返回情况 可能有些问题不够简洁
      */
     public boolean checkPermissionsIsAllowed(String[] permissions) {
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(requireContext(), permissions[i])
-                    != PackageManager.PERMISSION_GRANTED) {
-                //某一权限未打开
-                ActivityCompat.requestPermissions(requireActivity(), new String[]{permissions[i]}, PERMISSION_REQUEST_CODE);
-            }
-        }
+        final boolean[] success = {false};
+        //判断权限是否被授予了
+        boolean granted = XXPermissions.isGranted(requireContext(), permissions);
+        if (granted) {
+            //如果被授予了，返回true
+            return true;
+        } else {
+            //如果没被授予 动态申请权限
+            XXPermissions.with(this)
+                    .permission(permissions)
+                    .request(new OnPermissionCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
+                            //部分未授权成功
+                            if (!allGranted) {
+                                ToastUtils.toast("部分权限未获取成功");
+                                return;
+                            } else {
+                                ToastUtils.toast("成功获取权限！");
+                                success[0] = true;
+                            }
+                        }
 
-        for (int i = 0; i < cameraPermissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(requireContext(), cameraPermissions[i])
-                    != PackageManager.PERMISSION_GRANTED) {
-                //某一权限未打开
-                return false;
-            }
-        }//再次验证
-        return true;
+                        @Override
+                        public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {
+                            if (doNotAskAgain) {
+                                ToastUtils.toast("被永久拒绝授权，请手动进行授权！");
+                                XXPermissions.startPermissionActivity(requireContext(), permissions);
+                                if (XXPermissions.isGranted(requireContext(), permissions)) {
+                                    success[0] = true;
+                                }
+                            } else {
+                                ToastUtils.toast("权限获取失败！");
+                            }
+                        }
+                    });
+        }
+        return success[0];
     }
 
     /**
@@ -565,6 +583,7 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
 
     /**
      * 生成用来传递给服务器的头像
+     *
      * @return （MultipartBody.Part）
      */
     private MultipartBody.Part userAvatarBodyInit() {

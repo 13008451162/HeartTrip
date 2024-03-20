@@ -43,7 +43,7 @@ public class AccountInfoPresenter {
                     ARouter.getInstance().build("/browsingHistoryView/BrowsingHistoryRequest").navigation();
 
             collectionManagerService = (CollectionManagerService)
-                    ARouter.getInstance().build("/collections/CollectionManagerImpl").navigation();
+                    ARouter.getInstance().build("/collectionsView/CollectionManagerImpl").navigation();
         }
     }
 
@@ -105,7 +105,7 @@ public class AccountInfoPresenter {
                     AccountInfoResponse value = responseLiveData.getValue();
                     if (value != null) {
                         //两个申请返回都成功
-                        responseLiveData.setValue(new AccountInfoResponse(200, "OK", userInfo));
+                        value.setUserInfo(userInfo);
                         value.getUserInfo().setAvatar(s);
                         responseLiveData.setValue(value);
                     }

@@ -54,4 +54,13 @@ public class AccountInfoResponse {
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"code\":" + code +
+                ", \"msg\":\'" + msg + "\'" +
+                ", \"userInfo\":" + userInfo +
+                '}';
+    }
 }

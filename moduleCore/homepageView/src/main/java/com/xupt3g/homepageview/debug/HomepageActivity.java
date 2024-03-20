@@ -16,7 +16,7 @@ import com.hjq.permissions.XXPermissions;
 import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.UiTools.UiTool;
-import com.xupt3g.homepageview.HomeFragment;
+import com.xupt3g.homepageview.HomepageFragment;
 import com.xupt3g.homepageview.R;
 
 import java.util.List;
@@ -87,12 +87,12 @@ public class HomepageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private HomeFragment initHome() {
+    private HomepageFragment initHome() {
         FragmentManager FragmentManager = getSupportFragmentManager();
-        HomeFragment homeFragment = (HomeFragment) FragmentManager.findFragmentById((int) R.layout.home_fragment);
+        HomepageFragment homeFragment = (HomepageFragment) FragmentManager.findFragmentById((int) R.layout.home_fragment);
 
         if (homeFragment == null) {
-            homeFragment = HomeFragment.newInstance();
+            homeFragment = HomepageFragment.newInstance();
             FragmentTransaction ft = FragmentManager.beginTransaction();
             ft.add(R.id.home_fragment, homeFragment);
 

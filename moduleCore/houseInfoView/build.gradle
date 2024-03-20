@@ -62,8 +62,11 @@ android {
 dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
     implementation project(':moduleBase:mylibrary1')//依赖基础组件
-
     annotationProcessor cfg.libARouterCompiler
+
+//    implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.4.0-release-jitpack'
+////是否需要AliPlayer模式
+//    implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.4.0-release-jitpack'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

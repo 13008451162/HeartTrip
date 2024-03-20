@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.xuexiang.xui.widget.imageview.preview.loader.GlideMediaLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +24,19 @@ import java.util.List;
  * @about: TODO
  */
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder> {
-    private Context mContext;
-    private List<Integer> imgUrl;
+    private List<ImageViewInfo> imgUrlList;
+    private String[] imgUrls;
 
-    public BannerAdapter(Context mContext, List<Integer> imgUrl) {
-        this.mContext = mContext;
-        this.imgUrl = imgUrl;
+    public BannerAdapter(List<ImageViewInfo> imgUrl) {
+        this.imgUrlList = imgUrl;
+    }
+
+    public BannerAdapter(String[] imgUrls) {
+        this.imgUrls = imgUrls;
+        this.imgUrlList = new ArrayList<>();
+        for (String imgUrl : imgUrls) {
+            imgUrlList.add(new ImageViewInfo(imgUrl));
+        }
     }
 
     @NonNull
@@ -38,16 +47,23 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(mContext).load(imgUrl.get(position)).into(holder.imageView);
+        Glide.with(holder.itemView.getContext()).load(imgUrlList.get(position).getUrl())
+                .apply(GlideMediaLoader.getRequestOptions()).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return imgUrl.size();
+        return imgUrlList.size();
+
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public List<ImageViewInfo> getImgUrlList() {
+        return imgUrlList;
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.view_item);

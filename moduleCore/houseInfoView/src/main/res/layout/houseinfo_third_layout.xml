@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/xui_transparent">
+
+    <TextView
+        android:id="@+id/third_text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="房客点评"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/third_into_all_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/houseinfo_baseline_chevron_right_24"
+        android:drawableTint="#636363"
+        android:gravity="center_vertical"
+        android:text="查看全部评论"
+        android:textColor="#636363"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/third_text_1"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/third_comment_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/houseinfo_facilities_card_background"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/third_text_1">
+
+
+        <TextView
+            android:id="@+id/third_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="7dp"
+            android:text="5.0"
+            android:textColor="#ee609c"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.xuexiang.xui.widget.progress.ratingbar.ScaleRatingBar
+            android:id="@+id/third_rating_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/third_score"
+            app:layout_constraintStart_toEndOf="@id/third_score"
+            app:srb_drawableEmpty="@drawable/houseinfo_icon_rating_star_empty"
+            app:srb_drawableFilled="@drawable/houseinfo_icon_rating_star_filled"
+            app:srb_isIndicator="true"
+            app:srb_minimumStars="0"
+            app:srb_numStars="5"
+            app:srb_rating="5"
+            app:srb_starHeight="15dp"
+            app:srb_starPadding="2dp"
+            app:srb_starWidth="15dp"
+            app:srb_stepSize="0.1" />
+
+        <TextView
+            android:id="@+id/third_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:text="（共320条点评）"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/third_score"
+            app:layout_constraintStart_toEndOf="@id/third_rating_star" />
+
+        <TextView
+            android:id="@+id/third_text_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="15dp"
+            android:text="热门评论推荐"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/third_score" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/third_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/houseinfo_default_avatar_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/third_text_2" />
+
+        <TextView
+            android:id="@+id/third_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:text="告别寒冷冬季"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/third_avatar"
+            app:layout_constraintTop_toTopOf="@id/third_avatar" />
+
+        <TextView
+            android:id="@+id/third_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="2020年09月留下点评"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/third_avatar"
+            app:layout_constraintStart_toStartOf="@id/third_username" />
+
+        <TextView
+            android:id="@+id/third_user_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="他给出5.0分的评价"
+            android:textColor="#ee609c"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/third_avatar"
+            app:layout_constraintTop_toBottomOf="@id/third_avatar" />
+
+        <TextView
+            android:id="@+id/third_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:text="@string/shudaonan"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/third_user_score"
+            app:layout_constraintTop_toBottomOf="@id/third_user_score" />
+
+        <TextView
+            android:id="@+id/third_to_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="去评论区展开"
+            android:textColor="#0969da"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/third_content"
+            app:layout_constraintTop_toBottomOf="@id/third_content" />
+
+        <ImageView
+            android:id="@+id/third_picture_1"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/houseinfo_house_1"
+            app:layout_constraintStart_toStartOf="@id/third_content"
+            app:layout_constraintTop_toBottomOf="@id/third_to_expand" />
+
+        <ImageView
+            android:id="@+id/third_picture_2"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/houseinfo_house_2"
+            app:layout_constraintStart_toEndOf="@id/third_picture_1"
+            app:layout_constraintTop_toBottomOf="@id/third_to_expand" />
+
+        <ImageView
+            android:id="@+id/third_picture_3"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/houseinfo_house_1"
+            app:layout_constraintStart_toEndOf="@id/third_picture_2"
+            app:layout_constraintTop_toBottomOf="@id/third_to_expand" />
+        <!--        如果有大于三张图片，会在第三张图片上显示一个灰色蒙层-->
+        <FrameLayout
+            android:id="@+id/third_more_picture_greyview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#90000000"
+            app:layout_constraintBottom_toBottomOf="@id/third_picture_3"
+            app:layout_constraintEnd_toEndOf="@id/third_picture_3"
+            app:layout_constraintStart_toStartOf="@id/third_picture_3"
+            app:layout_constraintTop_toTopOf="@id/third_picture_3">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/houseinfo_font_1"
+                android:gravity="center"
+                android:text="更多照片去评论区查看"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/third_liked_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:drawableStart="@drawable/houseinfo_icon_collect_before"
+            android:drawablePadding="10dp"
+            android:drawableTint="#3E4055"
+            android:gravity="center_vertical"
+            android:text="200"
+            android:textColor="#3E4055"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@id/third_reply_to_comment"
+            app:layout_constraintTop_toBottomOf="@id/third_picture_1" />
+
+        <ImageView
+            android:id="@+id/third_reply_to_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/houseinfo_icon_reply_to_commnet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/third_picture_1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
