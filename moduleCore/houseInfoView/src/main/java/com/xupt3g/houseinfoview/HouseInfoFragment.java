@@ -30,6 +30,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.google.android.material.tabs.TabLayout;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
@@ -220,8 +221,8 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
      * 标记设施是否全部展开
      */
     private boolean facilitiesIsExpandedInSecondView;
-//    private GSYVideoOptionBuilder optionBuilderInSecondView;
-//    private VideoPlayerView playerViewInSecondView;
+    private GSYVideoOptionBuilder optionBuilderInSecondView;
+    private VideoPlayerView playerViewInSecondView;
 
     //第三个视图View的控件变量
     //点击什么都跳转到评论区页面
@@ -662,7 +663,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         //视频播放器
 //        String cleanVideoUrl = "https://stream7.iqilu.com/10339/upload_transcode/202002/18/20200218114723HDu3hhxqIT.mp4";
         String cleanVideoUrl = mBaseData.getCleanVideoUrl();
-//        playVideo(cleanVideoUrl);
+        playVideo(cleanVideoUrl);
     }
 
 
@@ -716,7 +717,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         expandImageInSecondView = mView.findViewById(R.id.second_expand_image);
         expandableForAllFacilitiesInSecondView = mView.findViewById(R.id.second_expand_all_facilities);
         facilitiesIsExpandedInSecondView = false;
-//        playerViewInSecondView = mView.findViewById(R.id.second_video_view);
+        playerViewInSecondView = mView.findViewById(R.id.second_video_view);
 
         gotoAllCommentsInThirdView = mView.findViewById(R.id.third_into_all_comment);
         commentLayoutInThirdView = mView.findViewById(R.id.third_comment_layout);
@@ -757,18 +758,18 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         bannerLayout = mView.findViewById(R.id.houseInfo_bannerLayout);
     }
 
-//    private void playVideo(String url) {
-//        if (playerViewInSecondView != null) {
-//            optionBuilderInSecondView = new GSYVideoOptionBuilder();
-//            optionBuilderInSecondView.setIsTouchWiget(true)
-//                    .setUrl(url).setShowFullAnimation(true).build(playerViewInSecondView);
-//            Glide.with(requireContext()).load(mBaseData.getBannerUrls()[0]).into(playerViewInSecondView.getCoverView());
-//            playerViewInSecondView.getBackButton().setVisibility(View.GONE);
-//            playerViewInSecondView.getFullscreenButton().setOnClickListener(view -> {
-//                playerViewInSecondView.startWindowFullscreen(playerViewInSecondView.getContext(), true, true);
-//            });
-//        }
-//    }
+    private void playVideo(String url) {
+        if (playerViewInSecondView != null) {
+            optionBuilderInSecondView = new GSYVideoOptionBuilder();
+            optionBuilderInSecondView.setIsTouchWiget(true)
+                    .setUrl(url).setShowFullAnimation(true).build(playerViewInSecondView);
+            Glide.with(requireContext()).load(mBaseData.getBannerUrls()[0]).into(playerViewInSecondView.getCoverView());
+            playerViewInSecondView.getBackButton().setVisibility(View.GONE);
+            playerViewInSecondView.getFullscreenButton().setOnClickListener(view -> {
+                playerViewInSecondView.startWindowFullscreen(playerViewInSecondView.getContext(), true, true);
+            });
+        }
+    }
 
     /**
      * 初始化标签流布局 字符串数组标签
