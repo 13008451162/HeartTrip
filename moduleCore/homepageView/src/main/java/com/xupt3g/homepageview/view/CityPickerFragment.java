@@ -4,17 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.jakewharton.rxbinding4.widget.RxTextView;
+import com.xupt3g.homepageview.HomeFragment;
 import com.xupt3g.homepageview.R;
 import com.xupt3g.homepageview.model.CityOfCollect;
 import com.xupt3g.homepageview.model.SearchedLocationData;
@@ -54,6 +59,9 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         return new CityPickerFragment();
     }
 
+    private CityPickerFragment() {
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +75,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
 
 
         EditText editText = indlaterView.findViewById(R.id.search_editText);
+        ImageButton backButton = indlaterView.findViewById(R.id.imageButton);
 
 
         LettersSidebar simpleSideBar = indlaterView.findViewById(R.id.simpleRipple);
@@ -107,6 +116,12 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         mPresenter.locationSearch(editObservable);
 
 
+        //返回上一层
+        backButton.setOnClickListener(v -> {
+            getParentFragmentManager().popBackStack();
+        });
+
+
 
         cityAdapter.getClickObservable().subscribe(v ->
                 Toast.makeText(getContext(), v.getText(), Toast.LENGTH_SHORT).show()
@@ -141,6 +156,18 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        HomeFragment homeFragment = (HomeFragment) fragmentManager.findFragmentById((int) R.layout.home_fragment);
+        if (homeFragment != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.show(homeFragment);
+            ft.commit();
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         mPresenter.unsubscribe();
@@ -155,7 +182,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
     public void searchRecycler(SearchedLocationData locationDataList) {
 
         //处理搜索失败的情况
-        if (locationDataList.getResult() == null){
+        if (locationDataList.getResult() == null) {
             animationView.setVisibility(View.VISIBLE);
         }
 

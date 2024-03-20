@@ -3,14 +3,11 @@ package com.xupt3g.homepageview.model.net;
 import static com.xupt3g.LocationUtils.SDKConstant.AK_WEB;
 import static com.xupt3g.LocationUtils.SDKConstant.OUTPUT;
 
-import android.util.Log;
-
 import com.xupt3g.homepageview.model.SearchedLocationData;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
@@ -25,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @about: TODO
  */
 
-public class LocationInfoTask implements LocationNetTask<String>{
+public class LocationInfoTask implements LocationNetTask<String> {
 
     private static String HOST = "https://api.map.baidu.com/";
     private static String REGION = "全国";
@@ -34,8 +31,8 @@ public class LocationInfoTask implements LocationNetTask<String>{
     private Retrofit retrofit;
 
 
-    public static LocationInfoTask getInstance(){
-        if (INSTANCE == null){
+    public static LocationInfoTask getInstance() {
+        if (INSTANCE == null) {
             return new LocationInfoTask();
         }
         return INSTANCE;
@@ -45,7 +42,7 @@ public class LocationInfoTask implements LocationNetTask<String>{
         createRetrofit();
     }
 
-    private void createRetrofit(){
+    private void createRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(HOST)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -58,7 +55,7 @@ public class LocationInfoTask implements LocationNetTask<String>{
 
         LocationService locationService = retrofit.create(LocationService.class);
 
-        Observable<SearchedLocationData> observable = locationService.getLocation(query,REGION,true,OUTPUT,AK_WEB)
+        Observable<SearchedLocationData> observable = locationService.getLocation(query, REGION, true, OUTPUT, AK_WEB)
                 .subscribeOn(Schedulers.io())
                 .retry(2)
                 .observeOn(AndroidSchedulers.mainThread());

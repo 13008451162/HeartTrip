@@ -170,7 +170,6 @@ public class LettersSidebar extends View {
 
                 if (onLetterTouchedChangeListener != null) {
                     onLetterTouchedChangeListener.onTouchedLetterChange(alphabet[index]);
-                    Log.e("TAG", "dispatchTouchEvent: "+alphabet[index]);
                 }
 
                 invalidate();

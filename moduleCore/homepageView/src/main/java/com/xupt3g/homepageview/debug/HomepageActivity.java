@@ -13,14 +13,11 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.xupt3g.UiTools.UiTool;
-import com.xupt3g.homepageview.R;
-import com.xupt3g.homepageview.model.SearchedLocationData;
-import com.xupt3g.homepageview.model.net.LocationInfoTask;
-import com.xupt3g.homepageview.presenter.LocationInfoPresenter;
-import com.xupt3g.homepageview.view.CityPickerFragment;
 import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
+import com.xupt3g.UiTools.UiTool;
+import com.xupt3g.homepageview.HomeFragment;
+import com.xupt3g.homepageview.R;
 
 import java.util.List;
 
@@ -32,8 +29,6 @@ import java.util.List;
 public class HomepageActivity extends AppCompatActivity {
 
     private static final String TAG = HomepageActivity.class.getSimpleName();
-
-    private FragmentManager FragmentManager;
 
 
     @Override
@@ -54,16 +49,7 @@ public class HomepageActivity extends AppCompatActivity {
         }
 
 
-
-        //实现MVP绑定
-
-        CityPickerFragment cityPickerFragment = initCityPicker();
-        LocationInfoTask locationInfoTask = LocationInfoTask.getInstance();
-        LocationInfoPresenter presenter = new LocationInfoPresenter(locationInfoTask, cityPickerFragment);
-
-        cityPickerFragment.setPresenter(presenter);
-
-
+        initHome();
 
 
         //沉浸式布局栏
@@ -101,18 +87,18 @@ public class HomepageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private CityPickerFragment initCityPicker() {
-        FragmentManager = getSupportFragmentManager();
-        CityPickerFragment cityPickerFragment = (CityPickerFragment) FragmentManager.findFragmentById((int) R.layout.city_picke_fragment);
+    private HomeFragment initHome() {
+        FragmentManager FragmentManager = getSupportFragmentManager();
+        HomeFragment homeFragment = (HomeFragment) FragmentManager.findFragmentById((int) R.layout.home_fragment);
 
-        if (cityPickerFragment == null) {
-            cityPickerFragment = CityPickerFragment.newInstance();
+        if (homeFragment == null) {
+            homeFragment = HomeFragment.newInstance();
             FragmentTransaction ft = FragmentManager.beginTransaction();
-            ft.add(R.id.city_fragment_container, cityPickerFragment);
+            ft.add(R.id.home_fragment, homeFragment);
 
             ft.addToBackStack(null);
             ft.commit();
         }
-        return cityPickerFragment;
+        return homeFragment;
     }
 }

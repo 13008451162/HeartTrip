@@ -1,7 +1,5 @@
 package com.xupt3g.homepageview.model;
 
-import com.xuexiang.citypicker.model.City;
-
 /**
  * 项目名: HeartTrip
  * 文件名: SimpleData
