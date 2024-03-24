@@ -58,7 +58,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         return new CityPickerFragment();
     }
 
-    private CityPickerFragment() {
+    public CityPickerFragment() {
     }
 
     @Override
@@ -117,7 +117,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
 
         //返回上一层
         backButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
+            getActivity().finish();
         });
 
 

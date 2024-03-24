@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.xupt3g.homepageview.R;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class Carousel {
 
     private ViewPager2 viewPager2;
 
-    private long AUTO_SCROLL_INTERVAL = 1_500; // 设置自动滚动的间隔时间，单位为毫秒
+    private long AUTO_SCROLL_INTERVAL = 2_500; // 设置自动滚动的间隔时间，单位为毫秒
 
     private boolean AUTO_SCROLL = false;    //是否设置自动播放
 
@@ -203,9 +204,10 @@ class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+        int radius = 40; // 圆角半径，根据需要调整
 
         //使用Glide加载可以优化加载流程，Glide使用异步操作
-        Glide.with(context).load(images.get(position)).into(holder.imageView);
+        Glide.with(context).load(images.get(position)).transform(new RoundedCorners(radius)).into(holder.imageView);
 //        holder.imageView.setImageResource(images.get(position));
     }
 

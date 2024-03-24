@@ -1,10 +1,10 @@
 ext {
     // false: 集成开发模式
     // true ：组件独立开发模式
-    isModule = true
+    isModule = false
 
     android = [
-            compileSdkVersion: 33,
+            compileSdkVersion: 34,
             minSdkVersion    : 24,
             targetSdkVersion : 33,
             versionCode      : 1,
@@ -61,6 +61,7 @@ ext {
             // 工具类
             xutil_core: 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0',
             xutil_sub : 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0',
+
     ]
 
 

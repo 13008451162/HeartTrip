@@ -20,7 +20,7 @@ public interface LocationNetTask<T> {
      * @param query
      * @return {@link Disposable}
      */
-    Observable<SearchedLocationData> execute(T query);
+    Observable<T> execute(String query);
 
     /**
      * 搜索指定范围的位置信息
@@ -28,5 +28,5 @@ public interface LocationNetTask<T> {
      * @param region 指定范围
      * @return {@link Disposable}
      */
-    Disposable execute(T query, T region);
+    Disposable execute(String query, String region);
 }

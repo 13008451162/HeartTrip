@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
 
+
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        ARouter.getInstance().build("/commentsview/CommentsActivity").navigation();
 
         UiTool.setImmersionBar(this, true);
         bottomNavigationView = findViewById(R.id.app_bottom_navigation);
@@ -63,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
         Fragment homepageFragment = (Fragment) ARouter.getInstance().build("/homepageView/HomepageFragment").navigation();
         Fragment messageFragment = (Fragment) ARouter.getInstance().build("/messagesView/MessageFragment").navigation();
         Fragment personalFragment = (Fragment) ARouter.getInstance().build("/personalManagementView/PersonalManagementFragment").navigation();
-        Collections.addAll(contentFragments, homepageFragment, collectionFragment, messageFragment, personalFragment);
+        Collections.addAll(contentFragments,homepageFragment, collectionFragment, messageFragment, personalFragment);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle(), contentFragments);
         contentViewPager.setAdapter(pagerAdapter);
         contentViewPager.setOffscreenPageLimit(3);
         contentViewPager.setUserInputEnabled(false);
+
 
         XXPermissions.with(this)
                 // 申请单个权限
@@ -94,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (!BuildConfig.isModule) {
             //集成模式
-            collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collections/CollectionManagerImpl").navigation();
-            browsedHistoryManagerService = (BrowsedHistoryManagerService) ARouter.getInstance().build("/browsingHistoryView/BrowsingHistoryRequest").navigation();
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {

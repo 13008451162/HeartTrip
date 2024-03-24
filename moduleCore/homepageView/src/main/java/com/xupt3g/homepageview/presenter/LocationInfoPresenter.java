@@ -24,8 +24,6 @@ public class LocationInfoPresenter implements LocationInfoContract.Presenter<Sea
 
     private LocationInfoContract.LocationView locationView;
 
-    private BehaviorSubject behaviorSubject = BehaviorSubject.create();
-
     private CompositeDisposable compositeDisposable;
 
 
