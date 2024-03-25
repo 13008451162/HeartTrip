@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
 
+
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
         contentViewPager = findViewById(R.id.app_viewpager);
         contentFragments = new ArrayList<>();
         Fragment collectionFragment = (Fragment) ARouter.getInstance().build("/collectionsView/CollectionsFragment").navigation();
-        Fragment homepageFragment = (Fragment) ARouter.getInstance().build("/homepageView/HomeFragment111").navigation();
+        Fragment homepageFragment = (Fragment) ARouter.getInstance().build("/homepageView/HomepageFragment").navigation();
         Fragment messageFragment = (Fragment) ARouter.getInstance().build("/messagesView/MessageFragment").navigation();
         Fragment personalFragment = (Fragment) ARouter.getInstance().build("/personalManagementView/PersonalManagementFragment").navigation();
-        Collections.addAll(contentFragments, homepageFragment,collectionFragment, messageFragment, personalFragment);
+        Collections.addAll(contentFragments,homepageFragment, collectionFragment, messageFragment, personalFragment);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle(), contentFragments);
         contentViewPager.setAdapter(pagerAdapter);
         contentViewPager.setOffscreenPageLimit(3);
         contentViewPager.setUserInputEnabled(false);
+
 
         XXPermissions.with(this)
                 // 申请单个权限

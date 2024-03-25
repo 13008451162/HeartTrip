@@ -22,7 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @about: TODO
  */
 
-public class LocationInfoTask implements LocationNetTask<String> {
+
+public class LocationInfoTask implements LocationNetTask<SearchedLocationData> {
 
     private static String HOST = "https://api.map.baidu.com/";
     private static String REGION = "全国";
@@ -38,7 +39,7 @@ public class LocationInfoTask implements LocationNetTask<String> {
         return INSTANCE;
     }
 
-    public LocationInfoTask() {
+    private LocationInfoTask() {
         createRetrofit();
     }
 
@@ -61,6 +62,7 @@ public class LocationInfoTask implements LocationNetTask<String> {
                 .observeOn(AndroidSchedulers.mainThread());
         return observable;
     }
+
 
     @Override
     public Disposable execute(String query, String region) {

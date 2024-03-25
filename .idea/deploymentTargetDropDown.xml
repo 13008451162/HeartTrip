@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
+<<<<<<< HEAD
     <targetSelectedWithDropDown>
       <Target>
         <type value="QUICK_BOOT_TARGET" />
@@ -13,5 +14,30 @@
       </Target>
     </targetSelectedWithDropDown>
     <timeTargetWasSelectedWithDropDown value="2024-03-23T04:21:15.587983900Z" />
+=======
+    <value>
+      <entry key="app">
+        <State />
+      </entry>
+      <entry key="moduleBase.rxlibbase">
+        <State />
+      </entry>
+      <entry key="moduleCore.collectionsView">
+        <State />
+      </entry>
+      <entry key="moduleCore.homepageView">
+        <State />
+      </entry>
+      <entry key="moduleCore.houseInfoView">
+        <State />
+      </entry>
+      <entry key="moduleCore.loginregistrationView">
+        <State />
+      </entry>
+      <entry key="moduleCore.searchResultView">
+        <State />
+      </entry>
+    </value>
+>>>>>>> 356cc32c509da22d9dd791016afecd79623e1ac7
   </component>
 </project>
