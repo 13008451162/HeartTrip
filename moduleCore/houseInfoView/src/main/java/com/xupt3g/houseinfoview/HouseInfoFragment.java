@@ -37,7 +37,6 @@ import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.GravityEnum;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.flowlayout.FlowTagLayout;
-import com.xuexiang.xui.widget.imageview.preview.PreviewBuilder;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xui.widget.popupwindow.ViewTooltip;
 import com.xuexiang.xui.widget.popupwindow.good.GoodView;
@@ -48,6 +47,8 @@ import com.xupt3g.houseinfoview.model.HouseInfoBaseData;
 import com.xupt3g.houseinfoview.model.RecommendHouse;
 import com.xupt3g.houseinfoview.presenter.HouseInfoPresenter;
 import com.xupt3g.houseinfoview.view.HouseInfoShowImpl;
+import com.xupt3g.mylibrary1.implservice.TopCommentData;
+import com.xupt3g.mylibrary1.implservice.TopCommentGetService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -351,6 +352,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
      * 当前民宿Id
      */
     private int houseId;
+
     public static HouseInfoFragment newInstance(int houseId) {
 
         Bundle args = new Bundle();
@@ -501,23 +503,63 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         });
     }
 
+    private TopCommentGetService topCommentGetService;
+
     /**
      * TODO 生成第三个View并生成交互
      */
+    @SuppressLint("SetTextI18n")
     private void initView3() {
         //点击跳转至评论区详情页面
         gotoAllCommentsInThirdView.setOnClickListener(view -> {
-            ToastUtils.toast("跳转至评论区详情页面");
+            if (!BuildConfig.isModule) {
+                ARouter.getInstance().build("/commentsview/CommentsActivity")
+                        .withInt("HouseId", houseId).navigation();
+            } else {
+                XToastUtils.error("当前处于组件开发模式下，不可跳转！");
+            }
         });
         commentLayoutInThirdView.setOnClickListener(view -> {
-            ToastUtils.toast("跳转至评论区详情页面");
+            gotoAllCommentsInThirdView.performClick();
         });
-        //获取数据Presenter
-        //基本数据设置
+        titleScoreTextInThirdView.setText(String.valueOf(mBaseData.getRatingStars()));
+        ratingBarInThirdView.setRating(mBaseData.getRatingStars());
+        totalCommentsCountInThirdView.setText("（共" + mBaseData.getCommentsCount() + "条点评）");
+        //数据变量
+        String commentContent = requireActivity().getString(R.string.shudaonan);
+        String[] pictureRes = new String[]{"https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
+                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
+                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
+                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
+                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg"};
+        //替换不同的数据源 组件测试开发使用自定义数据，集成开发使用获取的数据
+        //使用ARouter+接口服务来获取信息
+        if (!BuildConfig.isModule) {
+            //集成模式下可获取
+            topCommentGetService = (TopCommentGetService)
+                    ARouter.getInstance().build("/commentsview/CommentsRequest").navigation();
+            TopCommentData topCommentInfo = topCommentGetService.getTopCommentInfo(houseId);
+            if (topCommentInfo != null) {
+                //评论内容
+                commentContent = topCommentInfo.getContent();
+                //用户头像
+                Glide.with(requireContext()).load(topCommentInfo.getUserAvatar()).into(userAvatarInThirdView);
+                //用户昵称
+                userNicknameInThirdView.setText(topCommentInfo.getUserNickname());
+                //用户发表时间
+                userPostedTimeInThirdView.setText(topCommentInfo.getUserPostTime());
+                //用户评分
+                userRatingScoreInThirdView.setText(topCommentInfo.getUserRating());
+                //照片
+                pictureRes = topCommentInfo.getPicturesUrls();
+                //点赞数 随机
+                likedCountInThirdView.setText(new Random().nextInt(600) + 100 + "");
+            } else {
+                XToastUtils.error("Top == null");
+            }
+        }
 
         //测试评论的内容长度不同的UI
-        String commentContent = requireActivity().getString(R.string.shudaonan);
-//        String commentContent = requireActivity().getString(R.string.good);
         userContentInThirdView.setText(commentContent);
         ViewTreeObserver vto = userContentInThirdView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -534,10 +576,6 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
             }
         });
 
-
-        //测试评论的图片数量不同的UI
-        int[] pictureResC5 = new int[]{R.drawable.houseinfo_house_1, R.drawable.houseinfo_house_2, R.drawable.houseinfo_house_1, R.drawable.houseinfo_house_1, R.drawable.houseinfo_house_2};
-        int[] pictureRes = pictureResC5;
         //没有照片 什么都不做，直接跳过
         if (pictureRes != null && pictureRes.length > 0) {
             for (int i = 0; i < pictureRes.length; i++) {
@@ -590,12 +628,9 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         totalDaysInFirstView.setText("共1晚");
 
         //FLowTagLayout的初始化（数据设置）
-//        flowLayoutTagsInFirstView = new ArrayList<>();
-//        Collections.addAll(flowLayoutTagsInFirstView, "精选好房", "有停车位", "宽松取消", "可做饭", "可聚会");
-        String titleTags = mBaseData.getTitleTags();
-        if (titleTags != null) {
-            String[] split = titleTags.split("-");
-            initFlowTagsLayout(flowTagLayoutInFirstView, true, split);
+        String[] titleTags = mBaseData.getTitleTags();
+        if (titleTags != null && titleTags.length > 0) {
+            initFlowTagsLayout(flowTagLayoutInFirstView, true, titleTags);
         }
         //评分和点评数量
         scoreTextInFirstView.setText(String.valueOf(mBaseData.getRatingStars()));
@@ -625,7 +660,11 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
             ToastUtils.toast("预定时间页面弹出");
         });
         scoreCardViewInFirstView.setOnClickListener(view -> {
-            ToastUtils.toast("评分评论页面弹出");
+            if (!BuildConfig.isModule) {
+                //集成模式下
+                ARouter.getInstance().build("/commentsview/CommentsActivity")
+                        .withInt("HouseId", houseId);
+            }
         });
 
     }
@@ -848,7 +887,12 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
             }
         } else if (view.getId() == R.id.houseInfo_comment_icon) {
             //写评论按钮点击监听
-            ToastUtils.toast("跳转去为这间民宿写评论");
+            if (!BuildConfig.isModule) {
+                ARouter.getInstance().build("/commentsview/CommentPostActivity")
+                        .withInt("HouseId", houseId).navigation();
+            } else {
+                XToastUtils.error("当前处于组件开发模式下，不能跳转！");
+            }
         }
     }
 
@@ -960,7 +1004,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
 
     /**
      * @param iconColorIsWhite 图标颜色是否为白色
-     *                                                                                                                                                                                                                                                                         TODO 根据ScrollView动态改变顶部图标的颜色和背景的颜色
+     *                                                                                                                                                                                                                                                                                                 TODO 根据ScrollView动态改变顶部图标的颜色和背景的颜色
      */
     private void topViewColorChange(boolean iconColorIsWhite) {
         if (iconColorIsWhite) {

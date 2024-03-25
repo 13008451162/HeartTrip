@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-    <value>
-      <entry key="app">
-        <State />
-      </entry>
-      <entry key="moduleCore.collectionsView">
-        <State />
-      </entry>
-      <entry key="moduleCore.homepageView">
-        <State />
-      </entry>
-      <entry key="moduleCore.houseInfoView">
-        <State />
-      </entry>
-      <entry key="moduleCore.loginregistrationView">
-        <State />
-      </entry>
-      <entry key="moduleCore.searchResultView">
-        <State />
-      </entry>
-    </value>
+    <targetSelectedWithDropDown>
+      <Target>
+        <type value="QUICK_BOOT_TARGET" />
+        <deviceKey>
+          <Key>
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\lenovo\.android\avd\Pixel_6_API_34.avd" />
+          </Key>
+        </deviceKey>
+      </Target>
+    </targetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2024-03-23T04:21:15.587983900Z" />
   </component>
 </project>

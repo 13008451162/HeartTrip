@@ -17,7 +17,7 @@ import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.popupwindow.good.GoodView;
 import com.xupt3g.houseinfoview.model.RecommendHouse;
-import com.xupt3g.mylibrary1.CollectionManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 
 import java.util.List;
 import java.util.Random;

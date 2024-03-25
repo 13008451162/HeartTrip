@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.BuildConfig;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
@@ -20,8 +19,8 @@ import com.hjq.permissions.XXPermissions;
 import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.UiTools.UiTool;
-import com.xupt3g.mylibrary1.BrowsedHistoryManagerService;
-import com.xupt3g.mylibrary1.CollectionManagerService;
+import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,18 +51,15 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-
-        ARouter.getInstance().build("/commentsview/CommentsActivity").navigation();
-
         UiTool.setImmersionBar(this, true);
         bottomNavigationView = findViewById(R.id.app_bottom_navigation);
         contentViewPager = findViewById(R.id.app_viewpager);
         contentFragments = new ArrayList<>();
         Fragment collectionFragment = (Fragment) ARouter.getInstance().build("/collectionsView/CollectionsFragment").navigation();
-        Fragment homepageFragment = (Fragment) ARouter.getInstance().build("/homepageView/HomepageFragment").navigation();
+        Fragment homepageFragment = (Fragment) ARouter.getInstance().build("/homepageView/HomeFragment111").navigation();
         Fragment messageFragment = (Fragment) ARouter.getInstance().build("/messagesView/MessageFragment").navigation();
         Fragment personalFragment = (Fragment) ARouter.getInstance().build("/personalManagementView/PersonalManagementFragment").navigation();
-        Collections.addAll(contentFragments, homepageFragment, collectionFragment, messageFragment, personalFragment);
+        Collections.addAll(contentFragments, homepageFragment,collectionFragment, messageFragment, personalFragment);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle(), contentFragments);
         contentViewPager.setAdapter(pagerAdapter);
         contentViewPager.setOffscreenPageLimit(3);
@@ -91,35 +87,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
-        if (!BuildConfig.isModule) {
-            //集成模式
-            collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collections/CollectionManagerImpl").navigation();
-            browsedHistoryManagerService = (BrowsedHistoryManagerService) ARouter.getInstance().build("/browsingHistoryView/BrowsingHistoryRequest").navigation();
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    if (item.getItemId() == R.id.bottom_navigation_homepage) {
-                        //首页
-                        contentViewPager.setCurrentItem(0, false);
-                        return true;
-                    } else if (item.getItemId() == R.id.bottom_navigation_collection) {
-                        //收藏
-                        contentViewPager.setCurrentItem(1, false);
-                        return true;
-                    } else if (item.getItemId() == R.id.bottom_navigation_message) {
-                        //消息
-                        contentViewPager.setCurrentItem(2, false);
-                        return true;
-                    } else if (item.getItemId() == R.id.bottom_navigation_personal) {
-                        //个人
-                        contentViewPager.setCurrentItem(3, false);
-                        return true;
-                    }
-                    return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.bottom_navigation_homepage) {
+                    //首页
+                    contentViewPager.setCurrentItem(0, false);
+                    return true;
+                } else if (item.getItemId() == R.id.bottom_navigation_collection) {
+                    //收藏
+                    contentViewPager.setCurrentItem(1, false);
+                    return true;
+                } else if (item.getItemId() == R.id.bottom_navigation_message) {
+                    //消息
+                    contentViewPager.setCurrentItem(2, false);
+                    return true;
+                } else if (item.getItemId() == R.id.bottom_navigation_personal) {
+                    //个人
+                    contentViewPager.setCurrentItem(3, false);
+                    return true;
                 }
-            });
+                return false;
+            }
+        });
 
-        }
     }
 }

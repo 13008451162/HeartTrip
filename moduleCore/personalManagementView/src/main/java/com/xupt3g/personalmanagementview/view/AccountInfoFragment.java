@@ -139,7 +139,7 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
                     } else if (modifyTarget == MODIFY_ONLY_AVATAR) {
                         //只修改了头像
                         MultipartBody.Part part = userAvatarBodyInit();
-                        presenter.accountInfoModify(null, part);
+                        presenter.accountInfoModify(temAccountInfo.getUserInfo(), part);
                     } else if (modifyTarget == MODIFY_ALL) {
                         MultipartBody.Part part = userAvatarBodyInit();
                         presenter.accountInfoModify(temAccountInfo.getUserInfo(), part);

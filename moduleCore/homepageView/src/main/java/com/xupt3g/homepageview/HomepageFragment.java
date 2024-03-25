@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * @about: TODO 主展示页面
  */
 
-@Route(path = "/homepageView/HomepageFragment")
+@Route(path = "/homepageView/HomeFragment111")
 public class HomepageFragment extends Fragment {
 
     private View inflaterView;
@@ -37,7 +37,7 @@ public class HomepageFragment extends Fragment {
         return new HomepageFragment();
     }
 
-    private HomepageFragment() {
+    public HomepageFragment() {
     }
 
     @Nullable

@@ -58,7 +58,7 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         return new CityPickerFragment();
     }
 
-    private CityPickerFragment() {
+    public CityPickerFragment() {
     }
 
     @Override

@@ -1,10 +1,10 @@
-package com.xupt3g.mylibrary1;
+package com.xupt3g.mylibrary1.implservice;
 
 import com.alibaba.android.arouter.facade.template.IProvider;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.mylibrary1.BrowsedHistoryManagerService
+ * 文件名: com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService
  *
  * @author: shallew
  * @data: 2024/2/29 21:52

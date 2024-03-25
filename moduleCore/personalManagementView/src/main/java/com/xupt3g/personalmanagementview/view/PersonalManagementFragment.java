@@ -1,7 +1,6 @@
 package com.xupt3g.personalmanagementview.view;
 
 import android.content.Intent;
-import android.media.metrics.Event;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +24,8 @@ import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
-import com.xupt3g.mylibrary1.BrowsedHistoryManagerService;
-import com.xupt3g.mylibrary1.CollectionManagerService;
+import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xui.widget.button.RippleView;
 import com.xupt3g.personalmanagementview.R;
@@ -283,10 +282,9 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
 
         //登录按钮的监听 （跳转至登录模块）
         loginRippleButton.setOnClickListener(view -> {
-            LoginStatusData.getLoginStatus().setValue(true);
             if (!BuildConfig.isModule) {
                 //只有集成模式下可以尝试跳转
-                ARouter.getInstance().build("/loginRegistration/LoginActivity")
+                ARouter.getInstance().build("/loginregistrationView/LoginActivity")
                         .navigation();
             } else {
                 XToastUtils.error("当前不能跳转！");

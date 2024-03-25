@@ -67,7 +67,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
                 ToastUtils.toast("该民宿已下架");
             } else {
                 if (!BuildConfig.isModule) {
-                    Log.d("HouseId", "onBindViewHolder: " + collectionsData.getId());
+                    //判断当前是不是集成开发模式
                     ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
                             .withInt("HouseId", collectionsData.getId()).navigation();
                 } else {

@@ -1,6 +1,6 @@
 package com.xupt3g.collectionsview.collectionModel.retrofit;
 
-import com.xupt3g.mylibrary1.IsSuccessfulResponse;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

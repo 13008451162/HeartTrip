@@ -27,13 +27,13 @@ public class HouseInfoBaseData {
      */
     private int commentsCount;
     /**
-     * 标题下的标签 "精选好房-有停车位-宽松取消-可做饭-可聚会"
+     * 标题下的标签 "精选好房,有停车位,宽松取消,可做饭,可聚会"
      */
     private String titleTags;
     /**
      * 轮播图的图片url
      */
-    private String[] bannerUrls;
+    private String bannerUrls;
     /**
      * 纬度
      */
@@ -45,7 +45,7 @@ public class HouseInfoBaseData {
     /**
      * 基础设施标签
      */
-    private String[] baseFacilities;
+    private String baseFacilities;
     /**
      * 民宿面积 50平
      */
@@ -107,8 +107,20 @@ public class HouseInfoBaseData {
         this.ratingStars = ratingStars;
         this.commentsCount = commentsCount;
         this.titleTags = titleTags;
-        this.bannerUrls = bannerUrls;
-        this.baseFacilities = baseFacilities;
+        StringBuilder sb = new StringBuilder();
+        for (String s:
+             bannerUrls) {
+            sb.append(s);
+            sb.append(",");
+        }
+        this.bannerUrls = sb.toString().substring(0, sb.length() - 1);
+        sb = new StringBuilder();
+        for (String s:
+             baseFacilities) {
+            sb.append(s);
+            sb.append(",");
+        }
+        this.baseFacilities = sb.toString().substring(0, sb.length() - 1);
         this.area = area;
         this.room = room;
         this.cleanVideoUrl = cleanVideoUrl;
@@ -141,16 +153,16 @@ public class HouseInfoBaseData {
         return commentsCount;
     }
 
-    public String getTitleTags() {
-        return titleTags;
+    public String[] getTitleTags() {
+        return titleTags.split(",");
     }
 
     public String[] getBannerUrls() {
-        return bannerUrls;
+        return bannerUrls.split(",");
     }
 
     public String[] getBaseFacilities() {
-        return baseFacilities;
+        return baseFacilities.split(",");
     }
 
     public String getArea() {

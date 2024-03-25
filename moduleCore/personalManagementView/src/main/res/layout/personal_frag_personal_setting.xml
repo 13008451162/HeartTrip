@@ -36,13 +36,6 @@
             android:textStyle="bold"
             android:paddingEnd="60dp"
             />
-<!--        <View-->
-<!--            android:id="@+id/setting_separate_line"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height=".1dp"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/setting_text"-->
-<!--            android:background="@color/deep_grey"-->
-<!--            />-->
     </LinearLayout>
 
 

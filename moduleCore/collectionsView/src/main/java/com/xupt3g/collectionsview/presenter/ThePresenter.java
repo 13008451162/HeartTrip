@@ -1,6 +1,5 @@
 package com.xupt3g.collectionsview.presenter;
 
-import com.example.libbase.BuildConfig;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.collectionsview.collectionModel.CollectionManagerImpl;
 import com.xupt3g.collectionsview.collectionModel.CollectionsListImpl;
@@ -9,10 +8,6 @@ import com.xupt3g.collectionsview.guessModel.GuessListGetImpl;
 import com.xupt3g.collectionsview.guessModel.GuessListGetRequest;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
 import com.xupt3g.collectionsview.view.CollectionsGuessManagerImpl;
-import com.xupt3g.mylibrary1.CollectionManagerService;
-import com.xupt3g.mylibrary1.LoginStatusData;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 

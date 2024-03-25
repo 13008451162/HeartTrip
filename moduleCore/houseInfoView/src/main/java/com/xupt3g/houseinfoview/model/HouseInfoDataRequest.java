@@ -35,7 +35,7 @@ public class HouseInfoDataRequest implements HouseInfoGetImpl {
     @Override
     public HouseInfoBaseData getHouseInfoBaseData(int houseId) {
         //测试数据，请求成功
-        return new HouseInfoBaseData(houseId, "测试标题", "陕西省西安市", 5.0f, 23, "精选好房-有停车位-宽松取消-可做饭-可聚会",
+        return new HouseInfoBaseData(houseId, "测试标题", "陕西省西安市", 5.0f, 23, "精选好房,有停车位,宽松取消,可做饭,可聚会",
                 new String[]{"https://img.zcool.cn/community/01f23a5bc82cada801213dea4a5b3f.jpg@1280w_1l_2o_100sh.jpg",
                         "https://ts1.cn.mm.bing.net/th/id/R-C.86f60de4927aeac6f1d21ceaac877d60?rik=r%2bKyu%2b6VNCyehw&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50036%2f0196.jpg_wh1200.jpg&ehk=uQVHtyvwTiUJOr%2fw6YslqS5v5B7J%2fhpXAYsAna950Pk%3d&risl=&pid=ImgRaw&r=0",
                         "https://img.zcool.cn/community/0125015e217129a80120a895f459c9.jpg@1280w_1l_2o_100sh.jpg",

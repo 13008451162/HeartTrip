@@ -74,7 +74,7 @@
             app:srb_starHeight="15dp"
             app:srb_starPadding="2dp"
             app:srb_starWidth="15dp"
-            app:srb_stepSize="0.1" />
+            app:srb_stepSize="0.5" />
 
         <TextView
             android:id="@+id/third_comment_count"

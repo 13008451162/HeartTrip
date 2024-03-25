@@ -1,4 +1,4 @@
-package com.xupt3g.mylibrary1;
+package com.xupt3g.mylibrary1.implservice;
 
 import com.alibaba.android.arouter.facade.template.IProvider;
 

@@ -1,7 +1,6 @@
 package com.xupt3g.browsinghistoryview.model;
 
 import android.content.Context;
-import android.media.metrics.Event;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -9,24 +8,15 @@ import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.browsinghistoryview.model.retrofit.BrowsingHistoryManageService;
-import com.xupt3g.browsinghistoryview.model.retrofit.BrowsingHistoryResponse;
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
-import com.xupt3g.mylibrary1.BrowsedHistoryManagerService;
-import com.xupt3g.mylibrary1.CollectionManagerService;
-import com.xupt3g.mylibrary1.IsSuccessfulResponse;
+import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xupt3g.mylibrary1.PublicRetrofit;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 项目名: HeartTrip
@@ -192,14 +182,13 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
      */
     @Override
     public boolean addToCollections(int houseId) {
-//        if (!BuildConfig.isModule) {
-//            CollectionManagerService collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collections/CollectionManagerImpl").navigation();
-//            return collectionManagerService.addCollection(houseId);
-//        } else {
-//            ToastUtils.toast("非集成模式下不能添加！");
-//            return false;
-//        }
-        return true;
+        if (!BuildConfig.isModule) {
+            CollectionManagerService collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collectionsView/CollectionManagerImpl").navigation();
+            return collectionManagerService.addCollection(houseId);
+        } else {
+            ToastUtils.toast("非集成模式下不能添加！");
+            return false;
+        }
     }
 
     /**

@@ -1,35 +1,21 @@
 package com.xupt3g.collectionsview.collectionModel;
 
 import android.content.Context;
-import android.media.metrics.Event;
 import android.util.Log;
-import android.widget.CheckBox;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.libbase.BuildConfig;
-import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionDataResponse;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
-import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionsListResponse;
-import com.xupt3g.mylibrary1.BrowsedHistoryManagerService;
-import com.xupt3g.mylibrary1.IsSuccessfulResponse;
-import com.xupt3g.mylibrary1.CollectionManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xutil.tip.ToastUtils;
-import com.xupt3g.UiTools.RootDirectory;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionsListService;
 import com.xupt3g.mylibrary1.PublicRetrofit;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 项目名: HeartTrip

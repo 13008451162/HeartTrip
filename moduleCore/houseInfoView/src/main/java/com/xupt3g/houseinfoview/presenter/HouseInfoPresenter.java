@@ -4,12 +4,11 @@ package com.xupt3g.houseinfoview.presenter;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
-import com.xuexiang.xutil.data.BCDUtils;
 import com.xupt3g.houseinfoview.model.HouseInfoBaseData;
 import com.xupt3g.houseinfoview.model.HouseInfoDataRequest;
 import com.xupt3g.houseinfoview.model.HouseInfoGetImpl;
 import com.xupt3g.houseinfoview.view.HouseInfoShowImpl;
-import com.xupt3g.mylibrary1.CollectionManagerService;
+import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 
 /**

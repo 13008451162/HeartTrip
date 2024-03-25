@@ -29,6 +29,7 @@ import androidx.lifecycle.Observer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.libbase.BuildConfig;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -94,6 +95,8 @@ public class SettingFragment extends Fragment {
             @Override
             public void onChanged(Boolean aBoolean) {
                 mGroupListView.removeAllViews();
+                //先布局
+                initGroupListView();
                 if (Boolean.TRUE.equals(LoginStatusData.getLoginStatus().getValue())) {
                     //已登录
                     //观察用户信息
@@ -104,18 +107,31 @@ public class SettingFragment extends Fragment {
                                 userAvatar = response.getUserInfo().getAvatar();
                                 userMobile = response.getUserInfo().getMobile();
                                 userNickname = response.getUserInfo().getNickname();
-                                initGroupListView();
+                                changeUserInfo();
                             }
                         }
                     });
-                } else {
-                    //未登录
-                    initGroupListView();
                 }
             }
         });
 
         return mView;
+    }
+
+    private void changeUserInfo() {
+        Glide.with(requireContext()).load(userAvatar).into(new CustomTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                item1.setImageDrawable(resource);
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+        item1.setText(userNickname);
+        item1.setDetailText(userMobile);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -157,9 +173,18 @@ public class SettingFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             //跳转至账号信息管理页面
-                            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                            transaction.add(R.id.setting_fragment_container, new AccountInfoFragment())
-                                    .addToBackStack(null).commit();
+                            if (!BuildConfig.isModule) {
+                                //集成开发模式
+                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.add(R.id.setting_fragment_container, new AccountInfoFragment())
+                                        .addToBackStack(null).commit();
+                            } else {
+                                //组件开发模式
+                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.add(R.id.personal_fragment_container, new AccountInfoFragment())
+                                        .addToBackStack(null).commit();
+                            }
+
                         }
                     })
                     //加入第一节

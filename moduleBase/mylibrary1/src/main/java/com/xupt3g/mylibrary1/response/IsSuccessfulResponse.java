@@ -1,8 +1,8 @@
-package com.xupt3g.mylibrary1;
+package com.xupt3g.mylibrary1.response;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.mylibrary1.IsSuccessfulResponse
+ * 文件名: com.xupt3g.mylibrary1.response.IsSuccessfulResponse
  *
  * @author: shallew
  * @data: 2024/2/21 2:00

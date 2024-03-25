@@ -40,7 +40,10 @@
         <!--   百度定位SDK需要     -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="XhYyqtw93vMbszRh8OtKUdw8HTBOP0rU"></meta-data>
+            android:value="qESVRhL4jxqUxn4KOCw9pJysG0FskQML"></meta-data>
+
+<!--        //qESVRhL4jxqUxn4KOCw9pJysG0FskQML-->
+<!--        //XhYyqtw93vMbszRh8OtKUdw8HTBOP0rU-->
 
         <service
             android:name="com.baidu.location.f"

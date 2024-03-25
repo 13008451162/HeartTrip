@@ -1,23 +1,15 @@
 package com.xupt3g.personalmanagementview.model;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.xuexiang.xutil.tip.ToastUtils;
-import com.xupt3g.mylibrary1.IsSuccessfulResponse;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xupt3g.mylibrary1.PublicRetrofit;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoGetService;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
-import com.xupt3g.personalmanagementview.model.retrofit.AvatarUrlResponse;
 import com.xupt3g.personalmanagementview.model.retrofit.UserInfo;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 项目名: HeartTrip
