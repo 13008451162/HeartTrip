@@ -2,6 +2,7 @@ package com.xupt3g.homepageview.view.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +47,11 @@ public class RecommendAdpter extends RecyclerView.Adapter<RecommendAdpter.ViewHo
     }
 
     public RecommendAdpter() {
+        mHomeList = new ArrayList<>();
     }
 
     public void setmHomeList(ArrayList<RecommendHomeData.DataDTO.ListDTO> mHomeList) {
-        this.mHomeList = mHomeList;
+        this.mHomeList.addAll(mHomeList);
     }
 
 

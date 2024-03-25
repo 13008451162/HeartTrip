@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +28,8 @@ import com.xupt3g.homepageview.view.Adapter.SearchedAdpter;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
  * 项目名: HeartTrip
@@ -42,9 +42,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class CityPickerFragment extends Fragment implements LocationInfoContract.LocationView {
 
-    private static String TAG = CityPickerFragment.class.getSimpleName();
 
-    private CompositeDisposable clickViewDisposable = new CompositeDisposable();
+    interface int
 
     private LocationInfoContract.Presenter mPresenter;
     private View indlaterView;
@@ -83,6 +82,8 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         cityRecycler = indlaterView.findViewById(R.id.recycler_view);
         searchRecycler = indlaterView.findViewById(R.id.location_recycler);
 
+        TextView cityHomeView = indlaterView.findViewById(R.id.Location_view);
+
         cityAdapter = new CityAdapter(getContext(), CityOfCollect.getCityList());
         searchAdpter = new SearchedAdpter();
 
@@ -114,20 +115,24 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         //调用搜索功能
         mPresenter.locationSearch(editObservable);
 
+        cityAdapter.getClickObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(textView -> {
+                            cityHomeView.setText(textView.getText());
+                            getActivity().finish();
+                        },
+                        error -> {
+                            throw new RuntimeException("返回位置信息异常");
+                        });
+
+
+
 
         //返回上一层
         backButton.setOnClickListener(v -> {
             getActivity().finish();
         });
 
-
-
-        cityAdapter.getClickObservable().subscribe(v ->
-                Toast.makeText(getContext(), v.getText(), Toast.LENGTH_SHORT).show()
-        );
-        searchAdpter.getClickObservable().subscribe(v ->
-                Toast.makeText(getContext(), v.getText(), Toast.LENGTH_SHORT).show()
-        );
 
         simpleSideBar.setOnLetterTouchedChangeListener(letterTouched -> {
 
@@ -188,4 +193,6 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         searchAdpter.setLocationData(locationDataList.getResult());
         searchRecycler.setAdapter(searchAdpter);
     }
+
+
 }

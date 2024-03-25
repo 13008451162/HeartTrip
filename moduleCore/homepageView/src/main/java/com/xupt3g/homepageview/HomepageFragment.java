@@ -2,6 +2,7 @@ package com.xupt3g.homepageview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,11 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.viewpager.widget.ViewPager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.MiniLoadingDialog;
 import com.xupt3g.homepageview.model.RecommendHomeData;
 import com.xupt3g.homepageview.model.net.RecommendInfoTask;
 import com.xupt3g.homepageview.presenter.RecommendInfoContrach;
@@ -45,13 +47,14 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
     private int pageNumber;
 
+    MiniLoadingDialog mMiniLoadingDialog;
+
     RecommendInfoContrach.Presenter mPresenter;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private View inflaterView;
 
-    private ViewPager viewPager;
     private RecommendAdpter adpter;
     private RecyclerView recyclerView;
     private LottieAnimationView lottieAnimationView;
@@ -73,6 +76,8 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         pageNumber = 1;
 
+        mMiniLoadingDialog = WidgetUtils.getMiniLoadingDialog(getContext());
+
 
         TextView textView = inflaterView.findViewById(R.id.Location_view);
         lottieAnimationView = inflaterView.findViewById(R.id.lottie_failure);
@@ -85,8 +90,11 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         RecommendInfoTask recommendInfoTask = RecommendInfoTask.getInstance();
         RecommendInfoPresenter infoPresenter = new RecommendInfoPresenter(recommendInfoTask, this);
         this.setPresenter(infoPresenter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(adpter);
 
 
+        //加载推荐数据
         mPresenter.getHomeData(pageNumber);
 
 
@@ -129,12 +137,11 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     @Override
     public void revealRecycler(@NonNull RecommendHomeData listDTO) {
         if (listDTO.getData() != null) {
+            mMiniLoadingDialog.dismiss();
             lottieAnimationView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             List<RecommendHomeData.DataDTO.ListDTO> list = listDTO.getData().getList();
             adpter.setmHomeList((ArrayList<RecommendHomeData.DataDTO.ListDTO>) list);
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-            recyclerView.setAdapter(adpter);
         } else {
             lottieAnimationView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -149,14 +156,14 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     // 滑动到了底部
-//                    Log.d("TAG", "已滑动到底部");
-//                    pageNumber += 1;
-//                    mPresenter.getHomeData(pageNumber);
-//
-//                    int originalItemCount = adpter.getItemCount(); // 获取原始数据集的大小
-//                    int startPosition = originalItemCount; // 新项目开始插入的位置
-//
-//                    adpter.notifyItemRangeInserted(startPosition, 10);
+                    Log.d("TAG", "已滑动到底部");
+                    mMiniLoadingDialog.show();
+
+                    new Handler().postDelayed(() -> {
+                        pageNumber += 1;
+                        mPresenter.getHomeData(pageNumber);
+                        adpter.notifyItemInserted(adpter.getItemCount() );
+                    }, 500);
                 }
             }
         });
