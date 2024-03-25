@@ -57,7 +57,127 @@ public class RecommendHomeData {
             private Integer priceBefore;
             @SerializedName("priceAfter")
             private Integer priceAfter;
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getCover() {
+                return cover;
+            }
+
+            public void setCover(String cover) {
+                this.cover = cover;
+            }
+
+            public String getIntro() {
+                return intro;
+            }
+
+            public void setIntro(String intro) {
+                this.intro = intro;
+            }
+
+            public String getLocation() {
+                return location;
+            }
+
+            public void setLocation(String location) {
+                this.location = location;
+            }
+
+            public Integer getHomestayBusinessId() {
+                return homestayBusinessId;
+            }
+
+            public void setHomestayBusinessId(Integer homestayBusinessId) {
+                this.homestayBusinessId = homestayBusinessId;
+            }
+
+            public Integer getUserId() {
+                return userId;
+            }
+
+            public void setUserId(Integer userId) {
+                this.userId = userId;
+            }
+
+            public Integer getRowState() {
+                return rowState;
+            }
+
+            public void setRowState(Integer rowState) {
+                this.rowState = rowState;
+            }
+
+            public Integer getRatingStars() {
+                return ratingStars;
+            }
+
+            public void setRatingStars(Integer ratingStars) {
+                this.ratingStars = ratingStars;
+            }
+
+            public Integer getPriceBefore() {
+                return priceBefore;
+            }
+
+            public void setPriceBefore(Integer priceBefore) {
+                this.priceBefore = priceBefore;
+            }
+
+            public Integer getPriceAfter() {
+                return priceAfter;
+            }
+
+            public void setPriceAfter(Integer priceAfter) {
+                this.priceAfter = priceAfter;
+            }
         }
+
+        public List<ListDTO> getList() {
+            return list;
+        }
+
+        public void setList(List<ListDTO> list) {
+            this.list = list;
+        }
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public DataDTO getData() {
+        return data;
+    }
+
+    public void setData(DataDTO data) {
+        this.data = data;
     }
 
     public List<DataDTO.ListDTO>  getDataDTOList() {

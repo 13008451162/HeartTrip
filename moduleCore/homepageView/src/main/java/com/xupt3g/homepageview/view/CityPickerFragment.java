@@ -43,7 +43,9 @@ import io.reactivex.rxjava3.core.Observable;
 public class CityPickerFragment extends Fragment implements LocationInfoContract.LocationView {
 
 
-    interface int
+    interface void llll(){
+
+    }
 
     private LocationInfoContract.Presenter mPresenter;
     private View indlaterView;
