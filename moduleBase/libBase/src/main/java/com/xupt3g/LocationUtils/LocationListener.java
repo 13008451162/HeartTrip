@@ -3,6 +3,8 @@ package com.xupt3g.LocationUtils;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import lombok.ToString;
 
 /**
@@ -16,6 +18,8 @@ import lombok.ToString;
 
 @ToString
 public class LocationListener extends BDAbstractLocationListener {
+
+    private BehaviorSubject<BDLocation> behaviorSubject = BehaviorSubject.create();
 
     /**
      * 监听获取的位置信息
@@ -39,16 +43,18 @@ public class LocationListener extends BDAbstractLocationListener {
      *
      * @return {@link BDLocation}
      */
-    public BDLocation getLocData() {
-        return locData;
+    public Observable<BDLocation> getLocData() {
+        return behaviorSubject.hide();
     }
+
+
 
     private LocationListener() {
     }
 
     @Override
     public void onReceiveLocation(BDLocation location) {
-        locData = location;
+        behaviorSubject.onNext(location);
     }
 
 }

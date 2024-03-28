@@ -25,6 +25,5 @@ public interface RecommendService {
      * @return {@link Observable}<{@link RecommendHomeData}>
      */
     @POST("/travel/v1/homestay/homestayList")
-//    io.reactivex.rxjava3.core.Observable<RecommendHomeData> getHomeData(@Body HomestayListReq homestayListReq);
     io.reactivex.rxjava3.core.Observable<RecommendHomeData> getHomeData(@Body HomestayListReq homestayListReq);
 }

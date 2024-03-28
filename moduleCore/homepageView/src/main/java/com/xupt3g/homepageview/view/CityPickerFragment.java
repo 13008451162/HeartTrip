@@ -1,5 +1,6 @@
 package com.xupt3g.homepageview.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,12 @@ import io.reactivex.rxjava3.core.Observable;
 public class CityPickerFragment extends Fragment implements LocationInfoContract.LocationView {
 
 
-//    interface void llll(){
-//
-//    }
+    public interface onFragmentCityListener {
+        void onClickCity(String cityText);
+    }
+
+
+    private onFragmentCityListener mListener;
 
     private LocationInfoContract.Presenter mPresenter;
     private View indlaterView;
@@ -65,6 +69,16 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof onFragmentCityListener) {
+            mListener = (onFragmentCityListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " 与onFragmentCityListener类型不符合");
+        }
     }
 
     @Nullable
@@ -117,17 +131,8 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         //调用搜索功能
         mPresenter.locationSearch(editObservable);
 
-        cityAdapter.getClickObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(textView -> {
-                            cityHomeView.setText(textView.getText());
-                            getActivity().finish();
-                        },
-                        error -> {
-                            throw new RuntimeException("返回位置信息异常");
-                        });
 
-
+        returnClickData();
 
 
         //返回上一层
@@ -155,6 +160,32 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
         return indlaterView;
     }
 
+
+    @Override
+    public void returnClickData() {
+
+        if (mListener != null) {
+            mPresenter.subscribe(cityAdapter.getClickObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(textView -> {
+                                mListener.onClickCity(textView.getText().toString());
+                            },
+                            error -> {
+                                throw new RuntimeException("城市点击事件出错");
+                            }));
+
+            mPresenter.subscribe(searchAdpter.getClickObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(textView -> {
+                                mListener.onClickCity(textView.getText().toString());
+                            },
+                            error -> {
+                                throw new RuntimeException("搜索点击事件出错");
+                            }));
+        }
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -164,13 +195,13 @@ public class CityPickerFragment extends Fragment implements LocationInfoContract
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        HomepageFragment homeFragment = (HomepageFragment) fragmentManager.findFragmentById((int) R.layout.home_fragment);
-        if (homeFragment != null) {
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.show(homeFragment);
-            ft.commit();
-        }
+//        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//        HomepageFragment homeFragment = (HomepageFragment) fragmentManager.findFragmentById((int) R.layout.home_fragment);
+//        if (homeFragment != null) {
+//            FragmentTransaction ft = fragmentManager.beginTransaction();
+//            ft.show(homeFragment);
+//            ft.commit();
+//        }
     }
 
     @Override

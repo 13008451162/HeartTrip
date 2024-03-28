@@ -1,5 +1,8 @@
 package com.xupt3g.homepageview;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,8 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
@@ -18,8 +26,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.dialog.MiniLoadingDialog;
+import com.xupt3g.LocationUtils.LocationListener;
+import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.homepageview.model.RecommendHomeData;
 import com.xupt3g.homepageview.model.net.RecommendInfoTask;
 import com.xupt3g.homepageview.presenter.RecommendInfoContrach;
@@ -52,21 +63,59 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
     RecommendInfoContrach.Presenter mPresenter;
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-
     private View inflaterView;
 
     private RecommendAdpter adpter;
     private RecyclerView recyclerView;
     private LottieAnimationView lottieAnimationView;
     private NestedScrollView nestedScrollView;
+    private TextView cityTextView;
 
     public static HomepageFragment newInstance() {
         return new HomepageFragment();
     }
 
     public HomepageFragment() {
+    }
+
+    private ActivityResultLauncher<Intent> resultLauncher;
+
+    //使用百度定位Sdk
+    LocationListener locationListener;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        //判断是否传入正确的result
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent intent = result.getData();   //获取上一个活动返回的Intent
+                            //判断上一个活动的Intent是否存在，存在则在日志中输入
+                            if (intent != null) {
+                                String str = intent.getStringExtra("data_return");
+                                cityTextView.setText(str);
+                            }
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        locationListener = LocationListener.getInstance();
+
+        try {
+            LocationService locationService = LocationService.getInstance();
+            locationService.init(getContext());
+            LocationService.start(locationListener);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Nullable
@@ -81,8 +130,14 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         mMiniLoadingDialog = WidgetUtils.getMiniLoadingDialog(getContext());
 
 
-        TextView textView = inflaterView.findViewById(R.id.Location_view);
+        cityTextView = inflaterView.findViewById(R.id.Location_view);
         lottieAnimationView = inflaterView.findViewById(R.id.lottie_failure);
+
+
+        Button button = inflaterView.findViewById(R.id.search_button);
+
+        TextView currentView = inflaterView.findViewById(R.id.currentLocation);
+        TextView specifyView = inflaterView.findViewById(R.id.specify_search);
 
         recyclerView = inflaterView.findViewById(R.id.recommendedRoom);
         adpter = new RecommendAdpter();
@@ -92,6 +147,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         RecommendInfoTask recommendInfoTask = RecommendInfoTask.getInstance();
         RecommendInfoPresenter infoPresenter = new RecommendInfoPresenter(recommendInfoTask, this);
         this.setPresenter(infoPresenter);
+
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adpter);
 
@@ -99,14 +155,45 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         //加载推荐数据
         mPresenter.getHomeData(pageNumber);
 
+        //初始化当前位置
+        mPresenter.subscribe(locationListener.getLocData()
+                .subscribe(locdata -> cityTextView.setText(locdata.getCity() + "," + locdata.getDistrict())));
 
-        textView.setOnClickListener(v -> {
+
+        cityTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SearchActivity.class);
-            startActivity(intent);
+            resultLauncher.launch(intent);
         });
+
+        //更新当前位置
+        currentView.setOnClickListener(v -> mPresenter.subscribe(locationListener.getLocData()
+                .subscribe(locdata -> cityTextView.setText(locdata.getDistrict()))));
+
 
         listenForBottomSliding();
 
+        initCarousel();
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //传递一个位置信息
+                ARouter.getInstance().build("/searchResultView/SearchResultActivit")
+                        .withString("position", cityTextView.getText().toString() +","+ specifyView.getText())
+                        .withString("date", "3.14-3.16")
+                        .navigation();
+            }
+        });
+
+
+        return inflaterView;
+    }
+
+    /**
+     * 加载轮播图
+     */
+    private void initCarousel() {
         //轮播图
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("https://raw.githubusercontent.com/13008451162/PicImg/main/202403201729241.jpg");
@@ -116,8 +203,6 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         Carousel carousel = new Carousel(getContext(), inflaterView.findViewById(R.id.index_dot), inflaterView.findViewById(R.id.viewPager2));
         carousel.initViews(arrayList);
         carousel.startAutoScroll();
-
-        return inflaterView;
     }
 
     @Override
@@ -128,6 +213,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     @Override
     public void onStop() {
         super.onStop();
+        mPresenter.unsubscribe();
     }
 
 
@@ -164,7 +250,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
                     new Handler().postDelayed(() -> {
                         pageNumber += 1;
                         mPresenter.getHomeData(pageNumber);
-                        adpter.notifyItemInserted(adpter.getItemCount() );
+                        adpter.notifyItemInserted(adpter.getItemCount());
                     }, 500);
                 }
             }
