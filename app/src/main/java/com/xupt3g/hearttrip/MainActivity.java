@@ -4,6 +4,7 @@ import static com.xuexiang.xutil.tip.ToastUtils.toast;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import com.hjq.permissions.XXPermissions;
 import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.UiTools.UiTool;
+import com.xupt3g.homepageview.model.room.Data.HistoryData;
+import com.xupt3g.homepageview.model.room.HistoryDatabase;
 import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 
@@ -67,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         contentViewPager.setAdapter(pagerAdapter);
         contentViewPager.setOffscreenPageLimit(3);
         contentViewPager.setUserInputEnabled(false);
-
 
         XXPermissions.with(this)
                 // 申请单个权限

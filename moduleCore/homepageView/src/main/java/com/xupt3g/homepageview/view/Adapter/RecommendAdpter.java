@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -50,8 +51,12 @@ public class RecommendAdpter extends RecyclerView.Adapter<RecommendAdpter.ViewHo
         mHomeList = new ArrayList<>();
     }
 
-    public void setmHomeList(ArrayList<RecommendHomeData.DataDTO.ListDTO> mHomeList) {
-        this.mHomeList.addAll(mHomeList);
+    public void setmHomeList(@NonNull ArrayList<RecommendHomeData.DataDTO.ListDTO> mHomeList) {
+        if (mHomeList != null) {
+            this.mHomeList.addAll(mHomeList);
+        } else {
+            Toast.makeText(context, "没有更多数据了", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -74,7 +79,7 @@ public class RecommendAdpter extends RecyclerView.Adapter<RecommendAdpter.ViewHo
         RecommendHomeData.DataDTO.ListDTO listDTO = mHomeList.get(position);
 
         holder.titleView.setText(listDTO.getTitle());
-        holder.priceAfterView.setText(listDTO.getPriceAfter().toString());
+        holder.priceAfterView.setText(listDTO.getPriceBefore().toString());
         Glide.with(context).load(listDTO.getCover())
                 .transform(new RoundedCorners(40))
                 .into(holder.coverView);

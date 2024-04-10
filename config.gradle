@@ -53,7 +53,9 @@ ext {
             rxandroid        : 'io.reactivex.rxjava3:rxandroid:3.0.2',
             rxjava           : 'io.reactivex.rxjava3:rxjava:3.1.5',
             rxbinding        : 'com.jakewharton.rxbinding4:rxbinding:4.0.0',
-            rxjava3_retrofit2: 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+            rxjava3_retrofit2: 'com.squareup.retrofit2:adapter-rxjava3:2.9.0',
+            room    : 'androidx.room:room-runtime:2.6.1',
+            roomRxjava    : 'androidx.room:room-rxjava3:2.6.1'
     ]
 
     //XUI库所需依赖

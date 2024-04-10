@@ -27,12 +27,15 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.jakewharton.rxbinding4.view.RxView;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.dialog.MiniLoadingDialog;
 import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.homepageview.model.RecommendHomeData;
 import com.xupt3g.homepageview.model.net.RecommendInfoTask;
+import com.xupt3g.homepageview.model.room.Data.HistoryData;
+import com.xupt3g.homepageview.model.room.HistoryDatabase;
 import com.xupt3g.homepageview.presenter.RecommendInfoContrach;
 import com.xupt3g.homepageview.presenter.RecommendInfoPresenter;
 import com.xupt3g.homepageview.view.Adapter.RecommendAdpter;
@@ -41,8 +44,7 @@ import com.xupt3g.homepageview.view.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 项目名: HeartTrip
@@ -57,6 +59,11 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 @Route(path = "/homepageView/HomepageFragment")
 public class HomepageFragment extends Fragment implements RecommendInfoContrach.HomeView {
 
+    /**
+     * 向城市选择的Fragment页面传递数据
+     */
+    public static final String FLAG = "INDICATION";
+
     private int pageNumber;
 
     MiniLoadingDialog mMiniLoadingDialog;
@@ -70,6 +77,8 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     private LottieAnimationView lottieAnimationView;
     private NestedScrollView nestedScrollView;
     private TextView cityTextView;
+    private TextView attractionsTextView;
+    private TextView specifyView;
 
     public static HomepageFragment newInstance() {
         return new HomepageFragment();
@@ -79,6 +88,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     }
 
     private ActivityResultLauncher<Intent> resultLauncher;
+    private ActivityResultLauncher<Intent> resultSearchLauncher;
 
     //使用百度定位Sdk
     LocationListener locationListener;
@@ -86,6 +96,24 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        resultSearchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        //判断是否传入正确的result
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent intent = result.getData();   //获取上一个活动返回的Intent
+                            //判断上一个活动的Intent是否存在，存在则在日志中输入
+                            if (intent != null) {
+                                String str = intent.getStringExtra("data_return");
+                                specifyView.setText(str);
+                            }
+                        }
+                    }
+                });
+
         resultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -111,7 +139,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         try {
             LocationService locationService = LocationService.getInstance();
-            locationService.init(getContext());
+            locationService.init(getContext().getApplicationContext());
             LocationService.start(locationListener);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -121,6 +149,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
         inflaterView = inflater.inflate(R.layout.home_fragment, container, false);
         nestedScrollView = inflaterView.findViewById(R.id.nested_scrollview);
@@ -133,11 +162,13 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         cityTextView = inflaterView.findViewById(R.id.Location_view);
         lottieAnimationView = inflaterView.findViewById(R.id.lottie_failure);
 
+        attractionsTextView = inflaterView.findViewById(R.id.specify_search);
+
 
         Button button = inflaterView.findViewById(R.id.search_button);
 
         TextView currentView = inflaterView.findViewById(R.id.currentLocation);
-        TextView specifyView = inflaterView.findViewById(R.id.specify_search);
+        specifyView = inflaterView.findViewById(R.id.specify_search);
 
         recyclerView = inflaterView.findViewById(R.id.recommendedRoom);
         adpter = new RecommendAdpter();
@@ -148,9 +179,6 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         RecommendInfoPresenter infoPresenter = new RecommendInfoPresenter(recommendInfoTask, this);
         this.setPresenter(infoPresenter);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adpter);
-
 
         //加载推荐数据
         mPresenter.getHomeData(pageNumber);
@@ -160,14 +188,29 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
                 .subscribe(locdata -> cityTextView.setText(locdata.getCity() + "," + locdata.getDistrict())));
 
 
-        cityTextView.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), SearchActivity.class);
-            resultLauncher.launch(intent);
-        });
+        //防止点击过快发生重复创建Activity
+        mPresenter.subscribe(RxView.clicks(cityTextView)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(v -> {
+                    Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(FLAG, false);
+                    resultLauncher.launch(intent);
+                }));
+
+
+        //防止点击过快发生重复创建Activity
+        mPresenter.subscribe(RxView.clicks(attractionsTextView)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(v -> {
+                    Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(FLAG, true);
+                    resultSearchLauncher.launch(intent);
+                }));
+
 
         //更新当前位置
         currentView.setOnClickListener(v -> mPresenter.subscribe(locationListener.getLocData()
-                .subscribe(locdata -> cityTextView.setText(locdata.getDistrict()))));
+                .subscribe(bdLocation -> cityTextView.setText(bdLocation.getDistrict()))));
 
 
         listenForBottomSliding();
@@ -180,7 +223,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
             public void onClick(View v) {
                 //传递一个位置信息
                 ARouter.getInstance().build("/searchResultView/SearchResultActivit")
-                        .withString("position", cityTextView.getText().toString() +","+ specifyView.getText())
+                        .withString("position", cityTextView.getText().toString() + "," + specifyView.getText())
                         .withString("date", "3.14-3.16")
                         .navigation();
             }
@@ -210,12 +253,6 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         super.onPause();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mPresenter.unsubscribe();
-    }
-
 
     @Override
     public void setPresenter(RecommendInfoContrach.Presenter presenter) {
@@ -224,12 +261,15 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
     @Override
     public void revealRecycler(@NonNull RecommendHomeData listDTO) {
+
         if (listDTO.getData() != null) {
             mMiniLoadingDialog.dismiss();
             lottieAnimationView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             List<RecommendHomeData.DataDTO.ListDTO> list = listDTO.getData().getList();
             adpter.setmHomeList((ArrayList<RecommendHomeData.DataDTO.ListDTO>) list);
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adpter);
         } else {
             lottieAnimationView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -244,7 +284,6 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     // 滑动到了底部
-                    Log.d("TAG", "已滑动到底部");
                     mMiniLoadingDialog.show();
 
                     new Handler().postDelayed(() -> {

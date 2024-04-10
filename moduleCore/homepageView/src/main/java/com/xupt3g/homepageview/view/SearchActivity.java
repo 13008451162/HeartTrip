@@ -1,5 +1,7 @@
 package com.xupt3g.homepageview.view;
 
+import static com.xupt3g.homepageview.HomepageFragment.FLAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -53,7 +55,7 @@ public class SearchActivity extends AppCompatActivity implements CityPickerFragm
         cityPickerFragment = (CityPickerFragment) FragmentManager.findFragmentById((int) R.layout.city_picke_fragment);
 
         if (cityPickerFragment == null) {
-            cityPickerFragment = CityPickerFragment.newInstance();
+            cityPickerFragment = CityPickerFragment.newInstance(getIntent().getBooleanExtra(FLAG, false));
             FragmentTransaction ft = FragmentManager.beginTransaction();
             ft.add(R.id.home_fragment, cityPickerFragment);
             ft.commit();

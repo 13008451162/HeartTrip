@@ -1,6 +1,5 @@
 package com.xupt3g.homepageview.view.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,6 @@ public class SearchedAdpter extends RecyclerView.Adapter<SearchedAdpter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Log.e("TAG", "onBindViewHolder: "+locationData.get(position));
         SearchedLocationData.ResultDTO resultDTO = locationData.get(position);
 
         holder.mainView.setText(resultDTO.getName());

@@ -48,6 +48,7 @@ public interface LocationInfoContract {
      * @date 2024/03/18
      */
     interface LocationView extends BaseView<Presenter> {
+
         /**
          * 设置搜索展示的Recycler
          *
@@ -60,5 +61,11 @@ public interface LocationInfoContract {
          * 监听城市选择界面的点击事件
          */
         void returnClickData();
+
+
+        /**
+         * 用于选择历史位置和位置关键词返回事件
+         */
+        void returnHistoryClickData();
     }
 }

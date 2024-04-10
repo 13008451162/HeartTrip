@@ -1,5 +1,7 @@
 package com.xupt3g.homepageview.presenter;
 
+import android.util.Log;
+
 import com.xupt3g.homepageview.model.SearchedLocationData;
 import com.xupt3g.homepageview.model.net.LocationInfoTask;
 
@@ -58,6 +60,7 @@ public class LocationInfoPresenter implements LocationInfoContract.Presenter<Sea
                 .switchMap(charSequence -> getLocationData(charSequence.toString())
                         .onErrorResumeNext(throwable -> Observable.just(new SearchedLocationData())) // 在发生错误后继续流
                 )
+                .doOnNext(date -> Log.d("TAG", "onCreateView: "+date))
                 .subscribe(data -> locationView.searchRecycler(data),
                         error -> {
                             throw new RuntimeException("在位置搜索流时出现异常： " + LocationInfoPresenter.class.getName());
