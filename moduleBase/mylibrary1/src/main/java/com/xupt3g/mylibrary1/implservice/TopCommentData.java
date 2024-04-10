@@ -1,5 +1,7 @@
 package com.xupt3g.mylibrary1.implservice;
 
+import java.util.Arrays;
+
 /**
  * 项目名: HeartTrip
  * 文件名: com.xupt3g.mylibrary1.implservice.TopCommentData
@@ -17,8 +19,17 @@ public class TopCommentData {
     private String content;
     private String[] picturesUrls;
     private String commentCount;
+    private String msg;
 
-    public TopCommentData(float houseScore, String userAvatar, String userPostTime, String userNickname, String userRating, String content, String[] picturesUrls, String commentCount) {
+    public String getMsg() {
+        return msg;
+    }
+
+    public TopCommentData(String msg) {
+        this.msg = msg;
+    }
+
+    public TopCommentData(String userAvatar, String userPostTime, String userNickname, String userRating, String content, String[] picturesUrls) {
         this.houseScore = houseScore;
         this.userAvatar = userAvatar;
         this.userPostTime = userPostTime;
@@ -27,6 +38,7 @@ public class TopCommentData {
         this.content = content;
         this.picturesUrls = picturesUrls;
         this.commentCount = commentCount;
+        this.msg = "OK";
     }
 
     public float getHouseScore() {
@@ -59,5 +71,19 @@ public class TopCommentData {
 
     public String getCommentCount() {
         return commentCount;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"houseScore\":" + houseScore +
+                ", \"userAvatar\":\'" + userAvatar + "\'" +
+                ", \"userPostTime\":\'" + userPostTime + "\'" +
+                ", \"userNickname\":\'" + userNickname + "\'" +
+                ", \"userRating\":\'" + userRating + "\'" +
+                ", \"content\":\'" + content + "\'" +
+                ", \"picturesUrls\":" + Arrays.toString(picturesUrls) +
+                ", \"commentCount\":\'" + commentCount + "\'" +
+                '}';
     }
 }

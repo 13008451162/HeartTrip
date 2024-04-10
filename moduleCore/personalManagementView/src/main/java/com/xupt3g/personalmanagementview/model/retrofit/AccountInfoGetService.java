@@ -26,7 +26,7 @@ public interface AccountInfoGetService {
      * @return 返回用户信息Response
      */
     @POST("/usercenter/v1/user/detail")
-    Call<AccountInfoResponse> getAccountInfo(@Header("UserToken") String userToken);
+    Call<AccountInfoResponse> getAccountInfo(@Header("Authorization") String userToken);
 
     /**
      *
@@ -36,9 +36,9 @@ public interface AccountInfoGetService {
      * TODO 修改用户除头像以外的信息
      */
     @POST("/usercenter/v1/user/updateUserInfo")
-    Call<IsSuccessfulResponse> updateAccountInfo(@Header("UserToken") String userToken,@Body UserInfo userInfo);
+    Call<IsSuccessfulResponse> updateAccountInfo(@Header("Authorization") String userToken,@Body UserInfo userInfo);
 
     @Multipart
     @POST("/usercenter/v1/upload")
-    Call<FileUploadResponse> uploadUserAvatar(@Header("UserToken") String userToken, @Part MultipartBody.Part part);
+    Call<FileUploadResponse> uploadUserAvatar(@Header("Authorization") String userToken, @Part MultipartBody.Part part);
 }

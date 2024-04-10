@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,7 +23,9 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.luck.picture.lib.basic.PictureSelector;
 import com.luck.picture.lib.config.SelectMimeType;
+import com.luck.picture.lib.engine.CompressFileEngine;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.button.ButtonView;
@@ -34,9 +39,14 @@ import com.xupt3g.commentsview.PictureInfo;
 import com.xupt3g.commentsview.R;
 import com.xupt3g.commentsview.model.PostCommentData;
 import com.xupt3g.commentsview.presenter.CommentsPresenter;
+import com.xupt3g.mylibrary1.ProgressAnim;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnNewCompressListener;
 
 /**
  * 项目名: HeartTrip
@@ -51,7 +61,7 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
     /**
      * 民宿ID
      */
-//    @Autowired(name = "HouseId")
+//    @Autowired(name = "houseId")
     private int houseId;
     /**
      * 民宿评分
@@ -104,6 +114,13 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
             ARouter.getInstance().inject(this);
         }
 
+        if (getIntent() != null) {
+            int id = getIntent().getIntExtra("HouseId", -1);
+            if (id != -1) {
+                houseId = id;
+            }
+        }
+        Log.d("TATAGGGGYTUG", "onCreate: " + houseId);
         instantiationView();
         //添加照片的按钮监听
         addMorePicture.setOnClickListener(view -> {
@@ -164,7 +181,8 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                presenter.postNewComment(currPictureList, new PostCommentData(houseId,
+                                ProgressAnim.showProgress(CommentPostActivity.this);
+                                presenter.postNewComment(currPictureList, new PostCommentData(1,
                                         contentEdit.getText().toString(), scoreRating.getRating(),
                                         tidyRating.getRating(), trafficRating.getRating(), securityRating.getRating(),
                                         foodRating.getRating(), costRating.getRating()));
@@ -245,17 +263,19 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
         pictureRecycler = (RecyclerView) findViewById(R.id.comments_post_picture_recycler);
         clearEditText = (ImageView) findViewById(R.id.comments_post_clear_edittext);
         clearEditText.setVisibility(View.GONE);
-        presenter = new CommentsPresenter(this);
+        presenter = new CommentsPresenter(this, this);
     }
 
 
     @Override
     public void postSuccessful() {
+        ProgressAnim.hideProgress();
         XToastUtils.success("发布成功！");
     }
 
     @Override
     public void postFailed() {
+        ProgressAnim.hideProgress();
         XToastUtils.error("发布失败！");
     }
 }

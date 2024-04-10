@@ -3,6 +3,8 @@ package com.xupt3g.personalmanagementview.model;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.xupt3g.mylibrary1.response.FileUploadResponse;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 import com.xupt3g.personalmanagementview.model.retrofit.UserInfo;
 
@@ -32,7 +34,7 @@ public interface AccountInfoImpl {
      * @return 返回是否操作成功
      * TODO 修改账号信息的申请
      */
-    boolean modifyAccountInfoRequest(UserInfo userInfo);
+    MutableLiveData<IsSuccessfulResponse> modifyAccountInfoRequest(UserInfo userInfo);
 
     /**
      *
@@ -40,5 +42,5 @@ public interface AccountInfoImpl {
      * @return 用户新的头像的url
      * TODO 上传用户新的头像
      */
-    String uploadUserAvatarRequest(MultipartBody.Part file);
+    MutableLiveData<FileUploadResponse> uploadUserAvatarRequest(MultipartBody.Part file);
 }

@@ -1,5 +1,8 @@
 package com.xupt3g.mylibrary1.implservice;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+
 import com.alibaba.android.arouter.facade.template.IProvider;
 
 /**
@@ -11,5 +14,5 @@ import com.alibaba.android.arouter.facade.template.IProvider;
  * @about: TODO 获取某民宿的评论区相关信息和第一条评论，目前可知 用于民宿详情页面
  */
 public interface TopCommentGetService extends IProvider {
-    TopCommentData getTopCommentInfo(int houseId);
+    MutableLiveData<TopCommentData> getTopCommentInfo(LifecycleOwner owner, int houseId);
 }

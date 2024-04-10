@@ -44,13 +44,18 @@ public class GuessData {
      */
     private int priceAfter;
 
-    public GuessData() {
-        this.isCollected = false;
-    }
-
-    public GuessData(int id) {
-        this.id = id;
-        this.isCollected = false;
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"isCollected\":" + isCollected +
+                ", \"cover\":\'" + cover + "\'" +
+                ", \"title\":\'" + title + "\'" +
+                ", \"intro\":\'" + intro + "\'" +
+                ", \"location\":\'" + location + "\'" +
+                ", \"priceBefore\":" + priceBefore +
+                ", \"priceAfter\":" + priceAfter +
+                '}';
     }
 
     public int getId() {

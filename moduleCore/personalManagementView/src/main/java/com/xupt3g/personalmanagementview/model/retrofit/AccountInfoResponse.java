@@ -1,5 +1,10 @@
 package com.xupt3g.personalmanagementview.model.retrofit;
 
+import com.google.gson.annotations.SerializedName;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 项目名: HeartTrip
  * 文件名: com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse
@@ -8,10 +13,17 @@ package com.xupt3g.personalmanagementview.model.retrofit;
  * @data: 2024/2/11 0:08
  * @about: TODO 账号信息Response
  */
+@NoArgsConstructor
+@Data
 public class AccountInfoResponse {
-    private int code;
+
+
+    @SerializedName("code")
+    private Integer code;
+    @SerializedName("msg")
     private String msg;
-    private UserInfo userInfo;
+    @SerializedName("data")
+    private DataDTO data;
 
     public int getCode() {
         return code;
@@ -22,25 +34,25 @@ public class AccountInfoResponse {
     }
 
     public UserInfo getUserInfo() {
-        return userInfo;
+        return data.userInfo;
     }
     public AccountInfoResponse(AccountInfoResponse response) {
         this.code = response.getCode();
         this.msg = response.getMsg();
-        this.userInfo = new UserInfo();
-        this.userInfo.setId(response.getUserInfo().getId());
-        this.userInfo.setAvatar(response.getUserInfo().getAvatar());
-        this.userInfo.setNickname(response.getUserInfo().getNickname());
-        this.userInfo.setMobile(response.getUserInfo().getMobile());
-        this.userInfo.setSex(response.getUserInfo().getSex());
-        this.userInfo.setInfo(response.getUserInfo().getInfo());
+        this.data = new DataDTO();
+        this.data.userInfo = response.getUserInfo();
 
+    }
+
+    public AccountInfoResponse(String msg) {
+        this.msg = msg;
     }
 
     public AccountInfoResponse(int code, String msg, UserInfo userInfo) {
         this.code = code;
         this.msg = msg;
-        this.userInfo = userInfo;
+        this.data = new DataDTO();
+        this.data.userInfo = userInfo;
     }
 
     public void setCode(int code) {
@@ -52,7 +64,7 @@ public class AccountInfoResponse {
     }
 
     public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+        this.data.userInfo = userInfo;
     }
 
     @Override
@@ -60,7 +72,14 @@ public class AccountInfoResponse {
         return "{" +
                 "\"code\":" + code +
                 ", \"msg\":\'" + msg + "\'" +
-                ", \"userInfo\":" + userInfo +
+                ", \"data\":" + data.userInfo +
                 '}';
+    }
+
+    @NoArgsConstructor
+    @Data
+    public static class DataDTO {
+        @SerializedName("userInfo")
+        private UserInfo userInfo;
     }
 }

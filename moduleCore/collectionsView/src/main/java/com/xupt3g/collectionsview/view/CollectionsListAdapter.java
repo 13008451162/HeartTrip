@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.progress.ratingbar.ScaleRatingBar;
@@ -49,8 +50,40 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
 
         Random random = new Random();
         int i = random.nextInt(3);
+        //测试数据 随机封面
         holder.houseCover.setImageResource(imageResources[i]);
+        //测试数据 随机评分
         holder.ratingBar.setRating((float) random.nextInt(5));
+
+        //设置真实数据
+        if (collectionsData.getTitle() != null && !"".equals(collectionsData.getTitle())) {
+            //标题
+            holder.houseTitle.setText(collectionsData.getTitle());
+        }
+        if (collectionsData.getCover() != null && !"".equals(collectionsData.getCover())) {
+            //封面
+            Glide.with(holder.itemView.getContext()).load(collectionsData.getCover())
+                    .into(holder.houseCover);
+        }
+        if (collectionsData.getIntro() != null && !"".equals(collectionsData.getIntro())) {
+            //简介
+            holder.houseIntro.setText(collectionsData.getIntro());
+        }
+        if (collectionsData.getLocation() != null && !"".equals(collectionsData.getLocation())) {
+            //定位位置
+            holder.houseLocation.setText(collectionsData.getLocation());
+        }
+        //float 评星
+        holder.ratingBar.setRating(collectionsData.getRatingstarts());
+        if (collectionsData.getPriceBefore() != 0) {
+            //折前价
+            holder.priceBefore.setText(collectionsData.getPriceBefore() + "");
+        }
+        if (collectionsData.getPriceAfter() != 0) {
+            //折后价
+            holder.priceAfter.setText(collectionsData.getPriceAfter() + "");
+        }
+
         //中间横线（删除线）
         holder.priceBefore.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
         // 抗锯齿
@@ -68,6 +101,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
             } else {
                 if (!BuildConfig.isModule) {
                     //判断当前是不是集成开发模式
+                    Log.d("TAGGGGYTU", "onBindViewHolder: " + collectionsData.getId());
                     ARouter.getInstance().build("/houseInfoView/HouseInfoActivity")
                             .withInt("HouseId", collectionsData.getId()).navigation();
                 } else {
@@ -97,6 +131,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
         private TextView priceBefore;
         private TextView priceAfter;
         private CardView darkOverlayView;
+        private TextView houseLocation;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -106,6 +141,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
             ratingBar = (ScaleRatingBar) itemView.findViewById(R.id.item_rating_stars);
             priceBefore = (TextView) itemView.findViewById(R.id.item_price_before);
             priceAfter = (TextView) itemView.findViewById(R.id.item_price_after);
+            houseLocation = (TextView) itemView.findViewById(R.id.house_from);
             darkOverlayView = (CardView) itemView.findViewById(R.id.dark_overlay_layout);
             darkOverlayView.setVisibility(View.GONE);
         }

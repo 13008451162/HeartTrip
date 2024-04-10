@@ -1,10 +1,14 @@
 package com.xupt3g.collectionsview.guessModel;
 
+import androidx.lifecycle.MutableLiveData;
+
+import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.UiTools.RootDirectory;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessListResponse;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessListService;
+import com.xupt3g.mylibrary1.PublicRetrofit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,53 +30,37 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class GuessListGetRequest implements GuessListGetImpl {
     /**
-     * 构建的retrofit的实例
-     */
-    private Retrofit retrofit;
-    /**
      * 获取的接口动态代理对象
      */
     private GuessListService guessListService;
 
-    /**
-     *
-     */
-    private List<GuessData> guessDataList;
+    private MutableLiveData<GuessListResponse> guessListLiveData = new MutableLiveData<>();
 
     public GuessListGetRequest() {
-        //构建Retrofit实例
-        retrofit = new Retrofit.Builder()
-                //根路径
-                .baseUrl(RootDirectory.getRootDirectory())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        //获取接口的动态代理对象
-        guessListService = retrofit.create(GuessListService.class);
+        guessListService = (GuessListService)
+                PublicRetrofit.create(GuessListService.class);
     }
 
     @Override
-    public List<GuessData> getGuessList() {
-        //测试
-        guessDataList = new ArrayList<>();
-        Collections.addAll(guessDataList, new GuessData(1), new GuessData(2), new GuessData(3), new GuessData(4),
-                new GuessData(5), new GuessData(6));
+    public MutableLiveData<GuessListResponse> getGuessList() {
+        //无需登录
+        guessListService.getGuessList().enqueue(new Callback<GuessListResponse>() {
+            @Override
+            public void onResponse(Call<GuessListResponse> call, Response<GuessListResponse> response) {
+                GuessListResponse body = response.body();
+                if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                    guessListLiveData.setValue(body);
+                } else {
+                    guessListLiveData.setValue(new GuessListResponse(PublicRetrofit.getErrorMsg()));
+                }
+            }
 
-//        //无需登录
-//        guessListService.getGuessList().enqueue(new Callback<GuessListResponse>() {
-//            @Override
-//            public void onResponse(Call<GuessListResponse> call, Response<GuessListResponse> response) {
-//                GuessListResponse body = response.body();
-//                if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                    guessDataList = body.getList();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<GuessListResponse> call, Throwable t) {
-//                ToastUtils.toast("网络请求失败！");
-//                guessDataList = null;
-//            }
-//        });
-        return guessDataList;
+            @Override
+            public void onFailure(Call<GuessListResponse> call, Throwable t) {
+                XToastUtils.error("网络请求失败！");
+                guessListLiveData.setValue(new GuessListResponse(PublicRetrofit.getErrorMsg()));
+            }
+        });
+        return guessListLiveData;
     }
 }

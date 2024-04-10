@@ -1,5 +1,8 @@
 package com.xupt3g.mylibrary1.implservice;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+
 import com.alibaba.android.arouter.facade.template.IProvider;
 
 /**
@@ -21,7 +24,7 @@ public interface CollectionManagerService extends IProvider {
      * @return 是否成功添加收藏
      * TODO 添加收藏
      */
-     boolean addCollection(int houseId);
+     MutableLiveData<Boolean> addCollection(LifecycleOwner owner, int houseId);
 
     /**
      *
@@ -29,7 +32,7 @@ public interface CollectionManagerService extends IProvider {
      * @return 是否成功删除收藏
      * TODO 删除收藏
      */
-    boolean removeCollection(int houseId);
+    MutableLiveData<Boolean> removeCollection(LifecycleOwner owner, int houseId);
 
     /**
      *
@@ -37,6 +40,6 @@ public interface CollectionManagerService extends IProvider {
      * TODO 返回收藏列表的数量
      * 注意：正常时候返回数字>=0，如果返回数字<0(-1)，表示异常情况，可能网络请求失败
      */
-    int getCollectionsCount();
+    MutableLiveData<Integer> getCollectionsCount(LifecycleOwner owner);
 
 }

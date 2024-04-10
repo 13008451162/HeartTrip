@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MapActivity">
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/baidu_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        tools:ignore="KeyboardInaccessibleWidget">
+
+
+    </com.baidu.mapapi.map.MapView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_to_my_location"
+        android:layout_width="69dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="270dp"
+        android:src="@drawable/houseinfo_icon_back"
+        android:tint="@color/black" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/confirmLatLng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="340dp"
+        android:src="@drawable/houseinfo_icon_done" />
+
+
+    <LinearLayout
+        android:id="@+id/houseinfo_bottom_sheet_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/houseinfo_coupon_background"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_fitToContents="true"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <TextView
+            android:id="@+id/houseinfo_bottom_sheet_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="附近景点"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+        <TextView
+            android:id="@+id/houseinfo_bottom_sheet_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="（只为您推荐民宿附近12公里的景点）"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/houseinfo_map_recycler"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="340dp" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/homeseinfo_nodata_anim"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="false"
+            android:visibility="gone"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/houseinfo_no_attraction"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,12 @@
 package com.xupt3g.houseinfoview.model;
 
+import androidx.lifecycle.MutableLiveData;
+
+import com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseData;
+import com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseDataResponse;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouse;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouseResponse;
+
 import java.util.List;
 
 /**
@@ -14,13 +21,12 @@ public interface HouseInfoGetImpl {
     /**
      *
      * @param houseId 民宿ID
-     * @return 获取民宿详情列表
+     * @return 获取民宿详情列表 无需登录的
      */
-    HouseInfoBaseData getHouseInfoBaseData(int houseId);
+    MutableLiveData<HouseInfoBaseDataResponse> getHouseInfoBaseData(int houseId);
 
     /**
      * TODO 获取推荐民宿列表
-     * @return
      */
-    List<RecommendHouse> getRecommendHousesList();
+    MutableLiveData<RecommendHouseResponse> getRecommendHousesList();
 }

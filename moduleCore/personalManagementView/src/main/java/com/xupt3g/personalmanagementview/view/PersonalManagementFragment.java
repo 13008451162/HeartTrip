@@ -23,9 +23,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
-import com.xuexiang.xutil.tip.ToastUtils;
-import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
-import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xui.widget.button.RippleView;
 import com.xupt3g.personalmanagementview.R;
@@ -33,7 +30,6 @@ import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 import com.xupt3g.personalmanagementview.presenter.AccountInfoPresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -140,7 +136,7 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
         reviews = (LinearLayout) mView.findViewById(R.id.personal_comments_text);
 
         //注册EventBus的接收者
-        registerEventBus();
+//        registerEventBus();
 
         //观察者监视登陆状态的改变 将改页面UI改成对应的登录状态
         LoginStatusData.getLoginStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -186,23 +182,25 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
         EventBus.getDefault().register(this);
     }
 
-    @Subscribe
-    public void messageReceived(String tag) {
-        if (CollectionManagerService.COLLECTIONS_HAS_CHANGED.equals(tag)) {
-            //收藏数量改动
-            if (presenter != null && !BuildConfig.isModule) {
-                int collectionsCount = presenter.getCollectionManagerService().getCollectionsCount();
-                countOfCollections.setText(collectionsCount);
-                ToastUtils.toast("收藏数量改变");
-            }
-        } else if (BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED.equals(tag) && BuildConfig.isModule) {
-            //浏览历史数量改动
-            if (presenter != null) {
-                int browsedHistoryCount = presenter.getBrowsedHistoryManagerService().getBrowsedHistoryCount();
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (presenter != null && !BuildConfig.isModule) {
+            MutableLiveData<Integer> historyCount = presenter.getBrowsedHistoryManagerService().getBrowsedHistoryCount(this);
+            historyCount.observe(this, new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    countOfBrowses.setText(String.valueOf(integer));
+                }
+            });
+            MutableLiveData<Integer> collectionsCount = presenter.getCollectionManagerService().getCollectionsCount(this);
+            collectionsCount.observe(this, new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    countOfCollections.setText(String.valueOf(integer));
+                }
+            });
 
-                ToastUtils.toast("浏览历史数量改变");
-
-            }
         }
     }
 
@@ -235,7 +233,6 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
                     //集成开发模式
                     ARouter.getInstance().build("/collectionsView/CollectionsActivity")
                             .navigation();
-
                 }
             }
         });
@@ -304,21 +301,44 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
             public void onChanged(AccountInfoResponse response) {
                 if (response != null && response.getCode() == 200 && "OK".equals(response.getMsg())) {
                     //显示用户信息
-                    Glide.with(requireContext()).load(response.getUserInfo().getAvatar())
-                            .into(userAvatar);
+                    //头像及预览监听设置
+                    Intent intent = new Intent(getContext(), UserAvatarPreviewActivity.class);
+                    if (response.getUserInfo().getAvatar() == null || "".equals(response.getUserInfo().getAvatar())) {
+                        //头像为空 默认头像
+                        Glide.with(requireContext()).load(R.drawable.personal_default_avatar_2)
+                                .into(userAvatar);
+                        intent.putExtra("UserAvatar", UserAvatarPreviewActivity.defAvatar);
+                    } else {
+                        Glide.with(requireContext()).load(response.getUserInfo().getAvatar())
+                                .into(userAvatar);
+                        intent.putExtra("UserAvatar", response.getUserInfo().getAvatar());
+                    }
+                    userAvatar.setOnClickListener(view -> {
+                        startActivity(intent);
+                    });
+                    //昵称设置
                     userNickname.setText(response.getUserInfo().getNickname());
+                    //自我介绍设置
                     userIntroduce.setText(response.getUserInfo().getInfo());
                     if (!BuildConfig.isModule) {
                         //集成模式下可使用ARouter调用以下API
                         //显示收藏数量
-                        int collectionsCount = presenter.getCollectionManagerService().getCollectionsCount();
-                        countOfCollections.setText(String.valueOf(collectionsCount));
+                        MutableLiveData<Integer> collectionsCount = presenter.getCollectionManagerService().getCollectionsCount(getViewLifecycleOwner());
+                        collectionsCount.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                            @Override
+                            public void onChanged(Integer integer) {
+                                countOfCollections.setText(String.valueOf(integer));
+                            }
+                        });
                         //显示浏览历史数量
-                        int historyCount = presenter.getBrowsedHistoryManagerService().getBrowsedHistoryCount();
-                        countOfBrowses.setText(String.valueOf(historyCount));
-
+                        MutableLiveData<Integer> historyCount = presenter.getBrowsedHistoryManagerService().getBrowsedHistoryCount(getViewLifecycleOwner());
+                        historyCount.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                            @Override
+                            public void onChanged(Integer integer) {
+                                countOfBrowses.setText(String.valueOf(integer));
+                            }
+                        });
                     }
-
                 }
             }
         });

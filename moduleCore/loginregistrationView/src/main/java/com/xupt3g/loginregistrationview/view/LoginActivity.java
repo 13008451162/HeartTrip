@@ -1,20 +1,23 @@
 package com.xupt3g.loginregistrationview.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageButton;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
+import com.xupt3g.loginregistrationview.model.retrofit.JwtData;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xupt3g.mylibrary1.ProgressAnim;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,6 +31,11 @@ import com.xupt3g.loginregistrationview.R;
 import com.xupt3g.loginregistrationview.presenter.LoginRegisterPresenter;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -49,11 +57,12 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
     private LoginRegisterPresenter loginPresenter;
     private ButtonView registerButton;
     private ImageButton backButton;
-
+    private final int REGISTER_REQUEST_CODE = 100;
 
 
     @SuppressLint("MissingInflatedId")
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity_login);
@@ -74,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
         registerButton.setOnClickListener(view -> {
             //点击了注册按钮
             Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REGISTER_REQUEST_CODE);
         });
 
         //Presenter层的实例
@@ -91,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
                 //暴力解决按钮点击一次就恢复到原来的style的情况 按钮颜色不变
 
                 //进行登录验证
-                loginPresenter.login(phoneNumberInput.getText().toString(), passwordInput.getText().toString());
+                loginPresenter.loginOrRegister(phoneNumberInput.getText().toString(), passwordInput.getText().toString(), LoginRegisterPresenter.OPTION_LOGIN);
             }
         });
 
@@ -125,10 +134,6 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (Pattern.matches("[\u4E00-\u9FA5]", charSequence)) {
-//                    //判断字符串中存在不存在中文字符
-//
-//                }^[0-9a-zA-Z!@#$%^&*()_+~\\-=/\\[\\]{}\\|:;\"\'<>,.?]+$
                 String regex = "^[0-9a-zA-Z!@#$%^&*()_+~\\-=/\\[\\]{}|:;\"'<>,.?]+$";
                 if (!Pattern.matches(regex, charSequence)) {
                     passwordInput.setError("请检查密码，密码只能包含数字、大小写字母和一些特殊符号");
@@ -151,12 +156,25 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REGISTER_REQUEST_CODE) {
+            //注册请求
+            if (data != null) {
+                boolean isSuccessFul = data.getBooleanExtra("IsSuccessful", false);
+                if (isSuccessFul) {
+                    finish();
+                }
+            }
+        }
+    }
+
     /**
      * TODO 显示加载动画
      */
     @Override
     public void showProgress() {
-
         ProgressAnim.showProgress(LoginActivity.this);
     }
 
@@ -172,28 +190,53 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
      * TODO 登录成功响应并跳转至HomepageView
      */
     @Override
-    public void loginSuccess(String token) {
-        SnackbarUtils.Short(getWindow().getDecorView(), "登录成功！欢迎使用随心游！")
+    public void loginSuccess(JwtData data) {
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                2,
+                2,
+                60,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy()
+        );
+
+        pool.submit(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sp = getSharedPreferences("loggedInState", MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
+                //记录登陆成功
+                edit.putBoolean("isLoggedIn", true);
+                //记录登录密钥
+                edit.putString("userToken", data.getAccessToken());
+                edit.apply();
+            }
+        });
+
+        pool.shutdown();
+        //登陆状态 默认未登录
+
+
+        SnackbarUtils.Custom(getWindow().getDecorView(), "登录成功！欢迎使用随心游！", 1500)
                 .confirm()
                 .messageCenter()
                 .radius(25.5f)
                 .setCallback(new Snackbar.Callback() {
                     @Override
                     public void onShown(Snackbar sb) {
-                        // Snackbar显示时执行的操作
+                        // Snack bar显示时执行的操作
                     }
 
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        // Snackbar消失时执行的操作
+                        // Snack bar消失时执行的操作
                         //跳转到Homepage模块
                         if (!BuildConfig.isModule) {
                             //保存登录信息 给LiveData loginStatus userToken赋值
                             LoginStatusData.getLoginStatus().setValue(true);//loginStatus设为true，更改登陆状态为 已登陆
-                            LoginStatusData.getUserToken().setValue(token);
-                            //集成模式开发下才能尝试跳转
-                            ARouter.getInstance().build("/homepage/HomepageActivity")
-                                    .navigation();
+                            LoginStatusData.getUserToken().setValue(data.getAccessToken());
+                            finish();
                         }
                     }
                 })
@@ -206,7 +249,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRegisterVie
      */
     @Override
     public void loginFailed() {
-        SnackbarUtils.Short(getWindow().getDecorView(), "登录失败！请检查手机号和密码！")
+        SnackbarUtils.Custom(getWindow().getDecorView(), "登录失败！请检查手机号和密码！", 1500)
                 .warning()
                 .radius(25.5f)
                 .messageCenter()

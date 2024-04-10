@@ -1,8 +1,12 @@
 package com.xupt3g.collectionsview.guessModel.retrofit;
 
-import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
+import com.google.gson.annotations.SerializedName;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
 
 import java.util.List;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 项目名: HeartTrip
@@ -12,10 +16,15 @@ import java.util.List;
  * @data:2024/2/20 0:00
  * @about: TODO
  */
+@NoArgsConstructor
+@Data
 public class GuessListResponse {
-    private int code;
+    @SerializedName("code")
+    private Integer code;
+    @SerializedName("msg")
     private String msg;
-    private List<GuessData> list;
+    @SerializedName("data")
+    private DataDTO data;
 
     public int getCode() {
         return code;
@@ -26,6 +35,20 @@ public class GuessListResponse {
     }
 
     public List<GuessData> getList() {
-        return list;
+        return data.list;
+    }
+
+    public GuessListResponse(String msg) {
+        this.msg = msg;
+    }
+
+    public GuessListResponse() {
+    }
+
+    @NoArgsConstructor
+    @Data
+    public static class DataDTO {
+        @SerializedName("list")
+        private List<GuessData> list;
     }
 }

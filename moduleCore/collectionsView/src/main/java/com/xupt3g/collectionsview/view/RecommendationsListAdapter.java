@@ -1,7 +1,9 @@
 package com.xupt3g.collectionsview.view;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.popupwindow.good.GoodView;
@@ -19,8 +25,11 @@ import com.xuexiang.xui.widget.popupwindow.good.IGoodView;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.collectionsview.R;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionDataResponse;
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
-import com.xupt3g.collectionsview.presenter.ThePresenter;
+import com.xupt3g.collectionsview.presenter.CollectionPresenter;
+import com.xupt3g.mylibrary1.PublicRetrofit;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import java.util.List;
 import java.util.Random;
@@ -35,14 +44,16 @@ import java.util.Random;
  */
 public class RecommendationsListAdapter extends RecyclerView.Adapter<RecommendationsListAdapter.ViewHolder> implements CollectionsGuessManagerImpl {
 
-    private ThePresenter presenter;
+    private CollectionPresenter presenter;
     private List<GuessData> list;
     private IGoodView goodView;
+    private LifecycleOwner owner;
 
 
-    public RecommendationsListAdapter(List<GuessData> list) {
+    public RecommendationsListAdapter(List<GuessData> list, LifecycleOwner owner) {
         this.list = list;
-        presenter = new ThePresenter(this);
+        this.owner = owner;
+        presenter = new CollectionPresenter(this);
     }
 
     @Override
@@ -90,11 +101,39 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
     private final int[] imageResources = {R.drawable.collection_house_1, R.drawable.collection_house_2, R.drawable.collection_house_3};
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         GuessData guessData = list.get(position);
         Random random = new Random();
         int i = random.nextInt(3);
+
         holder.houseCover.setImageResource(imageResources[i]);
+
+        //设置真实数据
+        if (guessData.getTitle() != null && !"".equals(guessData.getTitle())) {
+            //标题
+            holder.houseTitle.setText(guessData.getTitle());
+        }
+        if (guessData.getCover() != null && !"".equals(guessData.getCover())) {
+            //封面
+            Glide.with(holder.itemView.getContext()).load(guessData.getCover())
+                    .into(holder.houseCover);
+        }
+        if (guessData.getIntro() != null && !"".equals(guessData.getIntro())) {
+            //简介
+            holder.houseIntro.setText(guessData.getIntro());
+        }
+        if (guessData.getLocation() != null && !"".equals(guessData.getLocation())) {
+            //定位位置
+            holder.houseFrom.setText(guessData.getLocation());
+        }
+        if (guessData.getPriceBefore() != 0) {
+            //折前价
+            holder.housePriceBefore.setText(guessData.getPriceBefore() + "");
+        }
+        if (guessData.getPriceAfter() != 0) {
+            //折后价
+            holder.housePriceAfter.setText(guessData.getPriceAfter() + "");
+        }
         //中间横线（删除线）
         holder.housePriceBefore.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         // 抗锯齿
@@ -112,38 +151,49 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
         //点击监听
         holder.collectionButton.setOnClickListener(view1 -> {
             if (!guessData.isCollected()) {
+                Log.d("addTAG", "onBindViewHolder: " + list.get(position).getId());
                 //先进行添加收藏的网络请求 Presenter
-                CollectionData collectionsData = presenter.addCollection(list.get(position).getId());
-                if (collectionsData == null) {
-                    //添加失败
-                    ToastUtils.toast("收藏失败！");
-                } else {
-                    //收藏民宿操作
-                    mCollectManager.collectSuccessfulCallback(position, collectionsData);
-                    //UI展示
-                    holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_light);
-                    goodView.setText("收藏成功")
-                            .setTextColor(Color.parseColor("#4facfe"))
-                            .setDuration(1000)
-                            .setTextSize(12)
-                            .setDistance(10)
-                            .show(holder.itemView);
-                    guessData.setCollected(true);
-                }
+                MutableLiveData<CollectionDataResponse> collectionsData = presenter.addCollection(list.get(position).getId());
+                collectionsData.observe(owner, new Observer<CollectionDataResponse>() {
+                    @Override
+                    public void onChanged(CollectionDataResponse response) {
+                        if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                            //收藏民宿操作
+                            mCollectManager.collectSuccessfulCallback(position, response.getCollection());
+                            //UI展示
+                            holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_light);
+                            goodView.setText("收藏成功")
+                                    .setTextColor(Color.parseColor("#4facfe"))
+                                    .setDuration(1000)
+                                    .setTextSize(12)
+                                    .setDistance(10)
+                                    .show(holder.itemView);
+                            guessData.setCollected(true);
+                        } else {
+                            //添加失败
+                            ToastUtils.toast("收藏失败！");
+                        }
+                    }
+                });
             } else {
                 //移除的网络请求
-                boolean b = presenter.removeCollection(list.get(position).getId());
-                if (!b) {
-                    //移除失败
-                    ToastUtils.toast("移除收藏失败！");
-                } else {
-                    //移除收藏操作
-                    mCollectManager.removeSuccessfulCallback(list.get(position).getId());
-                    //UI展示
-                    holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_dark);
-                    ToastUtils.toast("移除收藏成功！");
-                    guessData.setCollected(false);
-                }
+                MutableLiveData<IsSuccessfulResponse> booleanLiveData = presenter.removeCollection(list.get(position).getId());
+                booleanLiveData.observe(owner, new Observer<IsSuccessfulResponse>() {
+                    @Override
+                    public void onChanged(IsSuccessfulResponse response) {
+                        if (response != null && !response.isSuccess()) {
+                            //移除失败
+                            ToastUtils.toast("移除收藏失败！");
+                        } else {
+                            //移除收藏操作
+                            mCollectManager.removeSuccessfulCallback(list.get(position).getId());
+                            //UI展示
+                            holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_dark);
+                            ToastUtils.toast("移除收藏成功！");
+                            guessData.setCollected(false);
+                        }
+                    }
+                });
             }
         });
         holder.itemView.setOnClickListener(view -> {
@@ -169,13 +219,13 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
     public interface CollectionManageButtonClickListener {
         /**
          * @param position 子项下标、位置
-         *                 TODO 收藏成功，将新的CollectionsData添加到收藏集合并更新显示
+         * TODO 收藏成功，将新的CollectionsData添加到收藏集合并更新显示
          */
         void collectSuccessfulCallback(int position, CollectionData collectionsData);
 
         /**
          * @param houseId 民宿ID
-         *                TODO 移除收藏成功，猜你喜欢页面成功移除，拿着ID到收藏列表中遍历查找，找到了将它移除并更新显示
+         * TODO 移除收藏成功，猜你喜欢页面成功移除，拿着ID到收藏列表中遍历查找，找到了将它移除并更新显示
          */
         void removeSuccessfulCallback(int houseId);
     }

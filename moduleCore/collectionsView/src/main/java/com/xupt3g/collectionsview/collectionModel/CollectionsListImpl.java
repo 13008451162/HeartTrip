@@ -1,6 +1,11 @@
 package com.xupt3g.collectionsview.collectionModel;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionDataResponse;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionsListResponse;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import java.util.List;
 
@@ -20,7 +25,7 @@ public interface CollectionsListImpl {
      * @return 是否成功添加到收藏
      * TODO 添加收藏
      */
-    CollectionData addCollectionToList(int houseId);
+    MutableLiveData<CollectionDataResponse> addCollectionToList(int houseId);
 
     /**
      *
@@ -28,12 +33,12 @@ public interface CollectionsListImpl {
      * @return 是否成功移除收藏
      * TODO 移除收藏
      */
-    boolean removeCollectionFromList(int houseId);
+    MutableLiveData<IsSuccessfulResponse> removeCollectionFromList(int houseId);
 
     /**
      *
      * @return 收藏列表
      * TODO 获取收藏列表
      */
-    List<CollectionData> getCollectionsList();
+    MutableLiveData<CollectionsListResponse> getCollectionsList();
 }

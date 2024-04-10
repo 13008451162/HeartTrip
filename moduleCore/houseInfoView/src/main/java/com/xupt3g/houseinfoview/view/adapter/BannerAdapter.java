@@ -1,6 +1,5 @@
-package com.xupt3g.houseinfoview;
+package com.xupt3g.houseinfoview.view.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.xuexiang.xui.widget.imageview.preview.loader.GlideMediaLoader;
+import com.xupt3g.houseinfoview.ImageViewInfo;
+import com.xupt3g.houseinfoview.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.houseinfoview.BannerAdapter
+ * 文件名: com.xupt3g.houseinfoview.view.adapter.BannerAdapter
  *
  * @author: shallew
  * @data: 2024/3/5 20:49

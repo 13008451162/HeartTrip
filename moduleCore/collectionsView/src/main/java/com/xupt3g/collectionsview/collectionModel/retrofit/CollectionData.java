@@ -32,7 +32,7 @@ public class CollectionData {
     /**
      * 评星评分
      */
-    private float ratingstarts;
+    private float ratingStars;
     /**
      * 折前价格
      */
@@ -57,6 +57,7 @@ public class CollectionData {
     public CollectionData() {
     }
 
+
     public int getId() {
         return id;
     }
@@ -78,7 +79,7 @@ public class CollectionData {
     }
 
     public float getRatingstarts() {
-        return ratingstarts;
+        return ratingStars;
     }
 
     public int getPriceBefore() {
@@ -97,7 +98,7 @@ public class CollectionData {
                 ", \"title\":\'" + title + "\'" +
                 ", \"intro\":\'" + intro + "\'" +
                 ", \"location\":\'" + location + "\'" +
-                ", \"ratingstarts\":" + ratingstarts +
+                ", \"ratingstarts\":" + ratingStars +
                 ", \"priceBefore\":" + priceBefore +
                 ", \"priceAfter\":" + priceAfter +
                 ", \"rowState\":" + rowState +

@@ -3,17 +3,19 @@ package com.xupt3g.loginregistrationview.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.widget.ImageButton;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
+import com.xupt3g.loginregistrationview.model.retrofit.JwtData;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.google.android.material.snackbar.Snackbar;
 import com.xuexiang.xui.utils.SnackbarUtils;
@@ -27,6 +29,10 @@ import com.xupt3g.UiTools.UiTool;
 import com.xupt3g.loginregistrationview.R;
 import com.xupt3g.loginregistrationview.presenter.LoginRegisterPresenter;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -84,10 +90,10 @@ public class RegisterActivity extends AppCompatActivity implements LoginRegister
             if (phoneNumberInput.length() == 11
                     && passwordInput.length() >= 8 && passwordInput.length()<=16
                     && passwordInput.getText().toString().equals(passwordConfirmInput.getText().toString())) {
-
+                lightTheButton();
                 //满足注册条件 向服务器请求Token
-                registerPresenter.login(phoneNumberInput.getText().toString(),
-                        passwordInput.getText().toString());
+                registerPresenter.loginOrRegister(phoneNumberInput.getText().toString(),
+                        passwordInput.getText().toString(), LoginRegisterPresenter.OPTION_REGISTER);
             }
         });
 
@@ -198,8 +204,36 @@ public class RegisterActivity extends AppCompatActivity implements LoginRegister
      * TODO 注册成功响应并跳转至HomepageView
      */
     @Override
-    public void loginSuccess(String token) {
-        SnackbarUtils.Short(getWindow().getDecorView(), "注册成功！请妥善保管您的密码！")
+    public void loginSuccess(JwtData data) {
+        //创建线程池
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                2,
+                2,
+                60,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy()
+        );
+        //线程池提交任务
+        pool.submit(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sp = getSharedPreferences("loggedInState", MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
+                //记录登陆成功
+                edit.putBoolean("isLoggedIn", true);
+                //记录登录密钥
+                edit.putString("userToken", data.getAccessToken());
+                edit.apply();
+                Log.d("rememberLoggedInState", "run: 记忆登录成功");
+
+            }
+        });
+        //销毁线程池
+        pool.shutdown();
+
+        SnackbarUtils.Custom(getWindow().getDecorView(), "注册成功！请妥善保管您的密码！", 1500)
                 .confirm()
                 .messageCenter()
                 .radius(25.5f)
@@ -216,10 +250,12 @@ public class RegisterActivity extends AppCompatActivity implements LoginRegister
                         if (!BuildConfig.isModule) {
                             //保存登录信息 LiveData赋值
                             LoginStatusData.getLoginStatus().setValue(true); //设置登录状态为 已登录
-                            LoginStatusData.getUserToken().setValue(token); //保存用户token
-                            //集成模式开发下才能尝试跳转
-                            ARouter.getInstance().build("/homepage/HomepageActivity")
-                                    .navigation();
+                            LoginStatusData.getUserToken().setValue(data.getAccessToken()); //保存用户token
+                            Intent intent = getIntent();
+                            //注册成功就像intent中放入一个boolean
+                            intent.putExtra("IsSuccessful", true);
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
                     }
                 })
@@ -232,7 +268,7 @@ public class RegisterActivity extends AppCompatActivity implements LoginRegister
      */
     @Override
     public void loginFailed() {
-        SnackbarUtils.Short(getWindow().getDecorView(), "注册失败！请检查手机号输入错误或者手机号已经注册！")
+        SnackbarUtils.Custom(getWindow().getDecorView(), "注册失败！请检查手机号输入错误或者手机号已经注册！", 1500)
                 .warning()
                 .radius(25.5f)
                 .messageCenter()

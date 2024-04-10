@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -43,7 +44,9 @@ import com.xuexiang.xui.widget.popupwindow.popup.XUIPopup;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.browsinghistoryview.R;
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
-import com.xupt3g.browsinghistoryview.presenter.ThePresenter;
+import com.xupt3g.browsinghistoryview.presenter.BrowsingHistoryPresenter;
+import com.xupt3g.browsinghistoryview.view.adapter.MyExpandableListAdapter;
+import com.xupt3g.browsinghistoryview.view.entity.StickyItem;
 import com.xupt3g.mylibrary1.LoginStatusData;
 
 import java.text.ParseException;
@@ -115,7 +118,8 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
      * 缺省页按钮
      */
     private RippleView defaultButton;
-    private ThePresenter presenter;
+    private BrowsingHistoryPresenter presenter;
+    private AppCompatImageView backBtn;
 
     @Nullable
     @Override
@@ -123,6 +127,8 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
         mView = inflater.inflate(R.layout.history_frag_browsing_history, container, false);
 
         //历史数据展示页布局初始化（变量声明）
+        backBtn = (AppCompatImageView) mView.findViewById(R.id.history_backbtn);
+        backBtn.setOnClickListener(view -> requireActivity().finish());
         historyRecycler = (RecyclerView) mView.findViewById(R.id.history_recycler);
         stickyHeadContainer = (StickyHeadContainer) mView.findViewById(R.id.sticky_container);
         stickyHeaderTitle = (TextView) mView.findViewById(R.id.stv_title);
@@ -136,7 +142,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
         defaultButton = (RippleView) mView.findViewById(R.id.ripple_to_homepage);
         defaultBtnText = (TextView) mView.findViewById(R.id.default_button_text);
 
-        presenter = new ThePresenter(this);
+        presenter = new BrowsingHistoryPresenter(this);
         LoginStatusData.getLoginStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -308,14 +314,9 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
      */
     @Override
     public void showHistoryListOnUi(List<HistoryData> historyDataList) {
-        if (historyDataList == null) {
+        if (historyDataList == null || historyDataList.size() == 0) {
             //如果获取到的数据集合为空 可能未登录或请求失败
             //未登录的情况前面已经判断 应该是请求失败
-
-            return;
-        }
-        if (historyDataList.size() == 0) {
-            //如果集合中没有数据 生成缺省页
             defaultViewInit(R.drawable.history_no_history, "未找到您的浏览记录，去首页看看吧！", "点我去首页", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -376,7 +377,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
         historyRecycler.setItemAnimator(new DefaultItemAnimator());
 
         historyRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new MyExpandableListAdapter(dataList, historyRecycler);
+        adapter = new MyExpandableListAdapter(dataList, historyRecycler, this);
         adapter.setDeleteHistoryItemListener(new MyExpandableListAdapter.DeleteHistoryItemListener() {
             @Override
             public boolean deleteHistoryItem(int position) {

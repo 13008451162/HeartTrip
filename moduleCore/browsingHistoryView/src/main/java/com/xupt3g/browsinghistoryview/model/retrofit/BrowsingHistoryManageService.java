@@ -24,8 +24,8 @@ public interface BrowsingHistoryManageService {
      * @return 返回带有浏览记录集合的Response 返回结果可能为空
      *
      */
-    @POST("/travel/v1/broswinghistory/getHistoryList")
-    Call<BrowsingHistoryResponse> getBrowsingHistoryList(@Header("UserToken") String userToken);
+    @POST("/usercenter/v1/user/browinghistory")
+    Call<BrowsingHistoryResponse> getBrowsingHistoryList(@Header("Authorization") String userToken);
 
     /**
      *
@@ -47,13 +47,4 @@ public interface BrowsingHistoryManageService {
     @POST("/travel/v1/broswinghistory/removeHistory")
     Call<IsSuccessfulResponse> removeHistoryFromList(@Header("UserToken") String userToken,@Field("HouseId") int houseId);
 
-    /**
-     *
-     * @param userToken 用户登录时获取的Token
-     * @param houseId 要添加的子项民宿ID
-     * @return 返回是否成功将民宿添加到浏览历史列表
-     */
-    @FormUrlEncoded
-    @POST("/travel/v1/broswinghistory/addHistory")
-    Call<IsSuccessfulResponse> addHistoryToList(@Header("UserToken") String userToken, @Field("HouseId") int houseId, @Field("CurrentTime") long currentTime);
 }

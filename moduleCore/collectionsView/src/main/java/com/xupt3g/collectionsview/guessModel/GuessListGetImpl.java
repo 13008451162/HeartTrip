@@ -1,6 +1,9 @@
 package com.xupt3g.collectionsview.guessModel;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.xupt3g.collectionsview.guessModel.retrofit.GuessData;
+import com.xupt3g.collectionsview.guessModel.retrofit.GuessListResponse;
 
 import java.util.List;
 
@@ -18,5 +21,5 @@ public interface GuessListGetImpl {
      *
      * TODO 接收View层传来的userToken，进行网络请求
      */
-    List<GuessData> getGuessList();
+    MutableLiveData<GuessListResponse> getGuessList();
 }

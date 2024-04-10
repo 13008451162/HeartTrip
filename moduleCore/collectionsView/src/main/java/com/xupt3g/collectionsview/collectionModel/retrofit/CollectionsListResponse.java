@@ -7,13 +7,33 @@ import java.util.List;
  * 文件名: com.xupt3g.collectionsview.model.retrofit.CollectionsListResponse
  *
  * @author: shallew
- * @data:2024/2/18 1:43
+ * @data: 2024/2/18 1:43
  * @about: TODO Retrofit用收藏列表Response
  */
 public class CollectionsListResponse {
     private int code;
     private String msg;
-    private List<CollectionData> list;
+    private Data data;
+
+    public static class Data {
+        private List<CollectionData> list;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"code\":" + code +
+                ", \"msg\":\'" + msg + "\'" +
+                ", \"list\":" + data +
+                '}';
+    }
+
+    public CollectionsListResponse(String msg) {
+        this.msg = msg;
+    }
+
+    public CollectionsListResponse() {
+    }
 
     public int getCode() {
         return code;
@@ -24,6 +44,7 @@ public class CollectionsListResponse {
     }
 
     public List<CollectionData> getList() {
-        return list;
+        return data.list;
     }
+
 }

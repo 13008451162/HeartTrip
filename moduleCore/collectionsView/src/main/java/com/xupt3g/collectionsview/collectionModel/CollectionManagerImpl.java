@@ -3,19 +3,27 @@ package com.xupt3g.collectionsview.collectionModel;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionData;
+import com.example.libbase.BuildConfig;
+import com.xuexiang.xui.utils.XToastUtils;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionDataResponse;
+import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionsListResponse;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.collectionsview.collectionModel.retrofit.CollectionsListService;
 import com.xupt3g.mylibrary1.PublicRetrofit;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
-import retrofit2.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 项目名: HeartTrip
@@ -31,32 +39,33 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
     /**
      * 添加成功之后获取的收藏数据
      */
-    private CollectionData collection;
+    private MutableLiveData<CollectionDataResponse> collectionLiveData;
 
     /**
      * 是否删除成功
      */
-    private boolean isRemoveSuccessful = false;
-
-    /**
-     * retrofit实例
-     */
-    private Retrofit retrofit;
+    private MutableLiveData<IsSuccessfulResponse> removeSuccessLiveData;
 
     /**
      * 收藏管理服务接口的代理实例
      */
     private CollectionsListService collectionsListService;
 
-    private List<CollectionData> collectionsList;
+    private MutableLiveData<CollectionsListResponse> collectionsListLiveData;
 
     @Override
     public void init(Context context) {
         //获取收藏的动态代理对象
+        if (collectionsListService == null) {
+            collectionsListService = (CollectionsListService)
+                    PublicRetrofit.create(CollectionsListService.class);
+        }
+    }
+
+    public CollectionManagerImpl() {
         collectionsListService = (CollectionsListService)
                 PublicRetrofit.create(CollectionsListService.class);
     }
-
 
     /**
      * @param houseId 民宿id
@@ -64,52 +73,58 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
      * TODO 添加收藏 暴露接口的方法，调用本地方法
      */
     @Override
-    public boolean addCollection(int houseId) {
-        CollectionData collectionsData = addCollectionToList(houseId);
-        return collectionsData != null;
+    public MutableLiveData<Boolean> addCollection(LifecycleOwner owner, int houseId) {
+        MutableLiveData<CollectionDataResponse> collectionLiveData = addCollectionToList(houseId);
+        MutableLiveData<Boolean> resultLivaData = new MutableLiveData<>(false);
+        collectionLiveData.observe(owner, new Observer<CollectionDataResponse>() {
+            @Override
+            public void onChanged(CollectionDataResponse response) {
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg()) && response.getCollection() != null) {
+                    resultLivaData.setValue(true);
+                }
+            }
+        });
+        return resultLivaData;
     }
 
     /**
-     *
      * @param houseId 民宿ID
-     * @return
-     * TODO 本地添加方法
+     * @return TODO 本地添加方法
      */
     @Override
-    public CollectionData addCollectionToList(int houseId) {
+    public MutableLiveData<CollectionDataResponse> addCollectionToList(int houseId) {
+        collectionLiveData = new MutableLiveData<>();
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录");
-            return null;
+            collectionLiveData.setValue(new CollectionDataResponse(PublicRetrofit.getErrorMsg()));
+            return collectionLiveData;
         }
+//        Log.d("addTAG", "addCollectionToList: " + LoginStatusData.getUserToken().getValue() + "    " + houseId);
+        collectionsListService.addCollection(LoginStatusData.getUserToken().getValue(), new AddCollectionRequestBody(houseId))
+                .enqueue(new Callback<CollectionDataResponse>() {
+                    @Override
+                    public void onResponse(Call<CollectionDataResponse> call, Response<CollectionDataResponse> response) {
+                        CollectionDataResponse body = response.body();
+                        Log.d("addTAG", "onResponse: " + body);
+                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                            collectionLiveData.setValue(body);
+                            if (body.getCollection() != null && !BuildConfig.isModule) {
+                                //添加成功且集成模式下
+                                //通知PersonalManagement页面修改 收藏数量
+                                EventBus.getDefault().post(CollectionManagerService.COLLECTIONS_HAS_CHANGED);
+                            }
+                        } else {
+                            collectionLiveData.setValue(new CollectionDataResponse(PublicRetrofit.getErrorMsg()));
+                        }
+                    }
 
-
-        return new CollectionData(houseId);
-
-//        if (retrofit !=null && collectionsListService != null) {
-//            collectionsListService.addCollection(LoginStatusData.getUserToken().getValue(), houseId)
-//                    .enqueue(new Callback<CollectionDataResponse>() {
-//                        @Override
-//                        public void onResponse(Call<CollectionDataResponse> call, Response<CollectionDataResponse> response) {
-//                            CollectionDataResponse body = response.body();
-//                            if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                                collection = body.getCollection();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<CollectionDataResponse> call, Throwable t) {
-//                            collection = null;
-//                            ToastUtils.toast("添加收藏网络请求失败！");
-//                        }
-//                    });
-//        }
-
-//        if (collection != null && !BuildConfig.isModule) {
-//            //添加成功且集成模式下
-//            //通知PersonalManagement页面修改 收藏数量
-//            EventBus.getDefault().post(CollectionManagerService.COLLECTIONS_HAS_CHANGED);
-//        }
-//        return collection;
+                    @Override
+                    public void onFailure(Call<CollectionDataResponse> call, Throwable t) {
+                        collectionLiveData.setValue(new CollectionDataResponse(PublicRetrofit.getErrorMsg()));
+                        ToastUtils.toast("添加收藏网络请求失败！");
+                    }
+                });
+        return collectionLiveData;
     }
 
     /**
@@ -118,8 +133,18 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
      * TODO 删除收藏 暴露接口方法 调用本地方法实现
      */
     @Override
-    public boolean removeCollection(int houseId) {
-        return removeCollectionFromList(houseId);
+    public MutableLiveData<Boolean> removeCollection(LifecycleOwner owner, int houseId) {
+        MutableLiveData<IsSuccessfulResponse> removeSuccessLiveData = removeCollectionFromList(houseId);
+        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>(false);
+        removeSuccessLiveData.observe(owner, new Observer<IsSuccessfulResponse>() {
+            @Override
+            public void onChanged(IsSuccessfulResponse response) {
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                    resultLiveData.setValue(response.isSuccess());
+                }
+            }
+        });
+        return resultLiveData;
     }
 
     /**
@@ -127,92 +152,94 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
      * @return TODO 本模块 本地方法
      */
     @Override
-    public boolean removeCollectionFromList(int houseId) {
+    public MutableLiveData<IsSuccessfulResponse> removeCollectionFromList(int houseId) {
+        removeSuccessLiveData = new MutableLiveData<>();
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录");
-            return false;
+            removeSuccessLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+            return removeSuccessLiveData;
         }
 
-        return true;
+        collectionsListService.removeCollection(LoginStatusData.getUserToken().getValue(), new RemoveCollectionRequestBody(houseId))
+                .enqueue(new Callback<IsSuccessfulResponse>() {
+                    @Override
+                    public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
+                        IsSuccessfulResponse body = response.body();
+                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                            removeSuccessLiveData.setValue(body);
+                            if (body.isSuccess() && !BuildConfig.isModule) {
+                                //移除成功且集成模式下
+                                //通知PersonalManagement页面修改收藏数量
+                                EventBus.getDefault().post(CollectionManagerService.COLLECTIONS_HAS_CHANGED);
+                            }
+                        } else {
+                            removeSuccessLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+                        }
+                    }
 
-//        if (retrofit !=null && collectionsListService != null) {
-//            collectionsListService.removeCollection(LoginStatusData.getUserToken().getValue(), houseId)
-//                    .enqueue(new Callback<IsSuccessfulResponse>() {
-//                        @Override
-//                        public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
-//                            IsSuccessfulResponse body = response.body();
-//                            if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                                isRemoveSuccessful = body.isSuccess();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<IsSuccessfulResponse> call, Throwable t) {
-//                            isRemoveSuccessful = false;
-//                        }
-//                    });
-//        }
-//        if (isRemoveSuccessful && !BuildConfig.isModule) {
-//            //移除成功且集成模式下
-//            //通知PersonalManagement页面修改收藏数量
-//            EventBus.getDefault().post(CollectionManagerService.COLLECTIONS_HAS_CHANGED);
-//        }
-//
-//        return isRemoveSuccessful;
+                    @Override
+                    public void onFailure(Call<IsSuccessfulResponse> call, Throwable t) {
+                        removeSuccessLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+                        XToastUtils.error("网络请求失败！");
+                    }
+                });
+
+        return removeSuccessLiveData;
     }
 
     /**
-     *
      * @return 收藏列表的数据数量
      * TODO 暴露接口方法 调用本地方法，获取收藏列表，返回列表的大小
      */
     @Override
-    public int getCollectionsCount() {
-        List<CollectionData> list = getCollectionsList();
-        if (list != null) {
-            return list.size();
-        } else {
-            //返回-1 表示网络请求异常
-            return -1;
-        }
+    public MutableLiveData<Integer> getCollectionsCount(LifecycleOwner owner) {
+        MutableLiveData<CollectionsListResponse> collectionsListLiveData = getCollectionsList();
+        MutableLiveData<Integer> resultLiveData = new MutableLiveData<>(-1);
+        collectionsListLiveData.observe(owner, new Observer<CollectionsListResponse>() {
+            @Override
+            public void onChanged(CollectionsListResponse response) {
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                    if (response.getList() == null) {
+                        resultLiveData.setValue(0);
+                    } else {
+                        resultLiveData.setValue(response.getList().size());
+                    }
+                }
+            }
+        });
+        return resultLiveData;
     }
 
     /**
-     *
      * @return 收藏列表
      * TODO 本地方法 返回收藏列表
      */
     @Override
-    public List<CollectionData> getCollectionsList() {
+    public MutableLiveData<CollectionsListResponse> getCollectionsList() {
+        collectionsListLiveData = new MutableLiveData<>();
         //如果账户未登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录");
-            return null;
+            collectionsListLiveData.setValue(new CollectionsListResponse(PublicRetrofit.getErrorMsg()));
+            return collectionsListLiveData;
         }
-
-        Log.d("requestCOUNT", "getCollectionsList: 申请一次");
-        //测试
-        collectionsList = new ArrayList<>();
-        Collections.addAll(collectionsList, new CollectionData(1), new CollectionData(2), new CollectionData(3),
-                new CollectionData(4), new CollectionData(5), new CollectionData(6));
-        return collectionsList;
-
-
-//        collectionsListService.getCollectionsList(LoginStatusData.getUserToken().getValue())
-//                .enqueue(new Callback<CollectionsListResponse>() {
-//                    @Override
-//                    public void onResponse(Call<CollectionsListResponse> call, Response<CollectionsListResponse> response) {
-//                        CollectionsListResponse body = response.body();
-//                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                            collectionsList = body.getList();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<CollectionsListResponse> call, Throwable t) {
-//                        collectionsList = null;
-//                    }
-//                });
-//        return collectionsList;
+        collectionsListService.getCollectionsList(LoginStatusData.getUserToken().getValue())
+                .enqueue(new Callback<CollectionsListResponse>() {
+                             @Override
+                             public void onResponse(Call<CollectionsListResponse> call, Response<CollectionsListResponse> response) {
+                                 CollectionsListResponse body = response.body();
+                                 if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                                     collectionsListLiveData.setValue(body);
+                                 } else {
+                                     collectionsListLiveData.setValue(new CollectionsListResponse(PublicRetrofit.getErrorMsg()));
+                                 }
+                             }
+                             @Override
+                             public void onFailure(Call<CollectionsListResponse> call, Throwable t) {
+                                 collectionsListLiveData.setValue(new CollectionsListResponse(PublicRetrofit.getErrorMsg()));
+                                 XToastUtils.error("网络请求失败！");
+                             }
+                         });
+        return collectionsListLiveData;
     }
 }
