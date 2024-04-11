@@ -1,5 +1,7 @@
 package com.xupt3g.loginregistrationview.view;
 
+import com.xupt3g.loginregistrationview.model.retrofit.JwtData;
+
 /**
  * 项目名: HeartTrip
  * 文件名: com.xupt3g.loginregistrationview.view.LoginRegisterViewImpl
@@ -11,7 +13,7 @@ package com.xupt3g.loginregistrationview.view;
 public interface LoginRegisterViewImpl {
     void showProgress();//显示等待过程动画
     void hideProgress();//隐藏等待动画
-    void loginSuccess(String token);//登录成功提示，跳转至HomepageView token表示用户登录的token
+    void loginSuccess(JwtData jwtData);//登录成功提示，跳转至HomepageView token表示用户登录的token
     void loginFailed();//登录失败提示
 
 

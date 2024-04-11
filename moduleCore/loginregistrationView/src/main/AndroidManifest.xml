@@ -3,6 +3,9 @@
 
     <application>
         <activity
+            android:name=".view.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.LoginActivity"
             android:exported="false" />
         <meta-data

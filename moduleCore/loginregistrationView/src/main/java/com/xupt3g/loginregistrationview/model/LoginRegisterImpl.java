@@ -1,5 +1,7 @@
 package com.xupt3g.loginregistrationview.model;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.xupt3g.loginregistrationview.model.retrofit.JWTResponse;
 
 /**
@@ -17,6 +19,14 @@ public interface LoginRegisterImpl {
      * @param password 密码
      * @return 是否成功验证登录 false账号或密码错误 true登录成功
      */
-    JWTResponse loginCheck(String mobile, String password);
+    MutableLiveData<JWTResponse>  loginCheck(String mobile, String password);
+
+    /**
+     *
+     * @param mobile 用户输入的手机号码
+     * @param password 密码
+     * @return 是否成功注册
+     */
+    MutableLiveData<JWTResponse> registerNewAccont(String mobile, String password);
 
 }

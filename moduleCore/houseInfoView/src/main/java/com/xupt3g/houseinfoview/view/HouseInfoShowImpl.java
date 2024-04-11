@@ -1,6 +1,9 @@
 package com.xupt3g.houseinfoview.view;
 
-import com.xupt3g.houseinfoview.model.HouseInfoBaseData;
+import com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseData;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouse;
+
+import java.util.List;
 
 /**
  * 项目名: HeartTrip
@@ -27,4 +30,9 @@ public interface HouseInfoShowImpl {
      * TODO 民宿收藏成功
      */
     void collectSucceed();
+
+    /**
+     * TODO 显示推荐列表
+     */
+    void recommendHouseListShow(List<RecommendHouse> list);
 }

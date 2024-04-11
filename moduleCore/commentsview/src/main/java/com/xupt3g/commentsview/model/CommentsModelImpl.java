@@ -1,5 +1,10 @@
 package com.xupt3g.commentsview.model;
 
+import androidx.lifecycle.MutableLiveData;
+
+import com.xupt3g.mylibrary1.response.FileUploadResponse;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
+
 import okhttp3.MultipartBody;
 
 /**
@@ -16,15 +21,15 @@ public interface CommentsModelImpl {
      * @param houseId 民宿Id
      * @return 评论列表
      */
-    CommentsListResponse getCommentsList(int houseId, int page, int pageSize);
+    MutableLiveData<CommentsListResponse> getCommentsList(int houseId, int page, int pageSize);
 
     /**
      * 需要登录
      * @return 上传的图片的url
      */
-    String uploadPicture(MultipartBody.Part image);
+    MutableLiveData<FileUploadResponse> uploadPicture(MultipartBody.Part image, int index);
 
-    boolean postNewComment(PostCommentData postCommentData);
+    MutableLiveData<IsSuccessfulResponse> postNewComment(PostCommentData postCommentData);
 
 
 }

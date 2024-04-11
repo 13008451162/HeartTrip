@@ -19,7 +19,7 @@ public interface GuessListService {
      * @return 返回猜你喜欢列表
      * TODO 获取猜你喜欢列表
      */
-    @POST("/travel/v1/collections/guessList")
+    @POST("/travel/v1//homestay/guessList")
     Call<GuessListResponse> getGuessList();
 
 }

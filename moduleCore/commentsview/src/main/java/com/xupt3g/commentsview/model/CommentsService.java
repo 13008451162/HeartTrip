@@ -25,18 +25,16 @@ public interface CommentsService {
 
     /**
      * 无需登录
-     * @param houseId 民宿ID
      * @return 评论列表
      */
-    @FormUrlEncoded
     @POST("/travel/v1/homestayComment/commentList")
-    Call<CommentsListResponse> getCommentsList(@Field("HouseId") int houseId, @Field("Page") int page, @Field("PageSize") int pageSize);
+    Call<CommentsListResponse> getCommentsList(@Body CommentPageRequestBody body);
 
     @Multipart
     @POST("/usercenter/v1/upload")
-    Call<FileUploadResponse> uploadCommentPicture(@Header("UserToken") String userToken, @Part MultipartBody.Part image);
+    Call<FileUploadResponse> uploadCommentPicture(@Header("Authorization") String userToken, @Part MultipartBody.Part image);
 
     @POST("/travel/v1/homestayComment/addComment")
-    Call<IsSuccessfulResponse> postNewComment(@Header("UserToken") String userToken, @Body PostCommentData newCommentData);
+    Call<IsSuccessfulResponse> postNewComment(@Header("Authorization") String userToken, @Body PostCommentData newCommentData);
 
 }

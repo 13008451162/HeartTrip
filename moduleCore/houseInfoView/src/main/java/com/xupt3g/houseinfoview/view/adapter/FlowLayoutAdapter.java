@@ -1,4 +1,4 @@
-package com.xupt3g.houseinfoview;
+package com.xupt3g.houseinfoview.view.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuexiang.xui.widget.flowlayout.BaseTagAdapter;
+import com.xupt3g.houseinfoview.R;
 
 import java.util.List;
 import java.util.Random;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.houseinfoview.FlowLayoutAdapter
+ * 文件名: com.xupt3g.houseinfoview.view.adapter.FlowLayoutAdapter
  *
  * @author: shallew
  * @data: 2024/3/7 16:55

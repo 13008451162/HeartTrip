@@ -51,7 +51,7 @@ public class HistoryData {
     /**
      * 上次浏览的时间 y/M/d
      */
-    private long browsingTime;
+    private long lastBrowsingTime;
 
     public int getRowState() {
         return rowState;
@@ -64,7 +64,7 @@ public class HistoryData {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y/M/d");
         Date date = simpleDateFormat.parse(browsingTime);
-        this.browsingTime = date != null ? date.getTime() : 0L;
+        this.lastBrowsingTime = date != null ? date.getTime() : 0L;
     }
 
     public int getId() {
@@ -96,6 +96,21 @@ public class HistoryData {
     }
 
     public long getBrowsingTime() throws ParseException {
-        return browsingTime;
+        return lastBrowsingTime;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"cover\":\'" + cover + "\'" +
+                ", \"title\":\'" + title + "\'" +
+                ", \"intro\":\'" + intro + "\'" +
+                ", \"location\":\'" + location + "\'" +
+                ", \"priceBefore\":" + priceBefore +
+                ", \"priceAfter\":" + priceAfter +
+                ", \"rowState\":" + rowState +
+                ", \"lastBrowsingTime\":" + lastBrowsingTime +
+                '}';
     }
 }

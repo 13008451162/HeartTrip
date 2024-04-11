@@ -43,12 +43,21 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/history_backbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|top"
+        android:src="@drawable/history_icon_backbtn"
+        android:padding="20dp"
+        android:layout_marginTop="12dp"
+        />
+
     <FrameLayout
         android:id="@+id/history_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
         >
 
         <androidx.recyclerview.widget.RecyclerView

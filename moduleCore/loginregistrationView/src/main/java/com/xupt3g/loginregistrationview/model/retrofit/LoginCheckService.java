@@ -2,6 +2,7 @@ package com.xupt3g.loginregistrationview.model.retrofit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -18,13 +19,12 @@ public interface LoginCheckService {
 
     /**
      *
-     * @param mobile 手机号码
-     * @param password 密码
      * @return
      * TODO 验证是否能够成功登录或注册
      */
-    @FormUrlEncoded
-    @POST("/usercenter/v1/user/register")
-    Call<JWTResponse> loginChecked(@Field("mobile") String mobile, @Field("password") String password);
+    @POST("/usercenter/v1/user/login")
+    Call<JWTResponse> loginChecked(@Body LoginRegisterRequestBody body);
 
+    @POST("/usercenter/v1/user/register")
+    Call<JWTResponse> registerNewAccont(@Body LoginRegisterRequestBody body);
 }

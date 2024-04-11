@@ -1,4 +1,4 @@
-package com.xupt3g.houseinfoview;
+package com.xupt3g.houseinfoview.view.adapter;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -16,7 +19,8 @@ import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.popupwindow.good.GoodView;
-import com.xupt3g.houseinfoview.model.RecommendHouse;
+import com.xupt3g.houseinfoview.R;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouse;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 
 import java.util.List;
@@ -24,7 +28,7 @@ import java.util.Random;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.houseinfoview.RecommendHousesAdapter
+ * 文件名: com.xupt3g.houseinfoview.view.adapter.RecommendHousesAdapter
  *
  * @author: shallew
  * @data: 2024/3/11 22:44
@@ -34,9 +38,11 @@ public class RecommendHousesAdapter extends RecyclerView.Adapter<RecommendHouses
     private final List<RecommendHouse> recommendHouseList;
     private CollectionManagerService collectionManagerService;
     private GoodView goodView;
+    private LifecycleOwner owner;
 
-    public RecommendHousesAdapter(List<RecommendHouse> recommendHouseList) {
+    public RecommendHousesAdapter(List<RecommendHouse> recommendHouseList, LifecycleOwner owner) {
         this.recommendHouseList = recommendHouseList;
+        this.owner = owner;
         if (!BuildConfig.isModule) {
             //集成模式下 可添加到收藏
             collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collectionsView/CollectionManagerImpl").navigation();
@@ -76,18 +82,23 @@ public class RecommendHousesAdapter extends RecyclerView.Adapter<RecommendHouses
                 //如果当前未收藏该民宿
                 //申请收藏
                 if (collectionManagerService != null) {
-                    boolean b = collectionManagerService.addCollection(recommendHouse.getId());
-                    if (b) {
-                        //添加成功
-                        recommendHouse.setCollected(true);
-                        holder.collectionButton.setImageResource(R.drawable.houseinfo_icon_collect_light);
-                        goodView.setText("收藏成功")
-                                .setTextColor(Color.parseColor("#4facfe"))
-                                .setTextSize(12)
-                                .setDuration(1000)
-                                .setDistance(120)
-                                .show(view1);
-                    }
+                    MutableLiveData<Boolean> booleanLiveData = collectionManagerService.addCollection(owner, recommendHouse.getId());
+                    booleanLiveData.observe(owner, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            if (aBoolean) {
+                                //添加成功
+                                recommendHouse.setCollected(true);
+                                holder.collectionButton.setImageResource(R.drawable.houseinfo_icon_collect_light);
+                                goodView.setText("收藏成功")
+                                        .setTextColor(Color.parseColor("#4facfe"))
+                                        .setTextSize(12)
+                                        .setDuration(1000)
+                                        .setDistance(120)
+                                        .show(view1);
+                            }
+                        }
+                    });
                 } else {
                     XToastUtils.error("当前无法添加收藏！");
                 }
@@ -95,14 +106,19 @@ public class RecommendHousesAdapter extends RecyclerView.Adapter<RecommendHouses
                 //如果当前该民宿已收藏
                 //申请移除收藏
                 if (collectionManagerService != null) {
-                    boolean b = collectionManagerService.removeCollection(recommendHouse.getId());
-                    if (b) {
-                        //移除成功
-                        recommendHouse.setCollected(false);
-                        holder.collectionButton.setImageResource(R.drawable.houseinfo_icon_collect_dark);
-                    } else {
-                        XToastUtils.error("移除失败！");
-                    }
+                    MutableLiveData<Boolean> booleanLiveData = collectionManagerService.removeCollection(owner, recommendHouse.getId());
+                    booleanLiveData.observe(owner, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            if (aBoolean) {
+                                //移除成功
+                                recommendHouse.setCollected(false);
+                                holder.collectionButton.setImageResource(R.drawable.houseinfo_icon_collect_dark);
+                            } else {
+                                XToastUtils.error("移除失败！");
+                            }
+                        }
+                    });
                 } else {
                     XToastUtils.error("当前无法移除收藏！");
                 }

@@ -1,15 +1,27 @@
 package com.xupt3g.personalmanagementview.model;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xupt3g.mylibrary1.PublicRetrofit;
+import com.xupt3g.mylibrary1.response.FileUploadResponse;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoGetService;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 import com.xupt3g.personalmanagementview.model.retrofit.UserInfo;
 
+import java.io.File;
+import java.io.IOException;
+
 import okhttp3.MultipartBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 项目名: HeartTrip
@@ -20,17 +32,15 @@ import okhttp3.MultipartBody;
  * @about: TODO 请求并保存账号信息数据
  */
 public class AccountInfoRequest implements AccountInfoImpl {
+    private MutableLiveData<AccountInfoResponse> accountInfoLiveData;
+    private MutableLiveData<FileUploadResponse> fileUploadLiveData;
+    private MutableLiveData<IsSuccessfulResponse> modifyAccountInfoLiveData;
 
-    private AccountInfoResponse accountInfo;
-    private boolean isUpdateSuccessful;
-    /**
-     * 用户新的头像的url 替换成功 != null
-     */
-    private String newAvatarUrl;
     private final AccountInfoGetService accountInfoGetService;
 
     public AccountInfoRequest() {
-        accountInfoGetService = (AccountInfoGetService) PublicRetrofit.create(AccountInfoGetService.class);
+        accountInfoGetService = (AccountInfoGetService)
+                PublicRetrofit.create(AccountInfoGetService.class);
     }
 
     /**
@@ -40,38 +50,34 @@ public class AccountInfoRequest implements AccountInfoImpl {
      */
     @Override
     public MutableLiveData<AccountInfoResponse> getAccountInfoRequest() {
-        final MutableLiveData<AccountInfoResponse>[] mutableLiveData = new MutableLiveData[]{new MutableLiveData<>()};
+        accountInfoLiveData = new MutableLiveData<>();
         //需要登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录！");
-            return null;
+            accountInfoLiveData.setValue(new AccountInfoResponse(PublicRetrofit.getErrorMsg()));
+            return accountInfoLiveData;
         }
+        //获取接口的动态代理对象
+        accountInfoGetService.getAccountInfo(LoginStatusData.getUserToken().getValue())
+                .enqueue(new Callback<AccountInfoResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<AccountInfoResponse> call, Response<AccountInfoResponse> response) {
+                AccountInfoResponse body = response.body();
+                if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                    accountInfoLiveData.setValue(body);
+                } else {
+                    accountInfoLiveData.setValue(new AccountInfoResponse(PublicRetrofit.getErrorMsg()));
+                }
+            }
 
-        //测试数据
-        mutableLiveData[0].setValue(new AccountInfoResponse(200, "OK", new UserInfo(
-                114514, "18629627346", "告别寒冷冬季", 0, "https://i0.hdslb.com/bfs/face/e8daef29f566331fa57b94b1f5c5c326107776f3.jpg", "孤睾战神"
-        )));
+            @Override
+            public void onFailure(@NonNull Call<AccountInfoResponse> call, Throwable t) {
+                XToastUtils.error("数据请求失败！");
+                accountInfoLiveData.setValue(new AccountInfoResponse(PublicRetrofit.getErrorMsg()));
+            }
+        });
 
-//        //获取接口的动态代理对象
-//        accountInfoGetService.getAccountInfo(LoginStatusData.getUserToken().getValue())
-//                .enqueue(new Callback<AccountInfoResponse>() {
-//            @Override
-//            public void onResponse(@NonNull Call<AccountInfoResponse> call, Response<AccountInfoResponse> response) {
-//                AccountInfoResponse body = response.body();
-//                if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                    mutableLiveData[0].setValue(body);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<AccountInfoResponse> call, Throwable t) {
-//                ToastUtils.toast("数据请求失败！");
-//                mutableLiveData[0] = null;
-//            }
-//        });
-
-        return mutableLiveData[0];
+        return accountInfoLiveData;
     }
 
     /**
@@ -81,33 +87,36 @@ public class AccountInfoRequest implements AccountInfoImpl {
      * TODO 更新用户信息 不更新用户头像
      */
     @Override
-    public boolean modifyAccountInfoRequest(UserInfo userInfo) {
+    public MutableLiveData<IsSuccessfulResponse> modifyAccountInfoRequest(UserInfo userInfo) {
+        modifyAccountInfoLiveData = new MutableLiveData<>();
         //需要登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录！");
-            return false;
+            modifyAccountInfoLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+            return modifyAccountInfoLiveData;
         }
 
-        return true;
+        //传入用户TOKEN和新的用户信息对象 其中avatar == null
+        accountInfoGetService.updateAccountInfo(LoginStatusData.getUserToken().getValue(), userInfo)
+                .enqueue(new Callback<IsSuccessfulResponse>() {
+                    @Override
+                    public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
+                        IsSuccessfulResponse body = response.body();
+                        Log.d("modifyTAG", "onResponse: " + body);
+                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                            modifyAccountInfoLiveData.setValue(body);
+                        } else {
+                            modifyAccountInfoLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+                        }
+                    }
 
-//        //传入用户TOKEN和新的用户信息对象 其中avatar == null
-//        accountInfoGetService.updateAccountInfo(LoginStatusData.getUserToken().getValue(), userInfo)
-//                .enqueue(new Callback<IsSuccessfulResponse>() {
-//                    @Override
-//                    public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
-//                        IsSuccessfulResponse body = response.body();
-//                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                            isUpdateSuccessful = body.isSuccess();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<IsSuccessfulResponse> call, Throwable t) {
-//                        ToastUtils.toast("网络请求失败！");
-//                        isUpdateSuccessful = false;
-//                    }
-//                });
-//        return isUpdateSuccessful;
+                    @Override
+                    public void onFailure(Call<IsSuccessfulResponse> call, Throwable t) {
+                        XToastUtils.error("网络请求失败！所有信息");
+                        modifyAccountInfoLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
+                    }
+                });
+        return modifyAccountInfoLiveData;
     }
 
     /**
@@ -117,34 +126,36 @@ public class AccountInfoRequest implements AccountInfoImpl {
      * TODO 更新用户头像
      */
     @Override
-    public String uploadUserAvatarRequest(MultipartBody.Part file) {
+    public MutableLiveData<FileUploadResponse> uploadUserAvatarRequest(MultipartBody.Part file) {
+        fileUploadLiveData = new MutableLiveData<>();
         //需要登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录！");
-            return null;
+            fileUploadLiveData.setValue(new FileUploadResponse(PublicRetrofit.getErrorMsg()));
+            return fileUploadLiveData;
         }
 
         //测试 作为新的头像
-        return "https://i0.hdslb.com/bfs/face/403cfdd078739a5142325934f05c3ac9f7787879.jpg";
+//        return "https://i0.hdslb.com/bfs/face/403cfdd078739a5142325934f05c3ac9f7787879.jpg";
 
-//        accountInfoGetService.uploadUserAvatar(LoginStatusData.getUserToken().getValue(), file)
-//                .enqueue(new Callback<AvatarUrlResponse>() {
-//                    @Override
-//                    public void onResponse(Call<AvatarUrlResponse> call, Response<AvatarUrlResponse> response) {
-//                        AvatarUrlResponse body = response.body();
-//                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
-//                            newAvatarUrl = body.getUrl();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<AvatarUrlResponse> call, Throwable t) {
-//                        ToastUtils.toast("网络请求失败！");
-//                        newAvatarUrl = null;
-//                    }
-//                });
-//        return newAvatarUrl;
+        accountInfoGetService.uploadUserAvatar(LoginStatusData.getUserToken().getValue(), file)
+                .enqueue(new Callback<FileUploadResponse>() {
+                    @Override
+                    public void onResponse(Call<FileUploadResponse> call, Response<FileUploadResponse> response) {
+                        FileUploadResponse body = response.body();
+                        if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                            fileUploadLiveData.setValue(body);
+                        } else {
+                            fileUploadLiveData.setValue(new FileUploadResponse(PublicRetrofit.getErrorMsg()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FileUploadResponse> call, Throwable t) {
+                        XToastUtils.error("网络请求失败！头像");
+                        fileUploadLiveData.setValue(new FileUploadResponse(PublicRetrofit.getErrorMsg()));
+                    }
+                });
+        return fileUploadLiveData;
     }
-
-
 }

@@ -111,7 +111,7 @@ public class RecommendAdpter extends RecyclerView.Adapter<RecommendAdpter.ViewHo
                 holder.imageView.setTag(1); // 更新 Tag 为 1，表示已点击状态
 
                 if (collectionManagerService != null) {
-                    collectionManagerService.addCollection(listDTO.getId());
+//                    collectionManagerService.addCollection(listDTO.getId());
                 }
             } else {
                 // 如果当前为已点击状态，则设置为未点击时的样式（这里假设未点击时的样式为null）
@@ -120,7 +120,7 @@ public class RecommendAdpter extends RecyclerView.Adapter<RecommendAdpter.ViewHo
                 holder.imageView.setTag(0); // 更新 Tag 为 0，表示未点击状态
 
                 if (collectionManagerService != null) {
-                    collectionManagerService.removeCollection(listDTO.getId());
+//                    collectionManagerService.removeCollection(listDTO.getId());
                 }
             }
         });

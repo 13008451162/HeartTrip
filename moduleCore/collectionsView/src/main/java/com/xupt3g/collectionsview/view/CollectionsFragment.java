@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -22,7 +24,6 @@ import com.xupt3g.collectionsview.R;
 import com.xupt3g.mylibrary1.LoginStatusData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,13 +37,20 @@ import java.util.List;
 @Route(path = "/collectionsView/CollectionsFragment")
 public class CollectionsFragment extends Fragment {
     private View mView;
-    private List<String> mList = new ArrayList<>();
     private TabLayout tabLayout;
     private ViewPager2 vp2;
     private static List<PagerFragment> fragments;
     private MyPagerAdapter pagerAdapter;
     private String[] tabs = new String[]{"我的收藏", "猜你喜欢"};
-
+    private AppCompatImageView backBtn;
+    private boolean isHideBackBtn;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isHideBackBtn = getArguments().getBoolean("isHideBackBtn", false);
+        }
+    }
 
     @Nullable
     @Override
@@ -51,6 +59,14 @@ public class CollectionsFragment extends Fragment {
 
         tabLayout = (TabLayout) mView.findViewById(R.id.easy_indicator);
         vp2 = (ViewPager2) mView.findViewById(R.id.collections_viewpager2);
+        backBtn = (AppCompatImageView) mView.findViewById(R.id.collection_backbtn);
+        backBtn.setOnClickListener(view -> {
+            requireActivity().finish();
+        });
+        if (isHideBackBtn) {
+            backBtn.setVisibility(View.GONE);
+        }
+
 
         fragments = new ArrayList<>();
         fragments.add(PagerFragment.newInstance(PagerFragment.PAGE_COLLECTIONS));
@@ -65,7 +81,7 @@ public class CollectionsFragment extends Fragment {
                     ToastUtils.toast("跳转到登陆界面");
                     if (!BuildConfig.isModule) {
                         //集成开发模式
-                        ARouter.getInstance().build("/LoginRegistration/LoginActivity").navigation();
+                        ARouter.getInstance().build("/loginregistrationView/LoginActivity").navigation();
                     }
                 } else {
                     vp2.setCurrentItem(1, true);
@@ -100,7 +116,6 @@ public class CollectionsFragment extends Fragment {
 
         return mView;
     }
-
 
     public static PagerFragment getCollectionPage() {
         return fragments.get(0);

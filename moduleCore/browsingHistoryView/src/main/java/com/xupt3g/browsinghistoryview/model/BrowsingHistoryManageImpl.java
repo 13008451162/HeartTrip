@@ -1,6 +1,10 @@
 package com.xupt3g.browsinghistoryview.model;
 
+import androidx.lifecycle.MutableLiveData;
+
+import com.xupt3g.browsinghistoryview.model.retrofit.BrowsingHistoryResponse;
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import java.util.List;
 
@@ -19,14 +23,14 @@ public interface BrowsingHistoryManageImpl {
      * @return 返回浏览历史集合
      * TODO 获取浏览历史集合数据 可能返回为空
      */
-    List<HistoryData> getBrowsingHistoryList();
+    MutableLiveData<BrowsingHistoryResponse> getBrowsingHistoryList();
 
     /**
      *
      * @return 返回操作是否成功
      * TODO 请求清空浏览历史数据集合
      */
-    boolean clearBrowsingHistoryList();
+    MutableLiveData<IsSuccessfulResponse> clearBrowsingHistoryList();
 
     /**
      *
@@ -34,13 +38,6 @@ public interface BrowsingHistoryManageImpl {
      * @return 返回操作是否成功
      * TODO 请求将指定子项从浏览历史集合中移除
      */
-    boolean removeHistoryItem(int houseId);
+    MutableLiveData<IsSuccessfulResponse> removeHistoryItem(int houseId);
 
-    /**
-     *
-     * @param houseId 请求添加到收藏的民宿Id
-     * @return 返回操作是否成功
-     * TODO 请求将浏览记录子项添加到用户收藏
-     */
-    boolean addToCollections(int houseId);
 }

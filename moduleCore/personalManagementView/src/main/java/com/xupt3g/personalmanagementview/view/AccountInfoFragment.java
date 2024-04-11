@@ -7,6 +7,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -49,6 +51,7 @@ import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 import com.xupt3g.personalmanagementview.presenter.AccountInfoPresenter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -158,9 +161,9 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
         //获取原用户信息
         originalAccountInfo = PersonalManagementFragment.presenter.getResponseLiveData().getValue();
 
-
         if (originalAccountInfo != null) {
             //初始化临时Response
+            Log.d("originalAccountInfo", "onCreateView: " + originalAccountInfo.toString());
             temAccountInfo = new AccountInfoResponse(originalAccountInfo);
             initGroupListView();
         }
@@ -435,20 +438,22 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (CAMERA_REQUEST_CODE == requestCode) {  //调用相机后返回
+        //调用相机后返回
+        if (CAMERA_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 ToastUtils.toast("RESULT_OK");
 
                 cropPhoto(contentUri);
             }
         } else if (ALBUM_REQUEST_CODE == requestCode) {
-            if (resultCode == RESULT_OK) {//调用相册后返回
+            //调用相册后返回
+            if (resultCode == RESULT_OK) {
                 Uri uri = data.getData();
                 cropPhoto(uri);
             }
         } else if (CROP_REQUEST_CODE == requestCode) {
-            if (data == null) {//调用剪裁后返回
+            //调用剪裁后返回
+            if (data == null) {
                 return;
             }
             Bundle bundle = data.getExtras();
@@ -458,6 +463,7 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
                 BitmapDrawable drawable = new BitmapDrawable(image);
                 //设置到ImageView上
                 item1.setImageDrawable(drawable);
+                avatarResultFile = bitmapToFile(image);
                 if (modifyTarget == 0) {
                     //如果没有标记位
                     modifyTarget = MODIFY_ONLY_AVATAR;
@@ -468,13 +474,31 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
             }
         }
     }
+    private File avatarResultFile;
 
+    /**
+     * TODO 将头像降质量 储存到文件中
+     * @param bitmap
+     * @return
+     */
+    private File bitmapToFile(Bitmap bitmap) {
+        File bitmapFile = new File(requireContext().getCacheDir(), "userAvatar.jpg");
+        try {
+            bitmapFile.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(bitmapFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream); // 将 Bitmap 写入文件
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmapFile;
+    }
+//    private File tempAvatar = new File("heartTrip_temp_userAvatar.jpg");
     /**
      * 裁剪图片
      */
     private void cropPhoto(Uri uri) {
         ToastUtils.toast("裁剪 ");
-        Uri contentUri = Uri.fromFile(new File(getPhotoPath()));
         Intent intent = new Intent("com.android.camera.action.CROP");
         //Android 7.0需要临时添加读取Url的权限， 添加此属性是为了解决：调用裁剪框时候提示：图片无法加载或者加载图片失败或者无法加载此图片
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -490,14 +514,8 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
         intent.putExtra("outputY", 300);//你按照1:1的比例来裁剪的，如果最后成像是800*400，那么按照2:1的样式保存，
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//输出裁剪文件的格式
         intent.putExtra("return-data", true);//是否返回裁剪后图片的Bitmap
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);//设置输出路径
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempAvatar));//设置输出路径
         startActivityForResult(intent, CROP_REQUEST_CODE);
-    }
-
-    @NonNull
-    private String getPhotoPath() {
-        File file = new File(requireActivity().getPackageName() + "_userAvatar.jpg");
-        return file.getPath();
     }
 
     @Override
@@ -567,8 +585,6 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
     @Override
     public void modifySuccessful() {
         ToastUtils.toast("信息保存成功！");
-
-        //通知UI更新
     }
 
     /**
@@ -577,7 +593,7 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
     @Override
     public void modifyFailed() {
         ToastUtils.toast("信息保存失败！");
-
+        mGroupListView.removeAllViews();
         initGroupListView();//将界面数据还原
     }
 
@@ -587,9 +603,12 @@ public class AccountInfoFragment extends Fragment implements AccountInfoModifyIm
      * @return （MultipartBody.Part）
      */
     private MultipartBody.Part userAvatarBodyInit() {
-        File file = new File(getPhotoPath());
-        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        return MultipartBody.Part.createFormData("userAvatar", file.getName(), imageBody);
+        if (avatarResultFile != null) {
+            RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), avatarResultFile);
+            return MultipartBody.Part.createFormData("myFile", avatarResultFile.getName(), imageBody);
+        } else {
+            return null;
+        }
     }
 
 }

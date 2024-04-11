@@ -1,10 +1,10 @@
-package com.xupt3g.browsinghistoryview.view;
+package com.xupt3g.browsinghistoryview.view.entity;
 
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.browsinghistoryview.view.StickyItem
+ * 文件名: com.xupt3g.browsinghistoryview.view.entity.StickyItem
  *
  * @author: shallew
  * @data:2024/2/24 21:18

@@ -3,6 +3,7 @@ package com.xupt3g.commentsview.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,10 +112,11 @@ public class CommentsShowFragment extends Fragment implements CommentsShowImpl {
         postCommentButton = mView.findViewById(R.id.comments_post_comment);
         postCommentButton.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), CommentPostActivity.class);
-            startActivity(intent);
+            intent.putExtra("HouseId", houseId);
+            startActivityForResult(intent, 1);
         });
 
-        presenter = new CommentsPresenter(this);
+        presenter = new CommentsPresenter(this, getContext());
         ProgressAnim.showProgress(getContext());
         presenter.commentsDataShowOnUi(houseId, currPage, pageSize);
         return mView;
@@ -133,6 +135,7 @@ public class CommentsShowFragment extends Fragment implements CommentsShowImpl {
     @SuppressLint("SetTextI18n")
     @Override
     public void showCommentsRatingInfo(CommentsListResponse response) {
+        Log.d("TAGGGGYTU", "showCommentsRatingInfo: " + houseId);
         ratingScore.setText(response.getScore() + "");
         ratingStarts.setRating(response.getScore());
         totalCommentsCount.setText(response.getCommentCount());
@@ -178,6 +181,20 @@ public class CommentsShowFragment extends Fragment implements CommentsShowImpl {
     public void loadMoreFailed() {
         ProgressAnim.hideProgress();
         ToastUtils.toast("没有更多评论了。");
-        commentsItemAdapter.changeState(CommentsItemAdapter.FOOTER_VIEW_STATE_NO_MORE);
+        Log.d("HOUSEIDDD", "loadMoreFailed: " + houseId);
+        if (commentsItemAdapter != null) {
+            commentsItemAdapter.changeState(CommentsItemAdapter.FOOTER_VIEW_STATE_NO_MORE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (currComments != null) {
+            currComments.clear();
+            currPage = 1;
+        }
+        ProgressAnim.showProgress(getContext());
+        presenter.commentsDataShowOnUi(houseId, currPage, pageSize);
     }
 }

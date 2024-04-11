@@ -1,11 +1,14 @@
 package com.xupt3g.personalmanagementview.view;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -46,6 +49,10 @@ import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -85,6 +92,28 @@ public class SettingFragment extends Fragment {
         //退出登录按钮
         logoutButton.setOnClickListener(view -> {
             LoginStatusData.getLoginStatus().setValue(false);
+            ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                    2,
+                    2,
+                    60,
+                    TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<Runnable>(),
+                    Executors.defaultThreadFactory(),
+                    new ThreadPoolExecutor.AbortPolicy()
+            );
+
+            pool.submit(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences sp = requireActivity().getSharedPreferences("loggedInState", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = sp.edit();
+                    //记录登陆状态 未登录
+                    edit.putBoolean("isLoggedIn", false);
+                    edit.apply();
+                }
+            });
+
+            pool.shutdown();
         });
 
         //设置Fragment进场效果
@@ -200,11 +229,9 @@ public class SettingFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        Log.d("Switch", "onCheckedChanged: 允许");
                         //允许通知
                         notificationAllowed();
                     } else {
-                        Log.d("Switch", "onCheckedChanged: 不允许");
                         notificationNotAllowed();
                     }
                 }
@@ -271,23 +298,22 @@ public class SettingFragment extends Fragment {
             }
         }
 
-        Log.d("Switch", "onCheckedChanged: 允许通知");
         NotificationManagement.isAllowNotification = true;
         NotificationManager manager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             //2.判断系统版本是否大于等于android8.0
             //3.获取NotificationChannel的实例，构造函数第一个参数表示通知渠道的id；第二个参数表示通知渠道的名称，第三个参数则表示重要性
-            NotificationChannel channel = new NotificationChannel("allow_notification", "channel_0", NotificationManager.IMPORTANCE_DEFAULT /*重要性*/);
+            NotificationChannel channel = new NotificationChannel("allow_notification", "channel_0", NotificationManager.IMPORTANCE_DEFAULT);
             //4.构造通知渠道。使用NotificationManager实例的createNotificationChannel()方法
             manager.createNotificationChannel(channel);
         }
         Notification notification = new NotificationCompat.Builder(requireContext(), "allow_notification")
-                .setContentTitle("允许通知") //通知标题
-                .setContentText("您开启了通知允许，可以接收到推送的通知") //通知内容
+                .setContentTitle("允许通知")
+                .setContentText("您开启了通知允许，可以接收到推送的通知")
                 .setTicker("666")
-                .setSmallIcon(R.drawable.personal_baseline_done_outline_24) //设置小图标：必须提供
+                .setSmallIcon(R.drawable.personal_baseline_done_outline_24)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.personal_baseline_done_outline_24))
-                .setAutoCancel(true)//点击时自动取消通知
+                .setAutoCancel(true)
                 .build();
         manager.notify(1, notification);
     }

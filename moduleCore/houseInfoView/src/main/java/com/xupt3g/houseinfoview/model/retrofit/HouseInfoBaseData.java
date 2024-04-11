@@ -1,8 +1,8 @@
-package com.xupt3g.houseinfoview.model;
+package com.xupt3g.houseinfoview.model.retrofit;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.houseinfoview.model.HouseInfoBaseData
+ * 文件名: com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseData
  *
  * @author: shallew
  * @data: 2024/3/12 19:26
@@ -25,7 +25,7 @@ public class HouseInfoBaseData {
     /**
      * 评论总数量
      */
-    private int commentsCount;
+    private int commentCount;
     /**
      * 标题下的标签 "精选好房,有停车位,宽松取消,可做饭,可聚会"
      */
@@ -37,15 +37,15 @@ public class HouseInfoBaseData {
     /**
      * 纬度
      */
-    private long latitude;
+    private String latitude;
     /**
      * 经度
      */
-    private long longitude;
+    private String longitude;
     /**
      * 基础设施标签
      */
-    private String baseFacilities;
+    private String facilities;
     /**
      * 民宿面积 50平
      */
@@ -53,19 +53,19 @@ public class HouseInfoBaseData {
     /**
      * 房间配置 1室1厅1卫1厨
      */
-    private String room;
+    private String roomConfig;
     /**
      * 房间清理过程录像的url
      */
-    private String cleanVideoUrl;
+    private String cleanVideo;
     /**
      * 房东的头像的Url
      */
-    private String landlordAvatar;
+    private String hostAvatar;
     /**
      * 房东的昵称
      */
-    private String landlordNickname;
+    private String hostNickname;
     /**
      * 折后价
      */
@@ -79,7 +79,17 @@ public class HouseInfoBaseData {
      * 定位地址
      */
     private String location;
-//    /**
+
+    private boolean isCollected;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+    //    /**
 //     * 卫浴设施标签
 //     */
 //    private String[] bathFacilities;
@@ -105,7 +115,7 @@ public class HouseInfoBaseData {
         this.title = title;
         this.location = location;
         this.ratingStars = ratingStars;
-        this.commentsCount = commentsCount;
+        this.commentCount = commentsCount;
         this.titleTags = titleTags;
         StringBuilder sb = new StringBuilder();
         for (String s:
@@ -120,12 +130,12 @@ public class HouseInfoBaseData {
             sb.append(s);
             sb.append(",");
         }
-        this.baseFacilities = sb.toString().substring(0, sb.length() - 1);
+        this.facilities = sb.toString().substring(0, sb.length() - 1);
         this.area = area;
-        this.room = room;
-        this.cleanVideoUrl = cleanVideoUrl;
-        this.landlordAvatar = landlordAvatar;
-        this.landlordNickname = landlordNickname;
+        this.roomConfig = room;
+        this.cleanVideo = cleanVideoUrl;
+        this.hostAvatar = landlordAvatar;
+        this.hostNickname = landlordNickname;
         this.priceAfter = priceAfter;
         this.priceBefore = priceBefore;
     }
@@ -150,7 +160,7 @@ public class HouseInfoBaseData {
     }
 
     public int getCommentsCount() {
-        return commentsCount;
+        return commentCount;
     }
 
     public String[] getTitleTags() {
@@ -162,7 +172,7 @@ public class HouseInfoBaseData {
     }
 
     public String[] getBaseFacilities() {
-        return baseFacilities.split(",");
+        return facilities.split(",");
     }
 
     public String getArea() {
@@ -170,10 +180,14 @@ public class HouseInfoBaseData {
     }
 
     public String getRoom() {
-        return room;
+        return roomConfig;
     }
 
-//    public String[] getBathFacilities() {
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    //    public String[] getBathFacilities() {
 //        return bathFacilities;
 //    }
 //
@@ -194,15 +208,15 @@ public class HouseInfoBaseData {
 //    }
 
     public String getCleanVideoUrl() {
-        return cleanVideoUrl;
+        return cleanVideo;
     }
 
     public String getLandlordAvatar() {
-        return landlordAvatar;
+        return hostAvatar;
     }
 
     public String getLandlordNickname() {
-        return landlordNickname;
+        return hostNickname;
     }
 
     public int getPriceAfter() {
@@ -213,4 +227,26 @@ public class HouseInfoBaseData {
         return priceBefore;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"title\":\'" + title + "\'" +
+                ", \"ratingStars\":" + ratingStars +
+                ", \"commentsCount\":" + commentCount +
+                ", \"titleTags\":\'" + titleTags + "\'" +
+                ", \"bannerUrls\":\'" + bannerUrls + "\'" +
+                ", \"latitude\":" + latitude +
+                ", \"longitude\":" + longitude +
+                ", \"baseFacilities\":\'" + facilities + "\'" +
+                ", \"area\":\'" + area + "\'" +
+                ", \"room\":\'" + roomConfig + "\'" +
+                ", \"cleanVideoUrl\":\'" + cleanVideo + "\'" +
+                ", \"landlordAvatar\":\'" + hostAvatar + "\'" +
+                ", \"landlordNickname\":\'" + hostNickname + "\'" +
+                ", \"priceAfter\":" + priceAfter +
+                ", \"priceBefore\":" + priceBefore +
+                ", \"location\":\'" + location + "\'" +
+                '}';
+    }
 }

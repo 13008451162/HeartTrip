@@ -12,6 +12,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.xupt3g.UiTools.UiTool;
+import com.xupt3g.houseinfoview.view.HouseInfoFragment;
 
 @Route(path = "/houseInfoView/HouseInfoActivity")
 public class HouseInfoActivity extends AppCompatActivity {

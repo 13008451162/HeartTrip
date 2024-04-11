@@ -1,5 +1,8 @@
 package com.xupt3g.mylibrary1.implservice;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+
 import com.alibaba.android.arouter.facade.template.IProvider;
 
 /**
@@ -22,13 +25,5 @@ public interface BrowsedHistoryManagerService extends IProvider {
      * TODO 获取浏览历史数据的数量
      * 注意：正常时候返回数字>=0，如果返回数字<0(-1)，表示异常情况，可能网络请求失败
      */
-    int getBrowsedHistoryCount();
-
-    /**
-     *
-     * @param houseId 要添加的民宿Id
-     * @return 返回是否操作成功
-     * TODO 进入民俗详情页之类时调用该方法，将民宿添加到浏览历史列表
-     */
-    boolean addBrowsedHistory(int houseId);
+    MutableLiveData<Integer> getBrowsedHistoryCount(LifecycleOwner owner);
 }

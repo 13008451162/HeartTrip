@@ -26,6 +26,8 @@ public class HeartTripApp extends Application {
 
     }
 
+
+
     /**
      * 初始化ARouter设置
      */
@@ -49,4 +51,6 @@ public class HeartTripApp extends Application {
     private boolean isModule() {
         return !BuildConfig.isModule;
     }
+
+
 }

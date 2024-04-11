@@ -13,7 +13,11 @@ import java.util.List;
 public class BrowsingHistoryResponse {
     private int code;
     private String msg;
-    private List<HistoryData> historyDataList;
+    private List<HistoryData> historyList;
+
+    public BrowsingHistoryResponse(String msg) {
+        this.msg = msg;
+    }
 
     public int getCode() {
         return code;
@@ -24,6 +28,15 @@ public class BrowsingHistoryResponse {
     }
 
     public List<HistoryData> getHistoryDataList() {
-        return historyDataList;
+        return historyList;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"code\":" + code +
+                ", \"msg\":\'" + msg + "\'" +
+                ", \"historyList\":" + historyList +
+                '}';
     }
 }

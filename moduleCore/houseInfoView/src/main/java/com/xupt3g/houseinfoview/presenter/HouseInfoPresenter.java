@@ -1,13 +1,18 @@
 package com.xupt3g.houseinfoview.presenter;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
-import com.xupt3g.houseinfoview.model.HouseInfoBaseData;
 import com.xupt3g.houseinfoview.model.HouseInfoDataRequest;
 import com.xupt3g.houseinfoview.model.HouseInfoGetImpl;
+import com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseDataResponse;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouseResponse;
 import com.xupt3g.houseinfoview.view.HouseInfoShowImpl;
+import com.xupt3g.mylibrary1.PublicRetrofit;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
 
@@ -40,15 +45,23 @@ public class HouseInfoPresenter {
      * TODO 网络请求获取当前民宿的基本信息数据 并将其显示在Ui上
      */
     public void getHouseInfoBaseData(int houseId) {
-        //无需登录
-        HouseInfoBaseData houseInfoBaseData = model.getHouseInfoBaseData(houseId);
-        //返回可能为空
-        if (houseInfoBaseData != null) {
-            //成功获取到了数据
-            view.houseInfoBaseDataShowOnUi(houseInfoBaseData);
-        } else {
-            XToastUtils.error("数据获取异常");
-        }
+        //可登录 直接调用该方法 交给Model层去判断是否已登录
+        MutableLiveData<HouseInfoBaseDataResponse> houseInfoLiveData = model.getHouseInfoBaseData(houseId);
+        houseInfoLiveData.observe((LifecycleOwner) view, new Observer<HouseInfoBaseDataResponse>() {
+            @Override
+            public void onChanged(HouseInfoBaseDataResponse response) {
+                //返回可能为空
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                    if (response.getHouseInfoBaseData() != null) {
+                        //成功获取到了数据
+                        view.houseInfoBaseDataShowOnUi(response.getHouseInfoBaseData());
+                    } else {
+                        XToastUtils.error("数据获取异常");
+                    }
+                }
+            }
+        });
+        recommendListShowOnUi();
     }
 
     /**
@@ -65,12 +78,17 @@ public class HouseInfoPresenter {
             //如果已登录
             if (collectionManagerService != null) {
                 //已获取服务
-                boolean b = collectionManagerService.addCollection(houseId);
-                if (b) {
-                    view.collectSucceed();
-                } else {
-                    view.collectFailed();
-                }
+                MutableLiveData<Boolean> booleanLiveData = collectionManagerService.addCollection((LifecycleOwner) view, houseId);
+                booleanLiveData.observe((LifecycleOwner) view, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if (aBoolean) {
+                            view.collectSucceed();
+                        } else {
+                            view.collectFailed();
+                        }
+                    }
+                });
             } else {
                 XToastUtils.error("当前处于组件开发模式，不可添加收藏");
             }
@@ -91,15 +109,33 @@ public class HouseInfoPresenter {
             //如果已登录
             if (collectionManagerService != null) {
                 //已获取服务
-                boolean b = collectionManagerService.removeCollection(houseId);
-                if (b) {
-                    view.collectSucceed();
-                } else {
-                    view.collectFailed();
-                }
+                MutableLiveData<Boolean> booleanLiveData = collectionManagerService.removeCollection((LifecycleOwner) view, houseId);
+                booleanLiveData.observe((LifecycleOwner) view, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if (aBoolean) {
+                            view.collectSucceed();
+                        } else {
+                            view.collectFailed();
+                        }
+                    }
+                });
             } else {
                 XToastUtils.error("当前处于组件开发模式，不可移除收藏");
             }
         }
+    }
+
+    public void recommendListShowOnUi() {
+        //无需登录
+        MutableLiveData<RecommendHouseResponse> recommendListLiveData = model.getRecommendHousesList();
+        recommendListLiveData.observe((LifecycleOwner) view, new Observer<RecommendHouseResponse>() {
+            @Override
+            public void onChanged(RecommendHouseResponse response) {
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                    view.recommendHouseListShow(response.getRecommendHouse());
+                }
+            }
+        });
     }
 }

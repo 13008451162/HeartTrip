@@ -1,4 +1,4 @@
-package com.xupt3g.browsinghistoryview.view;
+package com.xupt3g.browsinghistoryview.view.adapter;
 
 
 import android.annotation.SuppressLint;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -25,7 +28,9 @@ import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.browsinghistoryview.R;
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
-import com.xupt3g.browsinghistoryview.presenter.ThePresenter;
+import com.xupt3g.browsinghistoryview.presenter.BrowsingHistoryPresenter;
+import com.xupt3g.browsinghistoryview.view.BrowsingHistoryUiImpl;
+import com.xupt3g.browsinghistoryview.view.entity.StickyItem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +40,7 @@ import java.util.Random;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.browsinghistoryview.view.MyExpandableListAdapter
+ * 文件名: com.xupt3g.browsinghistoryview.view.adapter.MyExpandableListAdapter
  *
  * @author: shallew
  * @data:2024/2/22 1:14
@@ -53,7 +58,8 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
      */
     private static final int TYPE_NEW_INFO = 2;
     private static int loadWhichView;
-    private ThePresenter presenter;
+    private BrowsingHistoryPresenter presenter;
+    private LifecycleOwner owner;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -65,10 +71,11 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
         FullSpanUtils.onViewAttachedToWindow(holder, this, TYPE_HEAD_STICKY);
     }
 
-    public MyExpandableListAdapter(List<StickyItem> mList, RecyclerView mRecyclerView) {
+    public MyExpandableListAdapter(List<StickyItem> mList, RecyclerView mRecyclerView, LifecycleOwner owner) {
         this.mList = mList;
         this.mRecyclerView = mRecyclerView;
-        this.presenter = new ThePresenter(this);
+        this.presenter = new BrowsingHistoryPresenter(this);
+        this.owner = owner;
     }
 
     @Override
@@ -163,12 +170,17 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
             });
 
             holder.expandCollectButton.setOnClickListener(view -> {
-                boolean b = presenter.passRequestOfAddCollection(item.getHistoryData().getId());
-                if (b) {
-                    ToastUtils.toast("添加成功");
-                } else {
-                    XToastUtils.error("收藏失败");
-                }
+                MutableLiveData<Boolean> booleanLiveData = presenter.passRequestOfAddCollection(item.getHistoryData().getId());
+                booleanLiveData.observe(owner, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if (aBoolean) {
+                            ToastUtils.toast("添加成功");
+                        } else {
+                            XToastUtils.error("收藏失败");
+                        }
+                    }
+                });
             });
 
             holder.expandDeleteButton.setOnClickListener(view -> {

@@ -1,8 +1,5 @@
 package com.xupt3g.commentsview.model;
 
-import android.util.Log;
-
-import com.xuexiang.xui.widget.imageview.preview.enitity.IPreviewInfo;
 import com.xupt3g.commentsview.PictureInfo;
 
 import java.util.ArrayList;
@@ -20,72 +17,77 @@ public class CommentData {
     /**
      * 民宿ID
      */
-    private int houseId;
+    private int homestayId;
     /**
      * 评论ID
      */
-    private int commentId;
+    private int id;
     /**
      * 用户头像
      */
-    private String userAvatar;
+    private String avatar;
     /**
      * 用户昵称
      */
-    private String userNickname;
+    private String nickname;
     /**
      * 点评时间 "2020年09月留下点评"
      */
-    private String commentedTime;
+    private String commentTime;
     /**
      * 点评分数 "他给出5.0分的评价"
      */
-    private String commentedScore;
+    private String star;
     /**
      * 点评内容
      */
-    private String commentContent;
+    private String content;
     /**
      * 图片url
      */
-    private String pictureUrls;
+    private String imageUrls;
+    private int likeCount;
+
+    public int getLikeCount() {
+        return likeCount;
+    }
 
     public String getUserAvatar() {
-        return userAvatar;
+        return avatar;
     }
 
     public String getUserNickname() {
-        return userNickname;
+        return nickname;
     }
 
     public String getCommentedTime() {
-        return commentedTime;
+        return commentTime;
     }
 
     public String getCommentedScore() {
-        return commentedScore;
+        return "他给出" + star + "分的评价";
     }
 
     public String getCommentContent() {
-        return commentContent;
+        return content;
     }
 
 
     public int getCommentId() {
-        return commentId;
+        return id;
     }
 
     public CommentData(String commentContent) {
-        this.commentContent = commentContent;
+        this.content = commentContent;
     }
 
     public int getHouseId() {
-        return houseId;
+        return homestayId;
     }
 
     public List<PictureInfo> getPictureUrls() {
         //假数据
-        pictureUrls = "https://www.sohodd.com/wp-content/uploads/2019/12/32-WUSH-Inn_DESHIN.jpg" +
+        imageUrls = "https://www.sohodd.com/wp-content/uploads/2019/12/32-WUSH-Inn_DESHIN.jpg" +
                 "," +
                 "https://pic2.zhimg.com/v2-e393246739167cdddc617fd9fc898239_r.jpg" +
                 "," +
@@ -94,11 +96,26 @@ public class CommentData {
                 "https://img.zcool.cn/community/01054f5cce728da801214168103462.jpg@3000w_1l_0o_100sh.jpg" +
                 "," +
                 "https://img.zcool.cn/community/0128926088ffbc11013f4720d7d7a7.jpg@1280w_1l_2o_100sh.jpg";
-        String[] split = pictureUrls.split(",");
+        String[] split = imageUrls.split(",");
         List<PictureInfo> pictureInfoArr = new ArrayList<>();
         for (String s : split) {
             pictureInfoArr.add(new PictureInfo(s));
         }
         return pictureInfoArr;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"homestayId\":" + homestayId +
+                ", \"id\":" + id +
+                ", \"avatar\":\'" + avatar + "\'" +
+                ", \"nickname\":\'" + nickname + "\'" +
+                ", \"commentTime\":\'" + commentTime + "\'" +
+                ", \"star\":\'" + star + "\'" +
+                ", \"content\":\'" + content + "\'" +
+                ", \"imageUrls\":\'" + imageUrls + "\'" +
+                ", \"likeCount\":" + likeCount +
+                '}';
     }
 }

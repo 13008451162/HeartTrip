@@ -1,10 +1,13 @@
-package com.xupt3g.houseinfoview;
+package com.xupt3g.houseinfoview.view;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -43,17 +48,22 @@ import com.xuexiang.xui.widget.popupwindow.good.GoodView;
 import com.xuexiang.xui.widget.popupwindow.good.IGoodView;
 import com.xuexiang.xui.widget.progress.ratingbar.ScaleRatingBar;
 import com.xuexiang.xutil.tip.ToastUtils;
-import com.xupt3g.houseinfoview.model.HouseInfoBaseData;
-import com.xupt3g.houseinfoview.model.RecommendHouse;
+import com.xupt3g.houseinfoview.view.adapter.BannerAdapter;
+import com.xupt3g.houseinfoview.view.adapter.FlowLayoutAdapter;
+import com.xupt3g.houseinfoview.R;
+import com.xupt3g.houseinfoview.view.adapter.RecommendHousesAdapter;
+import com.xupt3g.houseinfoview.VideoPlayerView;
+import com.xupt3g.houseinfoview.model.retrofit.HouseInfoBaseData;
+import com.xupt3g.houseinfoview.model.retrofit.RecommendHouse;
 import com.xupt3g.houseinfoview.presenter.HouseInfoPresenter;
-import com.xupt3g.houseinfoview.view.HouseInfoShowImpl;
+import com.xupt3g.mylibrary1.LoginStatusData;
+import com.xupt3g.mylibrary1.PublicRetrofit;
 import com.xupt3g.mylibrary1.implservice.TopCommentData;
 import com.xupt3g.mylibrary1.implservice.TopCommentGetService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -62,7 +72,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 项目名: HeartTrip
- * 文件名: com.xupt3g.houseinfoview.HouseInfoFragment
+ * 文件名: com.xupt3g.houseinfoview.view.HouseInfoFragment
  *
  * @author: shallew
  * @data: 2024/3/5 18:19
@@ -348,6 +358,8 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
      */
     private HouseInfoBaseData mBaseData;
     private HouseInfoPresenter presenter;
+
+    private final int CHOOSE_TIME_REQUEST_CODE = 12002;
     /**
      * 当前民宿Id
      */
@@ -396,21 +408,6 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         //设置ScrollView和TabLayout的关联
         setScrollViewPositionChangedListener();
         setTabLayoutSelectedTabChangedListener();
-        //设置底部的监听
-        consultInBottomView.setOnClickListener(view -> {
-            ToastUtils.toast("跳转至房东咨询页面");
-        });
-        priceBeforeInBottomView.setText(String.valueOf(mBaseData.getPriceBefore()));
-        //中间横线（删除线）
-        priceBeforeInBottomView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        // 抗锯齿
-        priceBeforeInBottomView.getPaint().setAntiAlias(true);
-        priceAfterInBottomView.setText(String.valueOf(mBaseData.getPriceAfter()));
-        hasDiscountInBottomView.setText("已为您优惠减免" + (mBaseData.getPriceBefore() - mBaseData.getPriceAfter()) + "元");
-        bookInBottomView.setOnClickListener(view -> {
-            //跳转至订单组件
-            ToastUtils.toast("跳转至订单信息确认及支付页面");
-        });
 
         return mView;
     }
@@ -423,18 +420,41 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         //收藏状态获取
         isCollected = false;
         goodView = new GoodView(getContext());
-        //生成民宿图片二点轮播图（手动滑动的）
-        initBannerView();
-        //生成第一个视图View 概览
-        initView1();
-        //生成第二个视图View 设施-服务
-        initView2();
-        //生成第三个视图View 点评
-        initView3();
-        //生成第四个视图View 规则须知 房东
-        initView4();
-        //生成第五个视图View 同类推荐
-        initView5();
+        if (mBaseData != null) {
+            if (Boolean.TRUE.equals(LoginStatusData.getLoginStatus().getValue()) && mBaseData.isCollected()) {
+                //如果已登录 且已收藏
+                isCollected = true;
+                collectImg.setImageResource(R.drawable.houseinfo_icon_collect_after);
+            }
+            //生成民宿图片二点轮播图（手动滑动的）
+            initBannerView();
+            //生成第一个视图View 概览
+            initView1();
+            //生成第二个视图View 设施-服务
+            initView2();
+            //生成第三个视图View 点评
+            initView3();
+            //生成第四个视图View 规则须知 房东
+            initView4();
+            //生成第五个视图View 同类推荐
+            initView5();
+            //设置底部的监听
+            consultInBottomView.setOnClickListener(view -> {
+                ToastUtils.toast("跳转至房东咨询页面");
+            });
+            priceBeforeInBottomView.setText(String.valueOf(mBaseData.getPriceBefore()));
+            //中间横线（删除线）
+            priceBeforeInBottomView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            // 抗锯齿
+            priceBeforeInBottomView.getPaint().setAntiAlias(true);
+            priceAfterInBottomView.setText(String.valueOf(mBaseData.getPriceAfter()));
+            hasDiscountInBottomView.setText("已为您优惠减免" + (mBaseData.getPriceBefore() - mBaseData.getPriceAfter()) + "元");
+            bookInBottomView.setOnClickListener(view -> {
+                //跳转至订单组件
+                ToastUtils.toast("跳转至订单信息确认及支付页面");
+            });
+        }
+
     }
 
     @Override
@@ -475,14 +495,29 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
     }
 
     /**
+     * TODO 将推荐列表显示
+     */
+    @Override
+    public void recommendHouseListShow(List<RecommendHouse> list) {
+        this.recommendHouseList = new ArrayList<>();
+        if (list == null || list.size() == 0) {
+            //无数据
+            XToastUtils.error("推荐民宿数据获取异常！");
+        } else {
+            //有数据
+            this.recommendHouseList = list;
+        }
+    }
+
+    /**
      * TODO 生成第五个View并生成交互
      */
     private void initView5() {
-        recommendHouseList = new ArrayList<>();
-        Collections.addAll(recommendHouseList, new RecommendHouse(), new RecommendHouse(), new RecommendHouse(), new RecommendHouse(), new RecommendHouse(), new RecommendHouse());
-        recommendHousesAdapter = new RecommendHousesAdapter(recommendHouseList);
-        recommendRecycler.setAdapter(recommendHousesAdapter);
-        recommendRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        if (this.recommendHouseList != null) {
+            recommendHousesAdapter = new RecommendHousesAdapter(recommendHouseList, this);
+            recommendRecycler.setAdapter(recommendHousesAdapter);
+            recommendRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        }
     }
 
 
@@ -526,41 +561,46 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         ratingBarInThirdView.setRating(mBaseData.getRatingStars());
         totalCommentsCountInThirdView.setText("（共" + mBaseData.getCommentsCount() + "条点评）");
         //数据变量
-        String commentContent = requireActivity().getString(R.string.shudaonan);
-        String[] pictureRes = new String[]{"https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
+        final String[] commentContent = {requireActivity().getString(R.string.shudaonan)};
+        final String[][] pictureRes = {new String[]{"https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
                 "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
                 "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
                 "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
-                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg"};
+                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg"}};
         //替换不同的数据源 组件测试开发使用自定义数据，集成开发使用获取的数据
         //使用ARouter+接口服务来获取信息
         if (!BuildConfig.isModule) {
             //集成模式下可获取
             topCommentGetService = (TopCommentGetService)
                     ARouter.getInstance().build("/commentsview/CommentsRequest").navigation();
-            TopCommentData topCommentInfo = topCommentGetService.getTopCommentInfo(houseId);
-            if (topCommentInfo != null) {
-                //评论内容
-                commentContent = topCommentInfo.getContent();
-                //用户头像
-                Glide.with(requireContext()).load(topCommentInfo.getUserAvatar()).into(userAvatarInThirdView);
-                //用户昵称
-                userNicknameInThirdView.setText(topCommentInfo.getUserNickname());
-                //用户发表时间
-                userPostedTimeInThirdView.setText(topCommentInfo.getUserPostTime());
-                //用户评分
-                userRatingScoreInThirdView.setText(topCommentInfo.getUserRating());
-                //照片
-                pictureRes = topCommentInfo.getPicturesUrls();
-                //点赞数 随机
-                likedCountInThirdView.setText(new Random().nextInt(600) + 100 + "");
-            } else {
-                XToastUtils.error("Top == null");
-            }
+            MutableLiveData<TopCommentData> topCommentInfoLiveData
+                    = topCommentGetService.getTopCommentInfo(this, houseId);
+            topCommentInfoLiveData.observe(this, new Observer<TopCommentData>() {
+                @Override
+                public void onChanged(TopCommentData topCommentData) {
+                    if (topCommentData != null && !topCommentData.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                        //评论内容
+                        userContentInThirdView.setText(topCommentData.getContent());
+                        //用户头像
+                        Glide.with(requireContext()).load(topCommentData.getUserAvatar()).circleCrop().into(userAvatarInThirdView);
+                        //用户昵称
+                        userNicknameInThirdView.setText(topCommentData.getUserNickname());
+                        //用户发表时间
+                        userPostedTimeInThirdView.setText(topCommentData.getUserPostTime());
+                        //用户评分
+                        userRatingScoreInThirdView.setText(topCommentData.getUserRating());
+                        //照片
+                        pictureRes[0] = topCommentData.getPicturesUrls();
+                        //点赞数 随机
+                        likedCountInThirdView.setText(new Random().nextInt(600) + 100 + "");
+                    } else {
+                        XToastUtils.error("获取数据异常！有可能暂无评论。");
+                    }
+                }
+            });
         }
-
         //测试评论的内容长度不同的UI
-        userContentInThirdView.setText(commentContent);
+        userContentInThirdView.setText(commentContent[0]);
         ViewTreeObserver vto = userContentInThirdView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -577,16 +617,16 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         });
 
         //没有照片 什么都不做，直接跳过
-        if (pictureRes != null && pictureRes.length > 0) {
-            for (int i = 0; i < pictureRes.length; i++) {
+        if (pictureRes[0] != null && pictureRes[0].length > 0) {
+            for (int i = 0; i < pictureRes[0].length; i++) {
                 if (i >= 3) {
                     break;
                 }
                 pictureArrayInThirdView[i].setVisibility(View.VISIBLE);
-                Glide.with(requireContext()).load(pictureRes[i]).into(pictureArrayInThirdView[i]);
+                Glide.with(requireContext()).load(pictureRes[0][i]).into(pictureArrayInThirdView[i]);
             }
         }
-        if (pictureRes != null && pictureRes.length > 3) {
+        if (pictureRes[0] != null && pictureRes[0].length > 3) {
             pictureOverlayInThirdView.setVisibility(View.VISIBLE);
         }
     }
@@ -653,11 +693,17 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
                     .show();
 
         });
+
+
         locateCardViewInFirstView.setOnClickListener(view -> {
-            ToastUtils.toast("定位页面弹出");
+            Intent intent = new Intent(requireContext(), MapActivity.class);
+            intent.putExtra("HouseLatitude", mBaseData.getLatitude());
+            intent.putExtra("HouseLongitude", mBaseData.getLongitude());
+            startActivity(intent);
         });
         timeCardViewInFirstView.setOnClickListener(view -> {
-            ToastUtils.toast("预定时间页面弹出");
+            Intent intent = new Intent(requireContext(), ChooseTimeCalendarActivity.class);
+            startActivityForResult(intent, CHOOSE_TIME_REQUEST_CODE);
         });
         scoreCardViewInFirstView.setOnClickListener(view -> {
             if (!BuildConfig.isModule) {
@@ -1044,5 +1090,16 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CHOOSE_TIME_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                String[] timeResult = data.getStringArrayExtra("data_return");
+                startLiveTimeInFirstView.setText(timeResult[0]);
+                endLiveTimeInFirstView.setText(timeResult[1]);
+                totalDaysInFirstView.setText(timeResult[2]);
+            }
+        }
+    }
 }

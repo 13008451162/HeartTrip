@@ -8,10 +8,12 @@ package com.xupt3g.loginregistrationview.model.retrofit;
  * @data:2024/1/26 23:15
  * @about: TODO 接收JWT令牌信息
  */
-public class Data {
+public class JwtData {
     private String accessToken;// jwt令牌
     private long accessExpire;// token过期时间
     private long refreshAfter;// 置换token的时间
+
+    public static final String ACCESS_EXPIRE = "accessExpire";
 
     public String getAccessToken() {
         return accessToken;

@@ -1,5 +1,10 @@
 package com.xupt3g.commentsview.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 项目名: HeartTrip
  * 文件名: com.xupt3g.commentsview.model.PostCommentData
@@ -8,57 +13,41 @@ package com.xupt3g.commentsview.model;
  * @data: 2024/3/23 18:56
  * @about: TODO
  */
+
+@NoArgsConstructor
+@Data
 public class PostCommentData {
 
-    /**
-     * 民宿ID
-     */
-    private int houseId;
-    /**
-     * 评论ID
-     */
-    private int commentId;
-    /**
-     * 点评时间 "2020年09月留下点评"
-     */
-    private String commentedTime;
-    /**
-     * 点评内容
-     */
-    private String commentContent;
-    /**
-     * 图片url
-     */
-    private String pictureUrls;
-    /**
-     * 民宿总评分
-     */
-    private String score;
-    /**
-     * 整洁程度评分
-     */
+
+    @SerializedName("homestayId")
+    private Integer homestayId;
+    @SerializedName("commentTime")
+    private String commentTime;
+    @SerializedName("content")
+    private String content;
+    @SerializedName("star")
+    private String star;
+    @SerializedName("tidyRating")
     private String tidyRating;
-    /**
-     * 交通位置评分
-     */
+    @SerializedName("trafficRating")
     private String trafficRating;
-    /**
-     * 安全程度评分
-     */
+    @SerializedName("securityRating")
     private String securityRating;
-    /**
-     * 餐饮体验评分
-     */
+    @SerializedName("foodRating")
     private String foodRating;
-    /**
-     * 综合性价比评分
-     */
+    @SerializedName("costRating")
     private String costRating;
+    @SerializedName("nickname")
+    private String nickname;
+    @SerializedName("avatar")
+    private String avatar;
+    @SerializedName("imageUrls")
+    private String imageUrls;
 
     public PostCommentData(int houseId, String commentContent, float score, float tidyRating, float trafficRating, float securityRating, float foodRating, float costRating) {
-        this.houseId = houseId;
-        this.commentContent = commentContent;
-        this.score = String.valueOf(score);
+        this.homestayId = houseId;
+        this.content = commentContent;
+        this.star = String.valueOf(score);
         this.tidyRating = String.valueOf(tidyRating);
         this.trafficRating = String.valueOf(trafficRating);
         this.securityRating = String.valueOf(securityRating);
@@ -67,11 +56,37 @@ public class PostCommentData {
     }
 
     public void setCommentedTime(String commentedTime) {
-        this.commentedTime = commentedTime;
+        this.commentTime = commentedTime;
     }
 
     public void setPictureUrls(String pictureUrls) {
 
-        this.pictureUrls = pictureUrls;
+        this.imageUrls = pictureUrls;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"homestayId\":" + homestayId +
+                ", \"commentTime\":\'" + commentTime + "\'" +
+                ", \"content\":\'" + content + "\'" +
+                ", \"star\":\'" + star + "\'" +
+                ", \"tidyRating\":\'" + tidyRating + "\'" +
+                ", \"trafficRating\":\'" + trafficRating + "\'" +
+                ", \"securityRating\":\'" + securityRating + "\'" +
+                ", \"foodRating\":\'" + foodRating + "\'" +
+                ", \"costRating\":\'" + costRating + "\'" +
+                ", \"nickname\":\'" + nickname + "\'" +
+                ", \"avatar\":\'" + avatar + "\'" +
+                ", \"imageUrls\":\'" + imageUrls + "\'" +
+                '}';
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
