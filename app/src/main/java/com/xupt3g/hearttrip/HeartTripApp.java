@@ -24,9 +24,6 @@ public class HeartTripApp extends Application {
         onCreateARouter();
         onCreateXUI();
 
-
-
-
     }
 
     /**

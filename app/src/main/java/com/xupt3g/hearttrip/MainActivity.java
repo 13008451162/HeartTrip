@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         UiTool.setImmersionBar(this, true);
+
         bottomNavigationView = findViewById(R.id.app_bottom_navigation);
         contentViewPager = findViewById(R.id.app_viewpager);
         contentFragments = new ArrayList<>();

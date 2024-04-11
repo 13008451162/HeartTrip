@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +33,6 @@ import com.xupt3g.LocationUtils.LocationListener;
 import com.xupt3g.LocationUtils.LocationService;
 import com.xupt3g.homepageview.model.RecommendHomeData;
 import com.xupt3g.homepageview.model.net.RecommendInfoTask;
-import com.xupt3g.homepageview.model.room.Data.HistoryData;
-import com.xupt3g.homepageview.model.room.HistoryDatabase;
 import com.xupt3g.homepageview.presenter.RecommendInfoContrach;
 import com.xupt3g.homepageview.presenter.RecommendInfoPresenter;
 import com.xupt3g.homepageview.view.Adapter.RecommendAdpter;
@@ -185,7 +182,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         //初始化当前位置
         mPresenter.subscribe(locationListener.getLocData()
-                .subscribe(locdata -> cityTextView.setText(locdata.getCity() + "," + locdata.getDistrict())));
+                .subscribe(locdata -> cityTextView.setText(locdata.getCity())));
 
 
         //防止点击过快发生重复创建Activity
@@ -210,7 +207,7 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         //更新当前位置
         currentView.setOnClickListener(v -> mPresenter.subscribe(locationListener.getLocData()
-                .subscribe(bdLocation -> cityTextView.setText(bdLocation.getDistrict()))));
+                .subscribe(bdLocation -> cityTextView.setText(bdLocation.getCity()))));
 
 
         listenForBottomSliding();
@@ -223,7 +220,8 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
             public void onClick(View v) {
                 //传递一个位置信息
                 ARouter.getInstance().build("/searchResultView/SearchResultActivit")
-                        .withString("position", cityTextView.getText().toString() + "," + specifyView.getText())
+                        .withString("position", specifyView.getText().toString())
+                        .withString("city", cityTextView.getText().toString())
                         .withString("date", "3.14-3.16")
                         .navigation();
             }

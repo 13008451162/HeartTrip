@@ -1,4 +1,4 @@
-package com.xupt3g.searchresultview;
+package com.xupt3g.searchresultview.View;
 
 /**
  * 项目名: HeartTrip
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -20,7 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.xupt3g.searchresultview.R;
 
 public class MyDialogFragment extends BottomSheetDialogFragment {
 
@@ -28,7 +31,6 @@ public class MyDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_FRAME,R.style.CustomBottomSheetDialogTheme);
     }
 
     @Nullable
@@ -37,7 +39,6 @@ public class MyDialogFragment extends BottomSheetDialogFragment {
 
 
         View view = inflater.inflate(R.layout.popup_layout, container, false);
-
 
         // 获取Spinner实例
         Spinner spinner = view.findViewById(R.id.spinner);
@@ -56,5 +57,18 @@ public class MyDialogFragment extends BottomSheetDialogFragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // 设置BottomSheetDialog的高度为全屏
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        if (dialog != null) {
+            View bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            }
+        }
     }
 }
