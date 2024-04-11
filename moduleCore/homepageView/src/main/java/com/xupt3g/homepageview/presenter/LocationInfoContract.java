@@ -26,12 +26,14 @@ public interface LocationInfoContract {
     interface Presenter<T> extends BasePresenter {
         /**
          * 获取指定位置的搜索信息
+         *
          * @param position 需要搜索的位置
          */
         Observable<T> getLocationData(String position);
 
         /**
          * 通过输入流处理搜索过程和结构
+         *
          * @param sequenceObservable
          */
         void locationSearch(Observable<CharSequence> sequenceObservable);
@@ -46,6 +48,7 @@ public interface LocationInfoContract {
      * @date 2024/03/18
      */
     interface LocationView extends BaseView<Presenter> {
+
         /**
          * 设置搜索展示的Recycler
          *
@@ -53,5 +56,16 @@ public interface LocationInfoContract {
          * @return {@link Observable}<{@link TextView}>
          */
         void searchRecycler(SearchedLocationData locationDataList);
+
+        /**
+         * 监听城市选择界面的点击事件
+         */
+        void returnClickData();
+
+
+        /**
+         * 用于选择历史位置和位置关键词返回事件
+         */
+        void returnHistoryClickData();
     }
 }

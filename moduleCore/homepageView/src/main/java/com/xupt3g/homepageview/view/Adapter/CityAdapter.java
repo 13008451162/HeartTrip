@@ -7,7 +7,6 @@ import static com.xupt3g.homepageview.model.CityOfCollect.TYPE_RECOMMEND_HEADER;
 import android.content.Context;
 import android.database.Observable;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
  *
  * @author: lukecc0
  * @data:2024/3/14 上午10:57
- * @about: TODO
+ * @about: TODO 选择页的城市信息
  */
 
 public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -153,9 +152,6 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @return int 字母位置
      */
     public int getLetterPosition(String header) {
-
-        Log.e("TAG", "getLetterPosition: " + simpleDatas.get(0).getString());
-
         for (int i = 0; i < simpleDatas.size(); i++) {
 
             if (simpleDatas.get(i).getString().equals(header)) {

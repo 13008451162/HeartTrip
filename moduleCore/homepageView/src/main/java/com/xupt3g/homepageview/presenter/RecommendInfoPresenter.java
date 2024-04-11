@@ -58,10 +58,9 @@ public class RecommendInfoPresenter implements RecommendInfoContrach.Presenter<R
 
 
         compositeDisposable.add(infoTask.execute(homestayListReq)
+                .doOnNext(data -> Log.d("TAG", "getHomeData11: "+data))
                 .onErrorResumeNext(throwable -> Observable.just(new RecommendHomeData()))
-                .doOnNext(recommendHomeData -> {
-                    Log.e("TAG", "getHomeData: " + recommendHomeData);
-                })
+                .doOnNext(data -> Log.d("TAG", "getHomeData22: "+data))
                 .subscribe(data -> homeView.revealRecycler(data),
                         error -> {
                             throw new RuntimeException("在访问推荐时出现异常： ");

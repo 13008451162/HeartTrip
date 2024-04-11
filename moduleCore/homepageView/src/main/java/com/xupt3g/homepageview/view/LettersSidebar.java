@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -136,6 +135,10 @@ public class LettersSidebar extends View {
         }
     }
 
+    /**
+     * 索引栏点击事件的回调
+     * @param onLetterTouchedChangeListener
+     */
     public void setOnLetterTouchedChangeListener(OnLetterTouchedChangeListener onLetterTouchedChangeListener) {
         this.onLetterTouchedChangeListener = onLetterTouchedChangeListener;
     }

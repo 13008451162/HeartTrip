@@ -1,8 +1,9 @@
 package com.xupt3g.homepageview.view;
 
+import static com.xupt3g.homepageview.HomepageFragment.FLAG;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,23 +13,22 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xupt3g.homepageview.R;
 import com.xupt3g.homepageview.model.net.LocationInfoTask;
 import com.xupt3g.homepageview.presenter.LocationInfoPresenter;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.subjects.PublishSubject;
 
 /**
  * @author lukecc0
  * @date 2024/03/20
  * TODO 地址搜索界面
  */
-public class SearchActivity extends AppCompatActivity {
 
-    private PublishSubject publishSubject = PublishSubject.create();
+@Route(path = "/homepageView/SearchActivity")
+public class SearchActivity extends AppCompatActivity implements CityPickerFragment.onFragmentCityListener {
+
     private static CityPickerFragment cityPickerFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class SearchActivity extends AppCompatActivity {
         LocationInfoPresenter presenter = new LocationInfoPresenter(locationInfoTask, cityPickerFragment);
 
         cityPickerFragment.setPresenter(presenter);
-
     }
 
 
@@ -56,7 +55,7 @@ public class SearchActivity extends AppCompatActivity {
         cityPickerFragment = (CityPickerFragment) FragmentManager.findFragmentById((int) R.layout.city_picke_fragment);
 
         if (cityPickerFragment == null) {
-            cityPickerFragment = CityPickerFragment.newInstance();
+            cityPickerFragment = CityPickerFragment.newInstance(getIntent().getBooleanExtra(FLAG, false));
             FragmentTransaction ft = FragmentManager.beginTransaction();
             ft.add(R.id.home_fragment, cityPickerFragment);
             ft.commit();
@@ -64,4 +63,11 @@ public class SearchActivity extends AppCompatActivity {
         return cityPickerFragment;
     }
 
+    @Override
+    public void onClickCity(String cityText) {
+        Intent intent = getIntent();
+        intent.putExtra("data_return", cityText);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 }
