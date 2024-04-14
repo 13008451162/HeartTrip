@@ -5,6 +5,7 @@ import static androidx.recyclerview.widget.OrientationHelper.VERTICAL;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,10 @@ import com.xupt3g.browsinghistoryview.presenter.BrowsingHistoryPresenter;
 import com.xupt3g.browsinghistoryview.view.adapter.MyExpandableListAdapter;
 import com.xupt3g.browsinghistoryview.view.entity.StickyItem;
 import com.xupt3g.mylibrary1.LoginStatusData;
+import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -125,6 +130,8 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.history_frag_browsing_history, container, false);
+        //订阅
+        EventBus.getDefault().register(this);
 
         //历史数据展示页布局初始化（变量声明）
         backBtn = (AppCompatImageView) mView.findViewById(R.id.history_backbtn);
@@ -378,12 +385,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
 
         historyRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         adapter = new MyExpandableListAdapter(dataList, historyRecycler, this);
-        adapter.setDeleteHistoryItemListener(new MyExpandableListAdapter.DeleteHistoryItemListener() {
-            @Override
-            public boolean deleteHistoryItem(int position) {
-                return deleteHistoryItemFromList(position);
-            }
-        });
+
         historyRecycler.setAdapter(adapter);
         animationInit(R.anim.history_recycler_anim);
     }
@@ -464,5 +466,21 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
         adapter.notifyDataSetChanged();
         historyRecycler.scheduleLayoutAnimation();
         return true;
+    }
+
+    @Subscribe
+    public void onHistoryItemChanged(String tag) {
+        if (tag.equals(BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED)) {
+            Log.d("remoteHistory", "onHistoryItemChanged: 更新浏览历史列表");
+            presenter.getHistoryListShowOnUi();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

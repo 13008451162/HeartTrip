@@ -195,6 +195,7 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void collectionViewInit() {
         noCollectionsView.setVisibility(View.GONE);
         collectionsRecyclerLayout.setVisibility(View.VISIBLE);
@@ -217,38 +218,10 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
                 int houseId = collections.get(position).getId();
                 //先向服务器提交删除申请Presenter
                 presenter.removeCollection(houseId);
-//                booleanLiveData.observe(getViewLifecycleOwner(), new Observer<IsSuccessfulResponse>() {
-//                    @Override
-//                    public void onChanged(IsSuccessfulResponse response) {
-//                        if (response != null && response.isSuccess()) {
-//                            //如果删除成功 从列表上更新
-//                            collections.remove(position);
-//                            if (collections.size() == 0) {
-//                                //如果收藏集合中已全部清空
-//                                //替换View，显示no Collections
-//                                ViewGroup parent = (ViewGroup) view.getParent();
-//                                parent.removeView(view);
-//                                defaultViewInit(R.drawable.collection_no_collections, "未找到您的收藏，去看看我们的推荐吧！", "点击看我推荐");
-//                                parent.addView(view);
-//                            }
-//                            if (adapter != null) {
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                            if (headerView != null) {
-//                                headerText.setText("以下共" + collections.size() + "条数据~");
-//                            }
-//                            ToastUtils.toast("删除");
-//                            //删除之后拿着民宿ID去推荐列表中检查
-//                            CollectionsFragment.getGuessPage().cancelCollectInGuesses(houseId);
-//                        } else {
-//                            ToastUtils.toast("删除失败！");
-//                        }
-//                    }
-//                });
             }
         };
         adapter = new CollectionsListAdapter(collections);
-
+        headerText.setText("以下共" + collections.size() + "条数据~");
         viewInit(collections, R.drawable.collection_toolbar_background, "确认删除",
                 mItemMenuClickListener, adapter, new GridLayoutManager(getContext(), 1));
 
@@ -294,7 +267,6 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
     @Override
     public void showGuessList(List<GuessData> guessDataList) {
         guesses = guessDataList;
-        Log.d("addTAG", "showGuessList: " + guessDataList.toString());
         if (guessDataList.size() == 0) {
             ToastUtils.toast("没有获取到数据");
             return;
@@ -431,9 +403,8 @@ public class PagerFragment extends Fragment implements CollectionsGuessManagerIm
      */
     @Subscribe
     public void refreshCollectionList(String tag) {
-        if (tag.equals(CollectionManagerService.COLLECTIONS_HAS_CHANGED)) {
-            //接收到收藏列表改动的消息
-            Log.d("refreshCollectionList", "refreshCollectionList: 收藏列表改动 刷新收藏列表");
+        if (PAGE_COLLECTIONS.equals(dataText) && tag.equals(CollectionManagerService.COLLECTIONS_HAS_CHANGED)) {
+            //收藏 接收到收藏列表改动的消息
             presenter.showCollections();
         }
     }

@@ -17,6 +17,7 @@ import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.browsinghistoryview.model.retrofit.BrowsingHistoryManageService;
 import com.xupt3g.browsinghistoryview.model.retrofit.BrowsingHistoryResponse;
 import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
+import com.xupt3g.browsinghistoryview.model.retrofit.HistoryRequestBody;
 import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
 import com.xupt3g.mylibrary1.LoginStatusData;
@@ -107,11 +108,11 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
                         IsSuccessfulResponse body = response.body();
                         if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
                             clearSuccessLivaData.setValue(body);
-//                            if (body.isSuccess() && !BuildConfig.isModule) {
-//                                //如果清空成功且集成模式
-//                                //通知PersonalManagement页面修改浏览历史数量
-//                                EventBus.getDefault().post(BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED);
-//                            }
+                            if (body.isSuccess() && !BuildConfig.isModule) {
+                                //如果清空成功且集成模式
+                                //通知PersonalManagement页面修改浏览历史数量
+                                EventBus.getDefault().post(BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED);
+                            }
                         } else {
                             clearSuccessLivaData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
                         }
@@ -127,30 +128,32 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
     }
 
     /**
-     * @param houseId 请求删除的民宿Id
      * @return 是否成功移除历史记录子项
      * TODO 移除历史记录子项 本地方法
      */
     @Override
-    public MutableLiveData<IsSuccessfulResponse> removeHistoryItem(int houseId) {
+    public MutableLiveData<IsSuccessfulResponse> removeHistoryItem(int id) {
+        Log.d("remoteHistory", "removeHistoryItem: " + id);
         removeSuccessLiveData = new MutableLiveData<>();
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录");
             removeSuccessLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
             return removeSuccessLiveData;
         }
-        browsingHistoryManageService.removeHistoryFromList(LoginStatusData.getUserToken().getValue(), houseId)
+        browsingHistoryManageService.removeHistoryFromList(LoginStatusData.getUserToken().getValue(), new HistoryRequestBody(id))
                 .enqueue(new Callback<IsSuccessfulResponse>() {
                     @Override
                     public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
                         IsSuccessfulResponse body = response.body();
+                        Log.d("remoteHistory", "removeHistoryItem: " + response.body());
+
                         if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
                             removeSuccessLiveData.setValue(body);
-//                            if (body.isSuccess() && !BuildConfig.isModule) {
-//                                //如果移除成功且集成模式
-//                                //通知PersonalManagement页面修改浏览历史数量
-//                                EventBus.getDefault().post(BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED);
-//                            }
+                            if (body.isSuccess() && !BuildConfig.isModule) {
+                                //如果移除成功且集成模式
+                                //通知PersonalManagement页面修改浏览历史数量
+                                EventBus.getDefault().post(BrowsedHistoryManagerService.BROWSED_HISTORY_HAS_CHANGED);
+                            }
                         } else {
                             removeSuccessLiveData.setValue(new IsSuccessfulResponse(PublicRetrofit.getErrorMsg()));
                         }

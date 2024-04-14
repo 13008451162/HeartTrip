@@ -11,12 +11,12 @@ import androidx.lifecycle.MutableLiveData;
  * @about: TODO 记录登陆数据的类 包含登录状态、登录的账户Token
  */
 public class LoginStatusData {
-    private static MutableLiveData<Boolean> loginStatus = new MutableLiveData<>(true);
+    private static MutableLiveData<Boolean> loginStatus = new MutableLiveData<>();
     //true表示当前账号已登录
     //false表示当前账号未登录
     //默认状态为true 已登陆
 
-    private static MutableLiveData<String> userToken = new MutableLiveData<>("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDM2NTQ0MTMsImlhdCI6MTcxMjExODQxMywiand0VXNlcklkIjozfQ.gB488cwEucn2uOOwiil58SDTeF-8uOnQ55jCISEE7Ew");
+    private static MutableLiveData<String> userToken = new MutableLiveData<>();
     //表示用户登陆后获取的Token
     //记得在登陆成功后将Token赋值给他
     //在退出登陆后恢复默认值null

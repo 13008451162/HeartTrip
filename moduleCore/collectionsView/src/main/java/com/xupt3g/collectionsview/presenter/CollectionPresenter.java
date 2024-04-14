@@ -19,6 +19,8 @@ import com.xupt3g.collectionsview.view.CollectionsGuessManagerImpl;
 import com.xupt3g.mylibrary1.PublicRetrofit;
 import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
+import java.util.ArrayList;
+
 /**
  * 项目名: HeartTrip
  * 文件名: com.xupt3g.collectionsview.presenter.ThePresenter
@@ -58,6 +60,8 @@ public class CollectionPresenter {
             public void onChanged(CollectionsListResponse response) {
                 if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
                     collectionsGuessManager.showCollectionsList(response.getList());
+                } else {
+                    collectionsGuessManager.showCollectionsList(new ArrayList<>());
                 }
             }
         });

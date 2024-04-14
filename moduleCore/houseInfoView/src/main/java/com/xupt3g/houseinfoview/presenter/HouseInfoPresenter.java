@@ -1,5 +1,7 @@
 package com.xupt3g.houseinfoview.presenter;
 
+import android.util.Log;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -73,7 +75,7 @@ public class HouseInfoPresenter {
         //需要登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             //如果未登录
-            view.collectFailed();
+            view.collectFailed(true);
         } else {
             //如果已登录
             if (collectionManagerService != null) {
@@ -85,7 +87,7 @@ public class HouseInfoPresenter {
                         if (aBoolean) {
                             view.collectSucceed();
                         } else {
-                            view.collectFailed();
+                            view.collectFailed(false);
                         }
                     }
                 });
@@ -104,7 +106,7 @@ public class HouseInfoPresenter {
         //需要登录
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             //如果未登录
-            view.collectFailed();
+            view.collectFailed(true);
         } else {
             //如果已登录
             if (collectionManagerService != null) {
@@ -116,7 +118,7 @@ public class HouseInfoPresenter {
                         if (aBoolean) {
                             view.collectSucceed();
                         } else {
-                            view.collectFailed();
+                            view.collectFailed(false);
                         }
                     }
                 });

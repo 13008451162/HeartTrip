@@ -75,12 +75,19 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
     @Override
     public MutableLiveData<Boolean> addCollection(LifecycleOwner owner, int houseId) {
         MutableLiveData<CollectionDataResponse> collectionLiveData = addCollectionToList(houseId);
-        MutableLiveData<Boolean> resultLivaData = new MutableLiveData<>(false);
+        MutableLiveData<Boolean> resultLivaData = new MutableLiveData<>();
         collectionLiveData.observe(owner, new Observer<CollectionDataResponse>() {
             @Override
             public void onChanged(CollectionDataResponse response) {
                 if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg()) && response.getCollection() != null) {
-                    resultLivaData.setValue(true);
+                    Log.d("collectIsLogged", "addToCollectionList: resultLivaData.setValue(true);");
+                    if (response.getCollection() != null) {
+                        resultLivaData.setValue(true);
+                    } else {
+                        resultLivaData.setValue(false);
+                    }
+                } else {
+                    resultLivaData.setValue(false);
                 }
             }
         });
@@ -99,13 +106,11 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
             collectionLiveData.setValue(new CollectionDataResponse(PublicRetrofit.getErrorMsg()));
             return collectionLiveData;
         }
-//        Log.d("addTAG", "addCollectionToList: " + LoginStatusData.getUserToken().getValue() + "    " + houseId);
         collectionsListService.addCollection(LoginStatusData.getUserToken().getValue(), new AddCollectionRequestBody(houseId))
                 .enqueue(new Callback<CollectionDataResponse>() {
                     @Override
                     public void onResponse(Call<CollectionDataResponse> call, Response<CollectionDataResponse> response) {
                         CollectionDataResponse body = response.body();
-                        Log.d("addTAG", "onResponse: " + body);
                         if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
                             collectionLiveData.setValue(body);
                             if (body.getCollection() != null && !BuildConfig.isModule) {
@@ -135,7 +140,7 @@ public class CollectionManagerImpl implements CollectionManagerService, Collecti
     @Override
     public MutableLiveData<Boolean> removeCollection(LifecycleOwner owner, int houseId) {
         MutableLiveData<IsSuccessfulResponse> removeSuccessLiveData = removeCollectionFromList(houseId);
-        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>(false);
+        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
         removeSuccessLiveData.observe(owner, new Observer<IsSuccessfulResponse>() {
             @Override
             public void onChanged(IsSuccessfulResponse response) {

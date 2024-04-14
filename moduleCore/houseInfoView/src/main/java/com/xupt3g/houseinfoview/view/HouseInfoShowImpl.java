@@ -24,7 +24,7 @@ public interface HouseInfoShowImpl {
     /**
      * TODO 民宿收藏失败
      */
-    void collectFailed();
+    void collectFailed(boolean notlogged);
 
     /**
      * TODO 民宿收藏成功

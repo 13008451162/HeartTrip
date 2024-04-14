@@ -3,6 +3,7 @@ package com.xupt3g.browsinghistoryview.model.retrofit;
 import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
@@ -33,18 +34,16 @@ public interface BrowsingHistoryManageService {
      * @return 返回浏览历史集合是否清空成功的Response
      *
      */
-    @POST("/travel/v1/broswinghistory/clearHistoryList")
-    Call<IsSuccessfulResponse> clearBrowsingHistoryList(@Header("UserToken") String userToken);
+    @POST("/usercenter/v1/user/clearHistory")
+    Call<IsSuccessfulResponse> clearBrowsingHistoryList(@Header("Authorization") String userToken);
 
     /**
      *
      * @param userToken 用户登录时获取的Token
-     * @param houseId 要删除的子项民宿ID
      * @return 返回是否删除成功的Response
      *
      */
-    @FormUrlEncoded
-    @POST("/travel/v1/broswinghistory/removeHistory")
-    Call<IsSuccessfulResponse> removeHistoryFromList(@Header("UserToken") String userToken,@Field("HouseId") int houseId);
+    @POST("/usercenter/v1/user/removeHistory")
+    Call<IsSuccessfulResponse> removeHistoryFromList(@Header("Authorization") String userToken, @Body HistoryRequestBody body);
 
 }
