@@ -27,6 +27,10 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+
+        buildFeatures {
+            viewBinding true
+        }
     }
 
     buildTypes {
@@ -60,7 +64,7 @@ dependencies {
     implementation project(':moduleBase:libBase')//依赖基础组件
     annotationProcessor cfg.libARouterCompiler
 
-
+    implementation 'com.github.xuexiangjys:XUI:1.2.1'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

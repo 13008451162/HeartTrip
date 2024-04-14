@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.xuexiang.xui.widget.picker.XRangeSlider
+        android:id="@+id/xrs_bubble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/constellation"
+        app:layout_constraintStart_toStartOf="@+id/constellation"
+        app:layout_constraintTop_toTopOf="parent"
+        app:xrs_insideRangeLineColor="#0bd97f"
+        app:xrs_insideRangeLineStrokeWidth="5dp"
+        app:xrs_isShowBubble="true"
+        app:xrs_max="1000"
+        app:xrs_min="0"
+        app:xrs_numberTextColor="#ffffff"
+        app:xrs_numberTextSize="15sp"
+        app:xrs_outsideRangeLineColor="#f0f0f0"
+        app:xrs_outsideRangeLineStrokeWidth="5dp"
+        app:xrs_rulerInterval="twenty" />
+
+
+    <GridView
+        android:id="@+id/constellation"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:horizontalSpacing="3dp"
+        android:numColumns="3"
+        android:verticalSpacing="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xrs_bubble" />
+
+    <Button
+        android:id="@+id/btn_ok"
+        style="@style/Button.Primary.wrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"
+        android:paddingBottom="15dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="确定"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constellation" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
