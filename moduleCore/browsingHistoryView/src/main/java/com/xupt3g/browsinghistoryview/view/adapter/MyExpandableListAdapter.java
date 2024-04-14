@@ -31,6 +31,8 @@ import com.xupt3g.browsinghistoryview.model.retrofit.HistoryData;
 import com.xupt3g.browsinghistoryview.presenter.BrowsingHistoryPresenter;
 import com.xupt3g.browsinghistoryview.view.BrowsingHistoryUiImpl;
 import com.xupt3g.browsinghistoryview.view.entity.StickyItem;
+import com.xupt3g.mylibrary1.PublicRetrofit;
+import com.xupt3g.mylibrary1.response.IsSuccessfulResponse;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -104,7 +106,7 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         StickyItem item = mList.get(position);
         if (item == null) {
             return;
@@ -170,7 +172,7 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
             });
 
             holder.expandCollectButton.setOnClickListener(view -> {
-                MutableLiveData<Boolean> booleanLiveData = presenter.passRequestOfAddCollection(item.getHistoryData().getId());
+                MutableLiveData<Boolean> booleanLiveData = presenter.passRequestOfAddCollection(item.getHistoryData().getId(), owner);
                 booleanLiveData.observe(owner, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
@@ -184,15 +186,22 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
             });
 
             holder.expandDeleteButton.setOnClickListener(view -> {
-                boolean b = presenter.passRequestOfRemoveHistory(item.getHistoryData().getId());
-                if (b) {
-                    boolean b1 = mDeleteHistoryItemListener.deleteHistoryItem(position);
-                    if (b1) {
-                        ToastUtils.toast("删除成功");
+                MutableLiveData<IsSuccessfulResponse> resultLiveData = presenter.passRequestOfRemoveHistory(item.getHistoryData().getId());
+                resultLiveData.observe(owner, new Observer<IsSuccessfulResponse>() {
+                    @Override
+                    public void onChanged(IsSuccessfulResponse response) {
+                        if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+                            if (response.isSuccess()) {
+
+                                    ToastUtils.toast("删除成功");
+                            } else {
+                                XToastUtils.error("删除失败");
+                            }
+                        } else {
+                            XToastUtils.error("删除失败");
+                        }
                     }
-                } else {
-                    XToastUtils.error("删除失败");
-                }
+                });
             });
             if (item.getHistoryData().getRowState() == 0) {
                 //已下架
@@ -266,19 +275,4 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
 
         }
     }
-
-    public interface DeleteHistoryItemListener {
-        /**
-         * @param position 该历史子项在dataList中的下标
-         * @return 是否删除成功
-         */
-        boolean deleteHistoryItem(int position);
-    }
-
-    private DeleteHistoryItemListener mDeleteHistoryItemListener;
-
-    public void setDeleteHistoryItemListener(DeleteHistoryItemListener deleteHistoryItemListener) {
-        this.mDeleteHistoryItemListener = deleteHistoryItemListener;
-    }
-
 }

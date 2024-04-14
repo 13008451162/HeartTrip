@@ -158,8 +158,9 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
                     @Override
                     public void onChanged(CollectionDataResponse response) {
                         if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
+//                            Log.d("eeyye", "onChanged: " + response + "\n mCollectManager" + mCollectManager);
                             //收藏民宿操作
-                            mCollectManager.collectSuccessfulCallback(position, response.getCollection());
+//                            mCollectManager.collectSuccessfulCallback(position, response.getCollection());
                             //UI展示
                             holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_light);
                             goodView.setText("收藏成功")
@@ -186,7 +187,7 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
                             ToastUtils.toast("移除收藏失败！");
                         } else {
                             //移除收藏操作
-                            mCollectManager.removeSuccessfulCallback(list.get(position).getId());
+//                            mCollectManager.removeSuccessfulCallback(list.get(position).getId());
                             //UI展示
                             holder.collectionButton.setImageResource(R.drawable.collection_icon_collect_dark);
                             ToastUtils.toast("移除收藏成功！");
@@ -216,23 +217,23 @@ public class RecommendationsListAdapter extends RecyclerView.Adapter<Recommendat
      *      当按钮点亮时会先进行添加收藏的网络请求，如果网络请求有效，调用该回调，将新的CollectionsData添加到收藏列表中并刷新显示
      *      当按钮再次被点击熄灭时表示移除收藏，如果移除的网络请求有效，调用该回调，会将改民宿的ID传给CollectionPage，遍历查找相应的民宿，刷新列表并刷新显示
      */
-    public interface CollectionManageButtonClickListener {
-        /**
-         * @param position 子项下标、位置
-         * TODO 收藏成功，将新的CollectionsData添加到收藏集合并更新显示
-         */
-        void collectSuccessfulCallback(int position, CollectionData collectionsData);
-
-        /**
-         * @param houseId 民宿ID
-         * TODO 移除收藏成功，猜你喜欢页面成功移除，拿着ID到收藏列表中遍历查找，找到了将它移除并更新显示
-         */
-        void removeSuccessfulCallback(int houseId);
-    }
-
-    private CollectionManageButtonClickListener mCollectManager;
-
-    public void setCollectManager(CollectionManageButtonClickListener collectManager) {
-        this.mCollectManager = collectManager;
-    }
+//    public interface CollectionManageButtonClickListener {
+//        /**
+//         * @param position 子项下标、位置
+//         * TODO 收藏成功，将新的CollectionsData添加到收藏集合并更新显示
+//         */
+//        void collectSuccessfulCallback(int position, CollectionData collectionsData);
+//
+//        /**
+//         * @param houseId 民宿ID
+//         * TODO 移除收藏成功，猜你喜欢页面成功移除，拿着ID到收藏列表中遍历查找，找到了将它移除并更新显示
+//         */
+//        void removeSuccessfulCallback(int houseId);
+//    }
+//
+//    private CollectionManageButtonClickListener mCollectManager;
+//
+//    public void setCollectManager(CollectionManageButtonClickListener collectManager) {
+//        this.mCollectManager = collectManager;
+//    }
 }

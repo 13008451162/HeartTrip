@@ -4,8 +4,10 @@ import static com.xuexiang.xutil.tip.ToastUtils.toast;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.media.metrics.Event;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,8 @@ import com.xupt3g.mylibrary1.LoginStatusData;
 
 import com.xupt3g.mylibrary1.implservice.BrowsedHistoryManagerService;
 import com.xupt3g.mylibrary1.implservice.CollectionManagerService;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,37 +138,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void recoverLoginStatus() {
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(
-                2,
-                2,
-                60,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(),
-                Executors.defaultThreadFactory(),
-                new ThreadPoolExecutor.AbortPolicy()
-        );
+        SharedPreferences sp = getSharedPreferences("loggedInState", MODE_PRIVATE);
 
-        pool.submit(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sp = getSharedPreferences("loggedInState", MODE_PRIVATE);
-
-                //登陆状态 默认未登录
-                boolean isLoggedIn = sp.getBoolean("isLoggedIn", false);
-                String userToken = sp.getString("userToken", "");
-                if (isLoggedIn) {
-                    //登录密钥
-                    //读取到LiveData
-                    LoginStatusData.getLoginStatus().postValue(true);
-                    LoginStatusData.getUserToken().postValue(userToken);
-                } else {
-                    LoginStatusData.getLoginStatus().postValue(false);
-                    LoginStatusData.getUserToken().postValue("");
-                }
-            }
-        });
-
-        pool.shutdown();
+        //登陆状态 默认未登录
+        boolean isLoggedIn = sp.getBoolean("isLoggedIn", false);
+        String userToken = sp.getString("userToken", "");
+        Log.d("AccountInfoResponse", "run: isLoggedIn " + isLoggedIn + " userToken " + userToken);
+        if (isLoggedIn) {
+            //登录密钥
+            //读取到LiveData
+            LoginStatusData.getLoginStatus().setValue(true);
+            LoginStatusData.getUserToken().setValue(userToken);
+        } else {
+            LoginStatusData.getLoginStatus().setValue(false);
+            LoginStatusData.getUserToken().setValue("");
+        }
+//        EventBus.getDefault().post("UpdateInfoAndData");
     }
 
 }

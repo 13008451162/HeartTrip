@@ -458,21 +458,27 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void collectFailed() {
-        new MaterialDialog.Builder(requireContext())
-                .positiveText("跳转")
-                .negativeText("取消")
-                .title("尚未登陆")
-                .content("您当前尚未登陆，是否为您跳转去登录？")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        if (!BuildConfig.isModule) {
-                            ARouter.getInstance().build("/loginregistrationView/LoginActivity").navigation();
+    public void collectFailed(boolean notLogged) {
+        if (notLogged) {
+            new MaterialDialog.Builder(requireContext())
+                    .positiveText("跳转")
+                    .negativeText("取消")
+                    .title("尚未登陆")
+                    .content("您当前尚未登陆，是否为您跳转去登录？")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                            if (!BuildConfig.isModule) {
+                                ARouter.getInstance().build("/loginregistrationView/LoginActivity").navigation();
+                            }
                         }
-                    }
-                }).show();
+                    }).show();
+        } else {
+            //收藏失败 并非未登录
+            XToastUtils.error("收藏失败！");
+        }
+
     }
 
     @Override
@@ -547,9 +553,12 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
     private void initView3() {
         //点击跳转至评论区详情页面
         gotoAllCommentsInThirdView.setOnClickListener(view -> {
+
             if (!BuildConfig.isModule) {
-                ARouter.getInstance().build("/commentsview/CommentsActivity")
-                        .withInt("HouseId", houseId).navigation();
+                Bundle extra = new Bundle();
+                extra.putInt("HouseId", houseId);
+                ARouter.getInstance().build("/commentsView/CommentsActivity")
+                        .withBundle("ExtraBundle", extra).navigation();
             } else {
                 XToastUtils.error("当前处于组件开发模式下，不可跳转！");
             }
@@ -572,7 +581,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         if (!BuildConfig.isModule) {
             //集成模式下可获取
             topCommentGetService = (TopCommentGetService)
-                    ARouter.getInstance().build("/commentsview/CommentsRequest").navigation();
+                    ARouter.getInstance().build("/commentsView/CommentsRequest").navigation();
             MutableLiveData<TopCommentData> topCommentInfoLiveData
                     = topCommentGetService.getTopCommentInfo(this, houseId);
             topCommentInfoLiveData.observe(this, new Observer<TopCommentData>() {
@@ -707,9 +716,11 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         });
         scoreCardViewInFirstView.setOnClickListener(view -> {
             if (!BuildConfig.isModule) {
-                //集成模式下
-                ARouter.getInstance().build("/commentsview/CommentsActivity")
-                        .withInt("HouseId", houseId);
+                Log.d("niowoecvownv", "initView1: " + houseId);
+                Bundle extra = new Bundle();
+                extra.putInt("HouseId", houseId);
+                    ARouter.getInstance().build("/commentsView/CommentsActivity")
+                            .withBundle("ExtraBundle", extra).navigation();
             }
         });
 
@@ -934,8 +945,10 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         } else if (view.getId() == R.id.houseInfo_comment_icon) {
             //写评论按钮点击监听
             if (!BuildConfig.isModule) {
-                ARouter.getInstance().build("/commentsview/CommentPostActivity")
-                        .withInt("HouseId", houseId).navigation();
+                Bundle bundle = new Bundle();
+                bundle.putInt("HouseId", houseId);
+                ARouter.getInstance().build("/commentsView/CommentPostActivity")
+                        .withBundle("bundle", bundle).navigation();
             } else {
                 XToastUtils.error("当前处于组件开发模式下，不能跳转！");
             }
@@ -1050,7 +1063,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
 
     /**
      * @param iconColorIsWhite 图标颜色是否为白色
-     *                                                                                                                                                                                                                                                                                                 TODO 根据ScrollView动态改变顶部图标的颜色和背景的颜色
+     *                                                                                                                                                                                                                                                                                                                         TODO 根据ScrollView动态改变顶部图标的颜色和背景的颜色
      */
     private void topViewColorChange(boolean iconColorIsWhite) {
         if (iconColorIsWhite) {

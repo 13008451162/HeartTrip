@@ -26,6 +26,8 @@ import com.xupt3g.personalmanagementview.model.retrofit.UserInfo;
 import com.xupt3g.personalmanagementview.view.AccountInfoModifyImpl;
 import com.xupt3g.personalmanagementview.view.AccountInfoShowImpl;
 
+import java.util.Objects;
+
 import okhttp3.MultipartBody;
 
 /**
@@ -68,7 +70,6 @@ public class AccountInfoPresenter {
         responseLiveData = model.getAccountInfoRequest();
         //从model层进行网络申请
         if (responseLiveData != null) {
-            ToastUtils.toast("response获取成功！！！！");
             view.showOnUi();
         }
     }

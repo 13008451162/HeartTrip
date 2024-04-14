@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -13,7 +14,7 @@ import com.xuexiang.xutil.tip.ToastUtils;
 import com.xupt3g.UiTools.UiTool;
 import com.xupt3g.commentsview.R;
 
-@Route(path = "/commentsview/CommentsActivity")
+@Route(path = "/commentsView/CommentsActivity")
 public class CommentsActivity extends AppCompatActivity {
 //    @Autowired(name = "HouseId")
     private int houseId;
@@ -23,10 +24,12 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comments);
         UiTool.setImmersionBar(this, true);
         //初始化-1
-        houseId = 1;
+        houseId = -1;
         if (!BuildConfig.isModule) {
             //集成模式下
-            ARouter.getInstance().inject(this);
+            Bundle extraBundle = getIntent().getBundleExtra("ExtraBundle");
+            houseId = extraBundle.getInt("HouseId");
+            Log.d("ewcwec", "onCreate: " + houseId);
         }
         if (houseId == -1) {
             ToastUtils.toast("houseId注入失败");

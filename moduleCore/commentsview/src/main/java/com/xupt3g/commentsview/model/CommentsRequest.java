@@ -34,7 +34,7 @@ import retrofit2.Response;
  * @data: 2024/3/23 12:44
  * @about: TODO Model进行网络申请的类
  */
-@Route(path = "/commentsview/CommentsRequest")
+@Route(path = "/commentsView/CommentsRequest")
 public class CommentsRequest implements CommentsModelImpl, TopCommentGetService {
     private CommentsService commentsService;
     private MutableLiveData<CommentsListResponse> commentsListLiveData;

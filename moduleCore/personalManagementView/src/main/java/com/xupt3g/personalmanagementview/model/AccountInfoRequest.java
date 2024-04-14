@@ -64,6 +64,7 @@ public class AccountInfoRequest implements AccountInfoImpl {
             public void onResponse(@NonNull Call<AccountInfoResponse> call, Response<AccountInfoResponse> response) {
                 AccountInfoResponse body = response.body();
                 if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
+                    Log.d("AccountInfoResponse", "onResponse: " + body);
                     accountInfoLiveData.setValue(body);
                 } else {
                     accountInfoLiveData.setValue(new AccountInfoResponse(PublicRetrofit.getErrorMsg()));

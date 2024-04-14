@@ -49,19 +49,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/personal_welcome_anim"
-                android:layout_width="160dp"
-                android:layout_height="120dp"
-                app:layout_constraintStart_toEndOf="@id/personal_avatar"
-                app:layout_constraintTop_toTopOf="@id/personal_avatar"
-                android:layout_marginTop="-65dp"
-                android:layout_marginStart="-65dp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_speed="0.75"
-                app:lottie_rawRes="@raw/personal_welcome" />
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/personal_avatar"
                 android:layout_width="80dp"

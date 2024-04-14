@@ -1,6 +1,11 @@
 package com.xupt3g.browsinghistoryview.model.retrofit;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 项目名: HeartTrip
@@ -10,10 +15,17 @@ import java.util.List;
  * @data: 2024/2/28 16:14
  * @about: TODO 浏览历史集合的Response
  */
+@NoArgsConstructor
+@Data
 public class BrowsingHistoryResponse {
-    private int code;
+
+
+    @SerializedName("code")
+    private Integer code;
+    @SerializedName("msg")
     private String msg;
-    private List<HistoryData> historyList;
+    @SerializedName("data")
+    private DataDTO data;
 
     public BrowsingHistoryResponse(String msg) {
         this.msg = msg;
@@ -28,7 +40,7 @@ public class BrowsingHistoryResponse {
     }
 
     public List<HistoryData> getHistoryDataList() {
-        return historyList;
+        return data.historyList;
     }
 
     @Override
@@ -36,7 +48,15 @@ public class BrowsingHistoryResponse {
         return "{" +
                 "\"code\":" + code +
                 ", \"msg\":\'" + msg + "\'" +
-                ", \"historyList\":" + historyList +
+                ", \"historyList\":" + data.historyList +
                 '}';
+    }
+
+    @NoArgsConstructor
+    @Data
+    public static class DataDTO {
+        @SerializedName("historyList")
+        private List<HistoryData> historyList;
+
     }
 }

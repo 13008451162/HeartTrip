@@ -1,6 +1,7 @@
 package com.xupt3g.personalmanagementview.view;
 
 import android.content.Intent;
+import android.media.metrics.Event;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +26,14 @@ import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xupt3g.mylibrary1.LoginStatusData;
 import com.xuexiang.xui.widget.button.RippleView;
+import com.xupt3g.mylibrary1.PublicRetrofit;
 import com.xupt3g.personalmanagementview.R;
 import com.xupt3g.personalmanagementview.model.retrofit.AccountInfoResponse;
 import com.xupt3g.personalmanagementview.presenter.AccountInfoPresenter;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -173,11 +177,17 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
         //observe观察者当数据第一次使用时（没有修改）也会被调用
         // 所以不需要初次登陆显示UI，再看数据改变更改UI
         //只需要保留observe观察
-        Log.d("createOne", "onCreateView: 创建了一个PMF");
 
         return mView;
     }
 
+//    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+//    public void updateDataAfterLogged(int tag) {
+//        Log.d("AccountInfoResponse", "updateDataAfterLogged: ");
+//        if (tag == 0) {
+//            presenter.accountInfoGet();
+//        }
+//    }
     private void registerEventBus() {
         EventBus.getDefault().register(this);
     }
@@ -185,6 +195,7 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("AccountInfoResponse", "onResume: " + EventBus.getDefault().isRegistered(this));
         if (presenter != null && !BuildConfig.isModule) {
             MutableLiveData<Integer> historyCount = presenter.getBrowsedHistoryManagerService().getBrowsedHistoryCount(this);
             historyCount.observe(this, new Observer<Integer>() {
@@ -299,7 +310,7 @@ public class PersonalManagementFragment extends Fragment implements AccountInfoS
         liveData.observe(getViewLifecycleOwner(), new Observer<AccountInfoResponse>() {
             @Override
             public void onChanged(AccountInfoResponse response) {
-                if (response != null && response.getCode() == 200 && "OK".equals(response.getMsg())) {
+                if (response != null && !response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
                     //显示用户信息
                     //头像及预览监听设置
                     Intent intent = new Intent(getContext(), UserAvatarPreviewActivity.class);

@@ -1,5 +1,7 @@
 package com.xupt3g.browsinghistoryview.presenter;
 
+import android.util.Log;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -54,10 +56,10 @@ public class BrowsingHistoryPresenter {
      * @return 是否成功
      * TODO 从View层向Model层传递添加收藏的请求
      */
-    public MutableLiveData<Boolean> passRequestOfAddCollection(int houseId) {
+    public MutableLiveData<Boolean> passRequestOfAddCollection(int houseId, LifecycleOwner owner) {
         if (!BuildConfig.isModule) {
             CollectionManagerService collectionManagerService = (CollectionManagerService) ARouter.getInstance().build("/collectionsView/CollectionManagerImpl").navigation();
-            return collectionManagerService.addCollection((LifecycleOwner) view, houseId);
+            return collectionManagerService.addCollection(owner, houseId);
         } else {
             ToastUtils.toast("非集成模式下不能添加！");
             return new MutableLiveData<>(false);
@@ -69,18 +71,9 @@ public class BrowsingHistoryPresenter {
      * @return 是否成功
      * TODO 从View层向Model层传递删除一项历史记录的请求
      */
-    public boolean passRequestOfRemoveHistory(int houseId) {
-        boolean[] result = new boolean[]{false};
-        MutableLiveData<IsSuccessfulResponse> removeSuccessLiveData = model.removeHistoryItem(houseId);
-        removeSuccessLiveData.observe((LifecycleOwner) view, new Observer<IsSuccessfulResponse>() {
-            @Override
-            public void onChanged(IsSuccessfulResponse response) {
-                if (!response.getMsg().equals(PublicRetrofit.getErrorMsg())) {
-                    result[0] = response.isSuccess();
-                }
-            }
-        });
-        return result[0];
+    public MutableLiveData<IsSuccessfulResponse>  passRequestOfRemoveHistory(int houseId) {
+        Log.d("remoteHistory", "passRequestOfRemoveHistory: " + houseId);
+        return model.removeHistoryItem(houseId);
     }
 
     /**

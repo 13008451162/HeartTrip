@@ -56,7 +56,7 @@ import top.zibin.luban.OnNewCompressListener;
  * @data: 2024/3/20 21:04
  * @about: TODO 评论发表页面
  */
-@Route(path = "/commentsview/CommentPostActivity")
+@Route(path = "/commentsView/CommentPostActivity")
 public class CommentPostActivity extends AppCompatActivity implements CommentPostImpl {
     /**
      * 民宿ID
@@ -111,7 +111,10 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
         UiTool.setImmersionBar(this, false);
         if (!BuildConfig.isModule) {
             //集成模式下
-            ARouter.getInstance().inject(this);
+            Bundle bundle = getIntent().getBundleExtra("bundle");
+            houseId = bundle.getInt("HouseId");
+            Log.d("ewcwec", "onCreate: " + houseId);
+
         }
 
         if (getIntent() != null) {
@@ -120,7 +123,6 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
                 houseId = id;
             }
         }
-        Log.d("TATAGGGGYTUG", "onCreate: " + houseId);
         instantiationView();
         //添加照片的按钮监听
         addMorePicture.setOnClickListener(view -> {
