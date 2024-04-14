@@ -34,7 +34,8 @@ public class LocationInfoTask implements LocationNetTask<SearchedLocationData> {
 
     public static LocationInfoTask getInstance() {
         if (INSTANCE == null) {
-            return new LocationInfoTask();
+            INSTANCE = new LocationInfoTask();
+            return INSTANCE;
         }
         return INSTANCE;
     }
