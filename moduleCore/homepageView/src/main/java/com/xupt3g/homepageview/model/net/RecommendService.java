@@ -1,11 +1,9 @@
 package com.xupt3g.homepageview.model.net;
 
-import android.database.Observable;
-
 import com.xupt3g.homepageview.model.HomestayListReq;
 import com.xupt3g.homepageview.model.RecommendHomeData;
 
-import retrofit2.Response;
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -21,9 +19,10 @@ import retrofit2.http.POST;
 public interface RecommendService {
     /**
      * 房屋推荐信息查询
+     *
      * @param homestayListReq
      * @return {@link Observable}<{@link RecommendHomeData}>
      */
     @POST("/travel/v1/homestay/homestayList")
-    io.reactivex.rxjava3.core.Observable<RecommendHomeData> getHomeData(@Body HomestayListReq homestayListReq);
+    Observable<RecommendHomeData> getHomeData(@Body HomestayListReq homestayListReq);
 }

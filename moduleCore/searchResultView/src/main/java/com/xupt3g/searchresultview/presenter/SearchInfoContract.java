@@ -4,6 +4,10 @@ import android.database.Observable;
 
 import com.xupt3g.searchresultview.View.BaseView;
 import com.xupt3g.searchresultview.model.CountyData;
+import com.xupt3g.searchresultview.model.HousingData;
+import com.xupt3g.searchresultview.model.net.KeyWordReq;
+
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 /**
  * 项目名: HeartTrip
@@ -31,9 +35,18 @@ public interface SearchInfoContract {
 
         /**
          * 设置城市的下级行政区
+         *
          * @param city
          */
         void setDropDownMenu(String city);
+    }
+
+    interface houseInfoPresenter<T> extends BasePresent {
+
+        io.reactivex.rxjava3.core.Observable<T> getHousedata(KeyWordReq keyWordReq);
+
+
+        void setHouseAdapter(io.reactivex.rxjava3.core.Observable<CharSequence> editObservable);
     }
 
     /**
@@ -45,6 +58,13 @@ public interface SearchInfoContract {
         /**
          * 初始化下拉选项试图
          */
-        void initDropDownMenu(CountyData countyData);
+        void initDropDownMenu(CountyData.DistrictsDTO districtsDTO);
+
+        /**
+         * 更新搜索内容
+         *
+         * @param housingData
+         */
+        void sethouseView(HousingData housingData);
     }
 }

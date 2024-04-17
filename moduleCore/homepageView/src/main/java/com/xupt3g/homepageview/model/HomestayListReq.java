@@ -13,11 +13,11 @@ import lombok.Data;
  * @about: TODO
  */
 
-@Data
+//@Data
 public class HomestayListReq {
-    @SerializedName("page")
+//    @SerializedName("page")
     private int page;
-    @SerializedName("pageSize")
+//    @SerializedName("pageSize")
     private int pageSize;
 
     public int getPage() {

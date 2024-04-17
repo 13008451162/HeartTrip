@@ -29,9 +29,9 @@ public class CountyAdapter extends RecyclerView.Adapter<CountyAdapter.ViewHolder
 
     private PublishSubject<TextView> publishSubject;
 
-    private ArrayList<CountyData.DistrictsDTO.Districts> mList;
+    private ArrayList<CountyData.DistrictsDTO> mList;
 
-    public CountyAdapter(@NonNull ArrayList<CountyData.DistrictsDTO.Districts> mList) {
+    public CountyAdapter(@NonNull ArrayList<CountyData.DistrictsDTO> mList) {
         this.mList = mList;
         publishSubject = PublishSubject.create();
     }
@@ -45,7 +45,7 @@ public class CountyAdapter extends RecyclerView.Adapter<CountyAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CountyData.DistrictsDTO.Districts countyData = mList.get(position);
+        CountyData.DistrictsDTO countyData = mList.get(position);
         holder.textView.setText(countyData.getName());
         holder.itemView.setOnClickListener(v -> publishSubject.onNext(holder.textView));
     }

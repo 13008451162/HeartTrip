@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CountyData {
-
     @SerializedName("status")
     private Integer status;
     @SerializedName("data_version")
@@ -27,27 +26,23 @@ public class CountyData {
     @SerializedName("result_size")
     private Integer resultSize;
     @SerializedName("districts")
-    private DistrictsDTO districts;
+    private List<DistrictsDTO> districts;
 
     @NoArgsConstructor
     @Data
     public static class DistrictsDTO {
-
+        @SerializedName("code")
+        private String code;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("level")
+        private Integer level;
         @SerializedName("districts")
-        private List<Districts>  districts;
-
-
-        public List<Districts> getDistricts() {
-            return districts;
-        }
-
-        public void setDistricts(List<Districts> districts) {
-            this.districts = districts;
-        }
+        private List<SubDistrictsDTO> subDistricts;
 
         @NoArgsConstructor
         @Data
-        public static class Districts {
+        public static class SubDistrictsDTO {
             @SerializedName("code")
             private String code;
             @SerializedName("name")
@@ -56,6 +51,16 @@ public class CountyData {
             private Integer level;
             @SerializedName("districts")
             private List<?> districts;
+
+            @Override
+            public String toString() {
+                return "SubDistrictsDTO{" +
+                        "code='" + code + '\'' +
+                        ", name='" + name + '\'' +
+                        ", level=" + level +
+                        ", districts=" + districts +
+                        '}';
+            }
 
             public String getCode() {
                 return code;
@@ -88,28 +93,49 @@ public class CountyData {
             public void setDistricts(List<?> districts) {
                 this.districts = districts;
             }
-
-            @Override
-            public String toString() {
-                return "DistrictsDTO{" +
-                        "code='" + code + '\'' +
-                        ", name='" + name + '\'' +
-                        ", level=" + level +
-                        ", districts=" + districts +
-                        '}';
-            }
         }
 
-    }
+        public String getCode() {
+            return code;
+        }
 
-    @Override
-    public String toString() {
-        return "CountyData{" +
-                "status=" + status +
-                ", dataVersion='" + dataVersion + '\'' +
-                ", resultSize=" + resultSize +
-                ", districts=" + districts +
-                '}';
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getLevel() {
+            return level;
+        }
+
+        public void setLevel(Integer level) {
+            this.level = level;
+        }
+
+        public List<SubDistrictsDTO> getSubDistricts() {
+            return subDistricts;
+        }
+
+        public void setSubDistricts(List<SubDistrictsDTO> subDistricts) {
+            this.subDistricts = subDistricts;
+        }
+
+        @Override
+        public String toString() {
+            return "DistrictsDTO{" +
+                    "code='" + code + '\'' +
+                    ", name='" + name + '\'' +
+                    ", level=" + level +
+                    ", subDistricts=" + subDistricts +
+                    '}';
+        }
     }
 
     public Integer getStatus() {
@@ -136,11 +162,21 @@ public class CountyData {
         this.resultSize = resultSize;
     }
 
-    public DistrictsDTO getDistricts() {
+    public List<DistrictsDTO> getDistricts() {
         return districts;
     }
 
-    public void setDistricts(DistrictsDTO districts) {
+    public void setDistricts(List<DistrictsDTO> districts) {
         this.districts = districts;
+    }
+
+    @Override
+    public String toString() {
+        return "CountyData{" +
+                "status=" + status +
+                ", dataVersion='" + dataVersion + '\'' +
+                ", resultSize=" + resultSize +
+                ", districts=" + districts +
+                '}';
     }
 }

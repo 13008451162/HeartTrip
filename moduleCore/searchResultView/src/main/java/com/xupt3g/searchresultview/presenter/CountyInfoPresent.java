@@ -58,15 +58,17 @@ public class CountyInfoPresent implements SearchInfoContract.CountyInfoPresenter
         subscribe(getCountyData(city)
                 .onErrorResumeNext(throwable -> {
                     CountyData countyData = new CountyData();
-                    CountyData.DistrictsDTO.Districts districtsDTO = new CountyData.DistrictsDTO.Districts();
-                    districtsDTO.setName("位置信息");
-                    countyData.getDistricts().getDistricts().add(districtsDTO);
+                    CountyData.DistrictsDTO districtsDTO = new CountyData.DistrictsDTO();
+                    CountyData.DistrictsDTO.SubDistrictsDTO subDistrictsDTO = new CountyData.DistrictsDTO.SubDistrictsDTO();
+                    subDistrictsDTO.setName("位置信息");
+                    districtsDTO.getSubDistricts().add(subDistrictsDTO);
+                    countyData.getDistricts().add(districtsDTO);
                     return Observable.just(countyData);
                 })
                 .doOnNext(countyData -> {
                     Log.e("TAG", "setDropDownMenu: "+countyData);
                 })
-                .subscribe(data -> searchView.initDropDownMenu(data),
+                .subscribe(data -> searchView.initDropDownMenu(data.getDistricts().get(0)),
                         error -> {
                             throw new RuntimeException("加载城市下级行政区出现异常");
                         }));
