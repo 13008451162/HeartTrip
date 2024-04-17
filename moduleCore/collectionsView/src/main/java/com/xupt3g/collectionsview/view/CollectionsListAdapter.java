@@ -53,7 +53,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
         //测试数据 随机封面
         holder.houseCover.setImageResource(imageResources[i]);
         //测试数据 随机评分
-        holder.ratingBar.setRating((float) random.nextInt(5));
+        holder.ratingBar.setRating(5);
 
         //设置真实数据
         if (collectionsData.getTitle() != null && !"".equals(collectionsData.getTitle())) {
@@ -83,7 +83,8 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
             //折后价
             holder.priceAfter.setText(collectionsData.getPriceAfter() + "");
         }
-
+        //tem
+        holder.ratingBar.setRating(5);
         //中间横线（删除线）
         holder.priceBefore.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
         // 抗锯齿

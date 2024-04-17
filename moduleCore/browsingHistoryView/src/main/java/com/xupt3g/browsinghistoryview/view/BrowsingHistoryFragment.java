@@ -275,8 +275,7 @@ public class BrowsingHistoryFragment extends Fragment implements BrowsingHistory
             //根据HistoryData的browsingTime进行分组
             HistoryData historyData = historyDataList.get(i);
 
-
-            long diffInDays = TimeUnit.DAYS.convert(System.currentTimeMillis() - historyData.getBrowsingTime(), TimeUnit.MILLISECONDS);
+            long diffInDays = TimeUnit.DAYS.convert(System.currentTimeMillis() - historyData.getBrowsingTime() * 1000, TimeUnit.MILLISECONDS);
 
             if (diffInDays < 0) {
                 //有错

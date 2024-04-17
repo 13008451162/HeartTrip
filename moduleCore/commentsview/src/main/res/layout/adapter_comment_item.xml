@@ -50,7 +50,7 @@
 
     <TextView
         android:id="@+id/comment_item_content"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ellipsize="end"
@@ -59,6 +59,8 @@
         android:textColor="@color/black"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="@id/comment_item_user_score"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         app:layout_constraintTop_toBottomOf="@id/comment_item_user_score" />
 
     <TextView

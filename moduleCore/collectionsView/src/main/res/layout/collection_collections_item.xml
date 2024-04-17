@@ -72,7 +72,7 @@
         android:layout_marginEnd="10sp"
         android:ellipsize="end"
         android:lines="1"
-        android:text="简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介"
+        android:text="近地铁-有投影-有洗衣机-可开发票-免费接送机-管家服务-智能门锁-冷暖空调-行李寄存-全天热水-有电梯-立即确认"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/item_house_cover"

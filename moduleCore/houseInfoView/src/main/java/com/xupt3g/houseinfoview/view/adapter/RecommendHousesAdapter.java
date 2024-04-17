@@ -62,6 +62,33 @@ public class RecommendHousesAdapter extends RecyclerView.Adapter<RecommendHouses
         Random random = new Random();
         int i = random.nextInt(3);
         Glide.with(holder.itemView.getContext()).load(imageResources[i]).into(holder.houseCover);
+        //设置真实数据
+        if (recommendHouse.getTitle() != null && !"".equals(recommendHouse.getTitle())) {
+            //标题
+            holder.houseTitle.setText(recommendHouse.getTitle());
+        }
+        if (recommendHouse.getCover() != null && !"".equals(recommendHouse.getCover())) {
+            //封面
+            Glide.with(holder.itemView.getContext()).load(recommendHouse.getCover())
+                    .into(holder.houseCover);
+        }
+        if (recommendHouse.getIntro() != null && !"".equals(recommendHouse.getIntro())) {
+            //简介
+            holder.houseIntro.setText(recommendHouse.getIntro());
+        }
+        if (recommendHouse.getLocation() != null && !"".equals(recommendHouse.getLocation())) {
+            //定位位置
+            holder.houseFrom.setText(recommendHouse.getLocation());
+        }
+        if (recommendHouse.getPriceBefore() != 0) {
+            //折前价
+            holder.housePriceBefore.setText(recommendHouse.getPriceBefore() + "");
+        }
+        if (recommendHouse.getPriceAfter() != 0) {
+            //折后价
+            holder.housePriceAfter.setText(recommendHouse.getPriceAfter() + "");
+        }
+
         //中间横线（删除线）
         holder.housePriceBefore.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         // 抗锯齿

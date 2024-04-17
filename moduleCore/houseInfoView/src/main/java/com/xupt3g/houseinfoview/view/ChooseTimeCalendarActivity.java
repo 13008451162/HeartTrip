@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
 import com.xuexiang.xui.utils.XToastUtils;
@@ -17,7 +18,7 @@ import com.xupt3g.UiTools.UiTool;
 import com.xupt3g.houseinfoview.R;
 
 import java.util.List;
-
+@Route(path = "/houseInfoView/ChooseTimeCalendarActivity")
 public class ChooseTimeCalendarActivity extends AppCompatActivity implements
         CalendarView.OnCalendarInterceptListener,
         CalendarView.OnCalendarRangeSelectListener,

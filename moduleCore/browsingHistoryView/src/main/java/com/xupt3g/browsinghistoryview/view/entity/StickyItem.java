@@ -48,4 +48,13 @@ public class StickyItem {
     public HistoryData getHistoryData() {
         return historyData;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"mIsHeadSticky\":" + mIsHeadSticky +
+                ", \"mHeadTitle\":\'" + mHeadTitle + "\'" +
+                ", \"historyData\":" + historyData +
+                '}';
+    }
 }

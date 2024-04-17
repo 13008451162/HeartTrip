@@ -118,6 +118,8 @@ public class CommentsShowFragment extends Fragment implements CommentsShowImpl {
 
         presenter = new CommentsPresenter(this, getContext());
         ProgressAnim.showProgress(getContext());
+        Log.d("TTAYVCCA", "CommentsPresenter: " + houseId);
+
         presenter.commentsDataShowOnUi(houseId, currPage, pageSize);
         return mView;
     }
@@ -190,10 +192,8 @@ public class CommentsShowFragment extends Fragment implements CommentsShowImpl {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (currComments != null) {
-            currComments.clear();
-            currPage = 1;
-        }
+        currComments = null;
+        currPage = 1;
         ProgressAnim.showProgress(getContext());
         presenter.commentsDataShowOnUi(houseId, currPage, pageSize);
     }

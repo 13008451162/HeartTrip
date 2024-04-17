@@ -2,8 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/personal_background_1">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/personal_layout_background_5"
+        />
 
     <ImageView
         android:id="@+id/personal_location"
@@ -69,7 +79,7 @@
                 android:fontFamily="@font/personal_font_1"
                 android:gravity="center"
                 android:text="用户名"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
 
@@ -83,7 +93,7 @@
                 android:fontFamily="@font/personal_font_1"
                 android:gravity="center"
                 android:text="你好！"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/personal_username" />
@@ -427,8 +437,8 @@
         android:id="@+id/blur_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/personal_img"
-        android:visibility="gone">
+        android:background="@drawable/personal_layout_background_5"
+        android:visibility="visible">
 
         <com.xuexiang.xui.widget.button.RippleView
             android:id="@+id/personal_ripple_login"

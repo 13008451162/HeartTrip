@@ -77,7 +77,6 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
                         } else {
                             historyListLiveData.setValue(new BrowsingHistoryResponse(PublicRetrofit.getErrorMsg()));
                         }
-                        Log.d("TAG321", "onResponse: " + response.body());
                     }
 
                     @Override
@@ -133,7 +132,7 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
      */
     @Override
     public MutableLiveData<IsSuccessfulResponse> removeHistoryItem(int id) {
-        Log.d("remoteHistory", "removeHistoryItem: " + id);
+        Log.d("lastBrowsedTime", "removeHistoryItem: " + id);
         removeSuccessLiveData = new MutableLiveData<>();
         if (Boolean.FALSE.equals(LoginStatusData.getLoginStatus().getValue())) {
             ToastUtils.toast("尚未登录");
@@ -145,7 +144,7 @@ public class BrowsingHistoryRequest implements BrowsingHistoryManageImpl, Browse
                     @Override
                     public void onResponse(Call<IsSuccessfulResponse> call, Response<IsSuccessfulResponse> response) {
                         IsSuccessfulResponse body = response.body();
-                        Log.d("remoteHistory", "removeHistoryItem: " + response.body());
+                        Log.d("lastBrowsedTime", "removeHistoryItem: " + response.body());
 
                         if (body != null && body.getCode() == 200 && "OK".equals(body.getMsg())) {
                             removeSuccessLiveData.setValue(body);

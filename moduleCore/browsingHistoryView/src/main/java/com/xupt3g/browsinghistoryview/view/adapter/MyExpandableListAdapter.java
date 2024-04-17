@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.example.libbase.BuildConfig;
 import com.xuexiang.xui.adapter.recyclerview.sticky.FullSpanUtils;
 import com.xuexiang.xui.utils.XToastUtils;
@@ -105,6 +106,7 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         StickyItem item = mList.get(position);
@@ -140,17 +142,20 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
 
 
             // 设置不粘顶正文子项的数据
-            Random random = new Random();
+            //真实数据
+            Glide.with(holder.itemView.getContext()).load(item.getHistoryData().getCover())
+                    .into(holder.houseCover);
+            holder.houseTitle.setText(item.getHistoryData().getTitle());
+            holder.houseIntro.setText(item.getHistoryData().getIntro());
+            holder.houseFrom.setText(item.getHistoryData().getLocation());
+            holder.priceBefore.setText(item.getHistoryData().getPriceBefore() + "");
+            holder.priceAfter.setText(item.getHistoryData().getPriceAfter() + "");
+            Date time = new Date(item.getHistoryData().getBrowsingTime() * 1000);
 
-            holder.houseCover.setImageResource(drawableRes[random.nextInt(3)]);
-            try {
-                Date time = new Date(item.getHistoryData().getBrowsingTime());
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y/M/d");
-                holder.lastBrowsedTime.setText(simpleDateFormat.format(time));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y/M/d");
+            holder.lastBrowsedTime.setText(simpleDateFormat.format(time));
+
             //中间横线（删除线）
             holder.priceBefore.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             // 抗锯齿
@@ -172,7 +177,7 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
             });
 
             holder.expandCollectButton.setOnClickListener(view -> {
-                MutableLiveData<Boolean> booleanLiveData = presenter.passRequestOfAddCollection(item.getHistoryData().getId(), owner);
+                MutableLiveData<Boolean> booleanLiveData = presenter.passRequestOfAddCollection(item.getHistoryData().getHomestayId(), owner);
                 booleanLiveData.observe(owner, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
@@ -203,7 +208,7 @@ public class MyExpandableListAdapter extends RecyclerView.Adapter<MyExpandableLi
                     }
                 });
             });
-            if (item.getHistoryData().getRowState() == 0) {
+            if (item.getHistoryData().getRowState() == 1) {
                 //已下架
                 holder.darkOverlayView.setVisibility(View.VISIBLE);
             } else {

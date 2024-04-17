@@ -1,10 +1,12 @@
 package com.xupt3g.browsinghistoryview.model.retrofit;
 
-import android.annotation.SuppressLint;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import android.util.Log;
+
+import com.google.gson.annotations.SerializedName;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 项目名: HeartTrip
@@ -14,44 +16,31 @@ import java.util.Date;
  * @data: 2024/2/25 21:55
  * @about: TODO 历史数据子项实体类 和收藏模块中CollectionData一样
  */
+@NoArgsConstructor
+@Data
 public class HistoryData {
 
-    /**
-     * 民宿ID
-     */
-    private int id;
-    /**
-     * 封面
-     */
-    private String cover;
-    /**
-     * 标题
-     */
+
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("homestayId")
+    private Integer homestayId;
+    @SerializedName("title")
     private String title;
-    /**
-     * 简介
-     */
+    @SerializedName("cover")
+    private String cover;
+    @SerializedName("intro")
     private String intro;
-    /**
-     * 定位，省份
-     */
+    @SerializedName("location")
     private String location;
-    /**
-     * 折前价格
-     */
-    private int priceBefore;
-    /**
-     * 折后价格
-     */
-    private int priceAfter;
-    /**
-     * 上架状态 0：下架 1：上架
-     */
-    private int rowState;
-    /**
-     * 上次浏览的时间 y/M/d
-     */
-    private long lastBrowsingTime;
+    @SerializedName("rowState")
+    private Integer rowState;
+    @SerializedName("priceBefore")
+    private Integer priceBefore;
+    @SerializedName("priceAfter")
+    private Integer priceAfter;
+    @SerializedName("lastBrowsingTime")
+    private Integer lastBrowsingTime;
 
     public int getRowState() {
         return rowState;
@@ -60,12 +49,6 @@ public class HistoryData {
     public HistoryData() {
     }
 
-    public HistoryData(String browsingTime) throws ParseException {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y/M/d");
-        Date date = simpleDateFormat.parse(browsingTime);
-        this.lastBrowsingTime = date != null ? date.getTime() : 0L;
-    }
 
     public int getId() {
         return id;
@@ -95,8 +78,12 @@ public class HistoryData {
         return priceAfter;
     }
 
-    public long getBrowsingTime() throws ParseException {
+    public long getBrowsingTime() {
         return lastBrowsingTime;
+    }
+
+    public Integer getHomestayId() {
+        return homestayId;
     }
 
     @Override

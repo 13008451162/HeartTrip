@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroCustomLayoutFragment;
 import com.github.appintro.AppIntroPageTransformerType;

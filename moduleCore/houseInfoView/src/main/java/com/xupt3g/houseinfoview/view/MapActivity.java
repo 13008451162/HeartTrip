@@ -114,15 +114,15 @@ public class MapActivity extends AppCompatActivity {
         houseLongitude = 116.404;
 
         //获取上个活动传来的经纬度 有数据时可恢复
-//        String temLat = getIntent().getStringExtra("HouseLatitude");
-//        String temLon = getIntent().getStringExtra("HouseLongitude");
-//        if (temLat != null && !"".equals(temLat) && temLon != null && !"".equals(temLon)) {
-//            //经纬度不为空
-//            houseLatitude = Double.parseDouble(temLat);
-//            houseLongitude = Double.parseDouble(temLon);
-//        } else {
-//            XToastUtils.error("民宿定位失败！");
-//        }
+        String temLat = getIntent().getStringExtra("HouseLatitude");
+        String temLon = getIntent().getStringExtra("HouseLongitude");
+        if (temLat != null && !"".equals(temLat) && temLon != null && !"".equals(temLon)) {
+            //经纬度不为空
+            houseLatitude = Double.parseDouble(temLat);
+            houseLongitude = Double.parseDouble(temLon);
+        } else {
+            XToastUtils.error("民宿定位失败！");
+        }
 
         BDLocation bdLocation = new BDLocation();
         bdLocation.setLatitude(houseLatitude);
@@ -212,7 +212,7 @@ public class MapActivity extends AppCompatActivity {
                     return;
                 }
                 List<PoiInfo> allPoi = poiResult.getAllPoi();
-                if (allPoi.size() == 0) {
+                if (allPoi == null || allPoi.size() == 0) {
                     initViewByIsHaveAttraction(false);
                     return;
                 }

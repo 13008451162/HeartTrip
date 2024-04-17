@@ -112,9 +112,9 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
         if (!BuildConfig.isModule) {
             //集成模式下
             Bundle bundle = getIntent().getBundleExtra("bundle");
-            houseId = bundle.getInt("HouseId");
-            Log.d("ewcwec", "onCreate: " + houseId);
-
+            if (bundle != null) {
+                houseId = bundle.getInt("HouseId");
+            }
         }
 
         if (getIntent() != null) {
@@ -123,6 +123,7 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
                 houseId = id;
             }
         }
+        Log.d("TTAYVCCA", "post: " + houseId);
         instantiationView();
         //添加照片的按钮监听
         addMorePicture.setOnClickListener(view -> {
@@ -184,7 +185,7 @@ public class CommentPostActivity extends AppCompatActivity implements CommentPos
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 ProgressAnim.showProgress(CommentPostActivity.this);
-                                presenter.postNewComment(currPictureList, new PostCommentData(1,
+                                presenter.postNewComment(currPictureList, new PostCommentData(houseId,
                                         contentEdit.getText().toString(), scoreRating.getRating(),
                                         tidyRating.getRating(), trafficRating.getRating(), securityRating.getRating(),
                                         foodRating.getRating(), costRating.getRating()));

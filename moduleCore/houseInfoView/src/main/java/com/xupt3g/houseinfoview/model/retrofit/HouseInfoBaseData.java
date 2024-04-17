@@ -164,7 +164,7 @@ public class HouseInfoBaseData {
     }
 
     public String[] getTitleTags() {
-        return titleTags.split(",");
+        return titleTags.split("-");
     }
 
     public String[] getBannerUrls() {

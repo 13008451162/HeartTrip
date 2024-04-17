@@ -63,6 +63,7 @@ public class CommentsRequest implements CommentsModelImpl, TopCommentGetService 
                     @Override
                     public void onResponse(Call<CommentsListResponse> call, Response<CommentsListResponse> response) {
                         CommentsListResponse body = response.body();
+                        Log.d("TTAYVCCA", "onResponse: " + body);
                         if ((body != null && body.getCode() == 200 && "OK".equals(body.getMsg()))) {
                             commentsListLiveData.setValue(body);
                         } else {

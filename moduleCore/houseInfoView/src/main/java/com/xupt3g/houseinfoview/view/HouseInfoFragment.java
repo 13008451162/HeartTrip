@@ -532,8 +532,8 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
      */
     private void initView4() {
         //设置头像和昵称
-        Glide.with(requireContext()).load(mBaseData.getLandlordAvatar()).into(landlordAvatarInFourthView);
-        landlordNicknameInFourthView.setText(mBaseData.getLandlordNickname());
+//        Glide.with(requireContext()).load(mBaseData.getLandlordAvatar()).into(landlordAvatarInFourthView);
+//        landlordNicknameInFourthView.setText(mBaseData.getLandlordNickname());
         gotoLandlordPageInFourthView.setOnClickListener(view -> {
             //跳转至房东主页页面
             ToastUtils.toast("跳转至房东主页");
@@ -546,6 +546,8 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
 
     private TopCommentGetService topCommentGetService;
 
+
+    private String[] pictureRes;
     /**
      * TODO 生成第三个View并生成交互
      */
@@ -571,11 +573,7 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         totalCommentsCountInThirdView.setText("（共" + mBaseData.getCommentsCount() + "条点评）");
         //数据变量
         final String[] commentContent = {requireActivity().getString(R.string.shudaonan)};
-        final String[][] pictureRes = {new String[]{"https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
-                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
-                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
-                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg",
-                "https://img.zcool.cn/community/016cc85cfb2000a801205e4b7ef441.jpg@1280w_1l_2o_100sh.jpg"}};
+
         //替换不同的数据源 组件测试开发使用自定义数据，集成开发使用获取的数据
         //使用ARouter+接口服务来获取信息
         if (!BuildConfig.isModule) {
@@ -590,16 +588,16 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
                     if (topCommentData != null && !topCommentData.getMsg().equals(PublicRetrofit.getErrorMsg())) {
                         //评论内容
                         userContentInThirdView.setText(topCommentData.getContent());
-                        //用户头像
-                        Glide.with(requireContext()).load(topCommentData.getUserAvatar()).circleCrop().into(userAvatarInThirdView);
-                        //用户昵称
-                        userNicknameInThirdView.setText(topCommentData.getUserNickname());
+//                        //用户头像
+//                        Glide.with(requireContext()).load(topCommentData.getUserAvatar()).circleCrop().into(userAvatarInThirdView);
+//                        //用户昵称
+//                        userNicknameInThirdView.setText(topCommentData.getUserNickname());
                         //用户发表时间
                         userPostedTimeInThirdView.setText(topCommentData.getUserPostTime());
                         //用户评分
                         userRatingScoreInThirdView.setText(topCommentData.getUserRating());
                         //照片
-                        pictureRes[0] = topCommentData.getPicturesUrls();
+//                        pictureRes[0] = topCommentData.getPicturesUrls();
                         //点赞数 随机
                         likedCountInThirdView.setText(new Random().nextInt(600) + 100 + "");
                     } else {
@@ -626,16 +624,21 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
         });
 
         //没有照片 什么都不做，直接跳过
-        if (pictureRes[0] != null && pictureRes[0].length > 0) {
-            for (int i = 0; i < pictureRes[0].length; i++) {
+        if (pictureRes != null && pictureRes.length > 0) {
+            for (int i = 0; i < pictureRes.length; i++) {
                 if (i >= 3) {
                     break;
                 }
                 pictureArrayInThirdView[i].setVisibility(View.VISIBLE);
-                Glide.with(requireContext()).load(pictureRes[0][i]).into(pictureArrayInThirdView[i]);
+                Glide.with(requireContext()).load(pictureRes[i]).into(pictureArrayInThirdView[i]);
+            }
+        } else {
+            for (int i = 0;i < 3;i++) {
+                pictureArrayInThirdView[i].setVisibility(View.GONE);
+                pictureOverlayInThirdView.setVisibility(View.GONE);
             }
         }
-        if (pictureRes[0] != null && pictureRes[0].length > 3) {
+        if (pictureRes != null && pictureRes.length > 3) {
             pictureOverlayInThirdView.setVisibility(View.VISIBLE);
         }
     }
@@ -682,13 +685,13 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
             initFlowTagsLayout(flowTagLayoutInFirstView, true, titleTags);
         }
         //评分和点评数量
-        scoreTextInFirstView.setText(String.valueOf(mBaseData.getRatingStars()));
+//        scoreTextInFirstView.setText(String.valueOf(mBaseData.getRatingStars()));
         int commentsCount = mBaseData.getCommentsCount();
-        if (commentsCount > 0) {
-            totalCommentsInFirstView.setText("共" + commentsCount + "条点评");
-        } else {
-            totalCommentsInFirstView.setText("暂无点评");
-        }
+//        if (commentsCount > 0) {
+//            totalCommentsInFirstView.setText("共" + commentsCount + "条点评");
+//        } else {
+//            totalCommentsInFirstView.setText("暂无点评");
+//        }
         //View1的点击监听
         couponCardViewInFirstView.setOnClickListener(view -> {
             ToastUtils.toast("优惠券页面弹出");
@@ -1113,6 +1116,9 @@ public class HouseInfoFragment extends Fragment implements View.OnClickListener,
                 endLiveTimeInFirstView.setText(timeResult[1]);
                 totalDaysInFirstView.setText(timeResult[2]);
             }
+        } else {
+            presenter.getHouseInfoBaseData(houseId);
+
         }
     }
 }

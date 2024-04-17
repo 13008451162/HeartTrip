@@ -28,13 +28,16 @@ public class CommentsActivity extends AppCompatActivity {
         if (!BuildConfig.isModule) {
             //集成模式下
             Bundle extraBundle = getIntent().getBundleExtra("ExtraBundle");
-            houseId = extraBundle.getInt("HouseId");
-            Log.d("ewcwec", "onCreate: " + houseId);
+            if (extraBundle != null) {
+                houseId = extraBundle.getInt("HouseId");
+            }
         }
-        if (houseId == -1) {
-            ToastUtils.toast("houseId注入失败");
-            finish();
-        }
+//        if (houseId == -1) {
+//            ToastUtils.toast("houseId注入失败");
+//            finish();
+//        }
+        Log.d("TTAYVCCA", "show: " + houseId);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.comments_fragment_container, CommentsShowFragment.newInstance(houseId)).commit();
     }

@@ -72,7 +72,7 @@ public class BrowsingHistoryPresenter {
      * TODO 从View层向Model层传递删除一项历史记录的请求
      */
     public MutableLiveData<IsSuccessfulResponse>  passRequestOfRemoveHistory(int houseId) {
-        Log.d("remoteHistory", "passRequestOfRemoveHistory: " + houseId);
+        Log.d("lastBrowsedTime", "passRequestOfRemoveHistory: " + houseId);
         return model.removeHistoryItem(houseId);
     }
 
