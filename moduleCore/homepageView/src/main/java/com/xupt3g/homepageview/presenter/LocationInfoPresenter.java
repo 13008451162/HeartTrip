@@ -17,7 +17,7 @@ import lombok.NonNull;
  *
  * @author: lukecc0
  * @data:2024/3/17 下午11:34
- * @about: TODO
+ * @about: TODO 位置搜索管理器
  */
 
 public class LocationInfoPresenter implements LocationInfoContract.Presenter<SearchedLocationData> {
