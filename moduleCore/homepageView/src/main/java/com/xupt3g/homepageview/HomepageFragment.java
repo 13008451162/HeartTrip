@@ -2,6 +2,7 @@ package com.xupt3g.homepageview;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,6 +57,9 @@ import java.util.concurrent.TimeUnit;
 @Route(path = "/homepageView/HomepageFragment")
 public class HomepageFragment extends Fragment implements RecommendInfoContrach.HomeView {
 
+
+    //设置标识符
+    public final int REQUEST_CODE = 1;
     /**
      * 向城市选择的Fragment页面传递数据
      */
@@ -76,6 +80,10 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     private TextView cityTextView;
     private TextView attractionsTextView;
     private TextView specifyView;
+    private TextView endView;
+    private TextView sumView;
+    private TextView startView;
+    private String[] timeResult = new String[3];
 
     public static HomepageFragment newInstance() {
         return new HomepageFragment();
@@ -93,6 +101,9 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        timeResult[0] = "4月4日";
+        timeResult[1] = "4月9日";
 
         resultSearchLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -161,6 +172,12 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         attractionsTextView = inflaterView.findViewById(R.id.specify_search);
 
+        View view = inflaterView.findViewById(R.id.Data_a);
+
+        startView = inflaterView.findViewById(R.id.start_date);
+        sumView = inflaterView.findViewById(R.id.sum_data);
+        endView = inflaterView.findViewById(R.id.end_date);
+
 
         Button button = inflaterView.findViewById(R.id.search_button);
 
@@ -169,6 +186,13 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
 
         recyclerView = inflaterView.findViewById(R.id.recommendedRoom);
         adpter = new RecommendAdpter();
+
+
+        view.setOnClickListener(v -> {
+            //传递标识符到需要跳转的Activity
+            Intent intent = new Intent(getContext(), chooseActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        });
 
 
         //实现MVP绑定
@@ -222,7 +246,8 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
                 ARouter.getInstance().build("/searchResultView/SearchResultActivit")
                         .withString("position", specifyView.getText().toString())
                         .withString("city", cityTextView.getText().toString())
-                        .withString("date", "3.14-3.16")
+                        .withString("dateStart", timeResult[0])
+                        .withString("dateEnd", timeResult[1])
                         .navigation();
             }
         });
@@ -271,6 +296,21 @@ public class HomepageFragment extends Fragment implements RecommendInfoContrach.
         } else {
             lottieAnimationView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+
+            if (data != null) {
+                timeResult = data.getStringArrayExtra("return_data1");
+                startView.setText(timeResult[0]);
+                endView.setText(timeResult[1]);
+                sumView.setText(timeResult[2].replace("共", ""));
+            }
         }
     }
 

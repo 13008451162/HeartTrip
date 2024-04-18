@@ -1,14 +1,14 @@
 package com.xupt3g.houseinfoview.view;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.haibin.calendarview.Calendar;
@@ -18,6 +18,7 @@ import com.xupt3g.UiTools.UiTool;
 import com.xupt3g.houseinfoview.R;
 
 import java.util.List;
+
 @Route(path = "/houseInfoView/ChooseTimeCalendarActivity")
 public class ChooseTimeCalendarActivity extends AppCompatActivity implements
         CalendarView.OnCalendarInterceptListener,

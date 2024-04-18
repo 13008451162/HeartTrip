@@ -2,4 +2,17 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="grue">#e5e8e8</color>
+    <color name="green">#1AFA29</color>
+    <color name="blue">#F2FBFE</color>
+    <color name="grue1">#D6D7D7</color>
+    <color name="grue2">#B0A5A5</color>
+    <color name="blue1">#50B0ED </color>
+    <color name="pink">#FEDCD9</color>
+    <color name="beige">#F5F5DC</color><!--米色 -->
 </resources>

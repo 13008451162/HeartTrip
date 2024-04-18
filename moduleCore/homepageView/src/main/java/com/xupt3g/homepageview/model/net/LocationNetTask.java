@@ -1,7 +1,5 @@
 package com.xupt3g.homepageview.model.net;
 
-import com.xupt3g.homepageview.model.SearchedLocationData;
-
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 

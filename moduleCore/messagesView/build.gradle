@@ -50,11 +50,15 @@ android {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
 
                 //正式环境下屏蔽Debug包下的所有文件
-                java{
+                java {
                     exclude "**/debug/**"
                 }
             }
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 

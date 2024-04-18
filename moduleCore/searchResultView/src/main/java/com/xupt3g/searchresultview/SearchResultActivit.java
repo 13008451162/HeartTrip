@@ -3,7 +3,6 @@ package com.xupt3g.searchresultview;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -36,8 +35,12 @@ import com.xupt3g.searchresultview.presenter.CountyInfoPresent;
 import com.xupt3g.searchresultview.presenter.HouseInfoPresent;
 import com.xupt3g.searchresultview.presenter.SearchInfoContract;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -73,8 +76,11 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
     @Autowired(name = "city")
     public String city;
 
-    @Autowired(name = "date")
-    public String date;
+    @Autowired(name = "dateStart")
+    public String dateStart;
+
+    @Autowired(name = "dateEnd")
+    public String dateEnd;
 
 
     private ActivityResultLauncher<Intent> resultLauncher;
@@ -105,7 +111,6 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
         UiTool.setImmersionBar(this, true);
 
         if (city != null) {
-            Log.d("TAG", "onCreate: " + city);
             searchResultBinding.searchBarView.cityView.setText(city);
             cInfoPresent.setDropDownMenu(city);
 
@@ -119,6 +124,10 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
 
         if (position != null) {
             searchResultBinding.searchBarView.searchEditText.setText(position);
+        }
+
+        if (dateStart != null && dateEnd != null) {
+            setDataStartAndEnd(dateStart, dateEnd);
         }
 
         EditText editText = searchResultBinding.searchBarView.searchEditText;
@@ -143,23 +152,13 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
                     (a, b) -> a.toString() + b.toString()));
         }));
 
+        searchResultBinding.searchBarView.date.setOnClickListener(v -> {
+            //传递标识符到需要跳转的Activity
+            ARouter.getInstance().build("/houseInfoView/ChooseTimeCalendarActivity").navigation(this, REQUEST_CODE);
+        });
+
 
         searchResultBinding.searchBarView.imageButton.setOnClickListener(v -> finish());
-    }
-
-    /**
-     * Arouter跳转的返回数据
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            String result = data.getStringExtra("data_return");
-        }
     }
 
 
@@ -263,6 +262,49 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
             countyInfoPresent = (CountyInfoPresent) present;
         } else if (present instanceof HouseInfoPresent) {
             houseInfoPresent = (HouseInfoPresent) present;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                String[] timeResult = data.getStringArrayExtra("data_return");
+
+                setDataStartAndEnd(timeResult[0], timeResult[1]);
+            }
+        }
+    }
+
+    /**
+     * 设置住店时间和离店时间
+     *
+     * @param start
+     * @param end
+     */
+    private void setDataStartAndEnd(String start, String end) {
+        // 指定日期格式化模式
+        SimpleDateFormat inputFormatter = new SimpleDateFormat("M月d日", Locale.CHINA);
+        SimpleDateFormat outputFormatter = new SimpleDateFormat("MM.dd");
+
+        try {
+            // 将文字日期解析为Date对象
+            Date date1 = inputFormatter.parse(start.toString());
+            Date date2 = inputFormatter.parse(end.toString());
+
+            // 将日期格式化为指定格式的字符串
+            String formattedDate1 = outputFormatter.format(date1);
+            String formattedDate2 = outputFormatter.format(date2);
+
+            // 输出结果
+            searchResultBinding.searchBarView.checkInDate.setText("入:" + formattedDate1);
+            searchResultBinding.searchBarView.departureDate.setText("离:" + formattedDate2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

@@ -58,12 +58,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="52dp"
+                    android:ellipsize="end"
+                    android:maxEms="6"
+                    android:maxLines="1"
                     android:text="北京"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:maxEms="6"
-                    android:maxLines="1"
-                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                     app:layout_constraintEnd_toStartOf="@+id/imageView3"
                     app:layout_constraintStart_toStartOf="parent"
@@ -126,52 +126,63 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/start_date"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:id="@+id/Data_a"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="4月4日"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/view6"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/search_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.166"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view4"
-                    app:layout_constraintVertical_bias="0.5" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.38">
 
-                <TextView
-                    android:id="@+id/end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:text="4月9日"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/view6"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.435"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view4" />
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4月4日"
+                        android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="19dp"
-                    android:layout_height="5dp"
-                    android:src="@drawable/dashed"
-                    app:layout_constraintBottom_toBottomOf="@+id/start_date"
-                    app:layout_constraintEnd_toStartOf="@+id/end_date"
-                    app:layout_constraintStart_toEndOf="@+id/start_date" />
+                    <LinearLayout
+                        android:id="@+id/l_sum_data"
+                        android:layout_marginStart="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/sum_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5晚"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/imageView4"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView4"
-                    app:layout_constraintStart_toStartOf="@+id/imageView4"
-                    app:layout_constraintTop_toBottomOf="@+id/view4"
-                    app:layout_constraintVertical_bias="1.0" />
+                        <TextView
+                            android:id="@+id/sum_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5晚"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="19dp"
+                            android:layout_height="5dp"
+                            android:src="@drawable/dashed"
+                            app:layout_constraintBottom_toBottomOf="@+id/start_date"
+                            app:layout_constraintEnd_toStartOf="@+id/end_date"
+                            app:layout_constraintStart_toEndOf="@+id/start_date" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="4月9日"
+                        android:textSize="20sp" />
+
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imageView5"
@@ -276,15 +287,15 @@
             android:id="@+id/lottie_failure"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:visibility="gone"
-            app:lottie_rawRes="@raw/network_anomaly"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView6"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/network_anomaly" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recommendedRoom"

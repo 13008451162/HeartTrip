@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">homepageView</string>
+    <string name="title_activity_choose">chooseActivity</string>
 </resources>
