@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.xupt3g.messagesview.Model.Message;
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ChatInfoTask implements ChatNetTask<Message> {
 
     Retrofit retrofit;
 
-    private List<MessageData> listMessageData;
+    private List<MessageBody> listMessageData;
 
     private static ChatInfoTask INSTANCE = null;
 
@@ -66,7 +66,7 @@ public class ChatInfoTask implements ChatNetTask<Message> {
     }
 
     @Override
-    public Observable<Message> execute(MessageData massageData) {
+    public Observable<Message> execute(MessageBody massageData) {
 
         listMessageData.add(massageData);
         ChatService service = retrofit.create(ChatService.class);
@@ -88,10 +88,10 @@ public class ChatInfoTask implements ChatNetTask<Message> {
 
     @Override
     public void upDataListMessages(Message message) {
-        INSTANCE.listMessageData.add(new MessageData(MessageData.ASSISTANT, message.getResult()));
+        INSTANCE.listMessageData.add(new MessageBody(MessageBody.ASSISTANT, message.getResult()));
     }
 
-    public List<MessageData> getListMessageData() {
+    public List<MessageBody> getListMessageData() {
         return INSTANCE.listMessageData;
     }
 

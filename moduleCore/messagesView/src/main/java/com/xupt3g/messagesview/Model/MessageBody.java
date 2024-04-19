@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class MessageData {
+public class MessageBody {
 
     public static final String  ASSISTANT = "assistant";
     public static final String  USER = "user";
@@ -26,7 +26,7 @@ public class MessageData {
     @SerializedName("content")
     private String content;
 
-    public MessageData(String role, String content) {
+    public MessageBody(String role, String content) {
         this.role = role;
         this.content = content;
     }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 import com.xupt3g.messagesview.R;
 import com.xupt3g.messagesview.databinding.ChatItemBinding;
 
@@ -24,9 +24,9 @@ import java.util.List;
 
 public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
-    private List<MessageData> mMsgList;
+    private List<MessageBody> mMsgList;
 
-    public MsgAdapter(List<MessageData> mMsgList) {
+    public MsgAdapter(List<MessageBody> mMsgList) {
         this.mMsgList = mMsgList;
     }
 
@@ -40,13 +40,13 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MsgAdapter.ViewHolder holder, int position) {
-        MessageData msg = mMsgList.get(position);
-        if (msg.getRole() == MessageData.ASSISTANT) {
+        MessageBody msg = mMsgList.get(position);
+        if (msg.getRole() == MessageBody.ASSISTANT) {
             //如果收到消息则显示左布局，不显示右布局
             holder.binding.leftLayout.setVisibility(View.VISIBLE);
             holder.binding.rightLayout.setVisibility(View.GONE);
             holder.binding.leftMsg.setText(msg.getContent());
-        } else if (msg.getRole() == MessageData.USER) {
+        } else if (msg.getRole() == MessageBody.USER) {
             //如果发出消息则显示右布局，不显示左布局
             holder.binding.leftLayout.setVisibility(View.GONE);
             holder.binding.rightLayout.setVisibility(View.VISIBLE);

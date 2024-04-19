@@ -3,6 +3,7 @@ package com.xupt3g.searchresultview;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -151,6 +152,10 @@ public class SearchResultActivit extends AppCompatActivity implements SearchInfo
                     editObservable,
                     (a, b) -> a.toString() + b.toString()));
         }));
+
+        searchResultBinding.searchBarView.message.setOnClickListener(v -> {
+            ARouter.getInstance().build("/messagesView/MessagesActivity").navigation(this);
+        });
 
         searchResultBinding.searchBarView.date.setOnClickListener(v -> {
             //传递标识符到需要跳转的Activity

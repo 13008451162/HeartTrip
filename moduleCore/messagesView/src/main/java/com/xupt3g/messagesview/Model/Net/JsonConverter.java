@@ -3,7 +3,7 @@ package com.xupt3g.messagesview.Model.Net;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
 public class JsonConverter {
     private static final Gson gson = new Gson();
 
-    public static String convertToJson(List<MessageData> listMessageData) {
+    public static String convertToJson(List<MessageBody> listMessageData) {
         JsonObject jsonObject = new JsonObject();
         JsonArray messagesArray = new JsonArray();
 
-        for (MessageData messageData : listMessageData) {
+        for (MessageBody messageData : listMessageData) {
             JsonObject messageJson = new JsonObject();
             messageJson.addProperty("role", messageData.getRole());
             messageJson.addProperty("content", messageData.getContent());

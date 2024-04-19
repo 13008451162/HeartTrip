@@ -61,7 +61,7 @@
                     android:ellipsize="end"
                     android:maxEms="6"
                     android:maxLines="1"
-                    android:text="北京"
+                    android:text="西安市"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView3"

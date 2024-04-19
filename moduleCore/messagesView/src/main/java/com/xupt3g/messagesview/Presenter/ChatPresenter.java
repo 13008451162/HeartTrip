@@ -1,18 +1,12 @@
 package com.xupt3g.messagesview.Presenter;
 
-import android.util.Log;
-
 import com.xupt3g.messagesview.Model.Message;
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 import com.xupt3g.messagesview.Model.Net.ChatInfoTask;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * 项目名: HeartTrip
@@ -23,7 +17,7 @@ import io.reactivex.rxjava3.functions.Consumer;
  * @about: TODO 实现聊天功能的Presenter
  */
 
-public class ChatPresenter implements ChatContract.Present<MessageData> {
+public class ChatPresenter implements ChatContract.Present<MessageBody> {
 
     private CompositeDisposable compositeDisposable;
 
@@ -54,7 +48,7 @@ public class ChatPresenter implements ChatContract.Present<MessageData> {
     @Override
     public void getMessage(String role, String message) {
 
-        MessageData messageData = new MessageData(role, message);
+        MessageBody messageData = new MessageBody(role, message);
 
         subscribe(chatInfoTask.execute(messageData)
                 .onErrorResumeNext(throwable -> {

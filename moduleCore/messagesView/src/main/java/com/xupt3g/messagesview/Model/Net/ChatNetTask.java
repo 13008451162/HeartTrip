@@ -1,7 +1,7 @@
 package com.xupt3g.messagesview.Model.Net;
 
 import com.xupt3g.messagesview.Model.Message;
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 
 import io.reactivex.rxjava3.core.Observable;
 
@@ -21,7 +21,7 @@ public interface ChatNetTask<T> {
      * @param messageData
      * @return {@link Observable}<{@link T}>
      */
-    Observable<T> execute(MessageData messageData);
+    Observable<T> execute(MessageBody messageData);
 
 
     /**

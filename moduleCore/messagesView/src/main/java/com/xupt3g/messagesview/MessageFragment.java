@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xupt3g.messagesview.Model.Message;
-import com.xupt3g.messagesview.Model.MessageData;
+import com.xupt3g.messagesview.Model.MessageBody;
 import com.xupt3g.messagesview.Model.Net.ChatInfoTask;
 import com.xupt3g.messagesview.Presenter.ChatContract;
 import com.xupt3g.messagesview.Presenter.ChatPresenter;
@@ -39,7 +39,7 @@ public class MessageFragment extends Fragment implements ChatContract.View {
 
     private MsgAdapter msgAdapter;
 
-    private List<MessageData> mList;
+    private List<MessageBody> mList;
     private RecyclerView recyclerView;
 
     @Nullable
@@ -71,8 +71,8 @@ public class MessageFragment extends Fragment implements ChatContract.View {
         sendButton.setOnClickListener(v -> {
             if (chatEdit.getText() != null) {
 
-                chatPresenter.getMessage(MessageData.USER, chatEdit.getText().toString());
-                mList.add(new MessageData(MessageData.USER, chatEdit.getText().toString()));
+                chatPresenter.getMessage(MessageBody.USER, chatEdit.getText().toString());
+                mList.add(new MessageBody(MessageBody.USER, chatEdit.getText().toString()));
                 chatEdit.setText("");
 
                 //更新消息
@@ -85,8 +85,14 @@ public class MessageFragment extends Fragment implements ChatContract.View {
     }
 
     @Override
+    public void onDestroy() {
+        chatPresenter.unsubscribe();
+        super.onDestroy();
+    }
+
+    @Override
     public void setRecyclerMessage(Message message) {
-        mList.add(new MessageData(MessageData.ASSISTANT, message.getResult()));
+        mList.add(new MessageBody(MessageBody.ASSISTANT, message.getResult()));
         msgAdapter.notifyItemChanged(mList.size() - 1);
         recyclerView.scrollToPosition(mList.size() - 1);
     }

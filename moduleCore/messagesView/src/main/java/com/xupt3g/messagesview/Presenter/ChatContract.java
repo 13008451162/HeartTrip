@@ -1,10 +1,7 @@
 package com.xupt3g.messagesview.Presenter;
 
 import com.xupt3g.messagesview.Model.Message;
-import com.xupt3g.messagesview.Model.MessageData;
 import com.xupt3g.messagesview.View.BaseView;
-
-import java.util.List;
 
 /**
  * 项目名: HeartTrip

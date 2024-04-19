@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+
+@Route(path = "/messagesView/MessagesActivity")
 public class MessagesActivity extends AppCompatActivity {
 
     @Override
